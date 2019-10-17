@@ -5,27 +5,37 @@
 
 #include "dataStructures/Segmentation.h"
 #include "dataStructures/ColumnSegment.h"
+#include "Drawer.h"
 
 // Number of Threads
-#define N_THREADS 8
+#define N_THREADS 4
 
 // Skip some pixels (for large images)
 #define SKIP_ROW 0
+#define SKIP_COL 0
 
-// Debug mode (comment out if you dont use it)
-#define DEBUG
+// Minimum delta for threshold
+#define THRESHOLD 3
+
+// Debug mode
+#define DEBUG 1
+
 
 int main(int argc, char** argv) {
+    // Start Timer
     Timer totalTime("Total time");
     totalTime.start();
 
+    // Set Debug
+    if (DEBUG) { Drawer::setDebug(); }
+
     // Init image
     cv::Mat image;
-    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, SKIP_ROW, &image);
+    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, SKIP_ROW, SKIP_COL, THRESHOLD, image);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_straight_long.mp4";
-    if (!imageProcessor.startVideo(filename)) {
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    if (!Drawer::startVideo(filename)) {
         return -1;
     }
 
@@ -35,26 +45,24 @@ int main(int argc, char** argv) {
 
     while (true) {
         // Update Image
-        if (!imageProcessor.getNextFrame()) {
+        if (!Drawer::getNextFrame(image)) {
             break;
         }
 
         // Segment image
         Segmentation segmentation = imageProcessor.segmentImage();
 
-#ifdef DEBUG
         // Show Image
-        if (!imageProcessor.showImage()) {
+        if (!Drawer::showImage(image)) {
             break;
         }
-#endif
 
         // Timing
         timer.printMilliSeconds();
     }
 
     // Properly close windows
-    imageProcessor.closeVideo();
+    Drawer::closeVideo();
     totalTime.printSeconds();
     return 0;
 }

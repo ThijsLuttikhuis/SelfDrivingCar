@@ -3,39 +3,36 @@
 //
 
 #include "ImageProcessor.h"
+#include <thread>
+#include "Drawer.h"
 #include <iostream>
 
+bool ImageProcessor::thresholdPixel(const cv::Vec3b &pixel) {
+    return ((pixel[0] > (&pixel)[-1][0] + minimumDelta) &&
+            (pixel[1] > (&pixel)[-1][1] + minimumDelta) &&
+            (pixel[2] > (&pixel)[-1][2] + minimumDelta)) ||
+           ((pixel[0] > (&pixel)[1][0] + minimumDelta) &&
+            (pixel[1] > (&pixel)[1][1] + minimumDelta) &&
+            (pixel[2] > (&pixel)[1][2] + minimumDelta));
+}
 
-bool ImageProcessor::startVideo(cv::String &filename) {
-    cv::VideoCapture _capture(filename);
-    capture = _capture;
-
-    if (!capture.isOpened()) {
-        std::cerr << "Error opening video stream or file" << std::endl;
-        return false;
+void ImageProcessor::thresholdColumn(int row, std::vector<int>* columnSegment) {
+    int cols = image.cols;
+    cv::Vec3b thresholdedColor = cv::Vec3b(255,255,127);
+    for (int col = 1; col < cols - 1; col += (1 + skipCol)) {
+        auto &pixel = image.at<cv::Vec3b>(row, col);
+        if (thresholdPixel(pixel)) {
+            Drawer::setPixel(pixel, thresholdedColor);
+            columnSegment->push_back(col);
+        }
     }
-
-    capture >> *image;
-    return true;
 }
 
-void ImageProcessor::closeVideo() {
-    capture.release();
-    cv::destroyAllWindows();
-}
-
-bool ImageProcessor::getNextFrame() {
-    capture >> *image;
-    return !image->empty();
-}
-
-bool ImageProcessor::showImage() {
-    if (!initShowImage) {
-        cv::namedWindow("Display window", cv::WINDOW_NORMAL); // Create a window for display.
-        cv::resizeWindow("Display window", 1366, 768);
-    }
-    cv::imshow("Display window", *image);
-    return cv::waitKey(1) != 27;
+std::vector<int> ImageProcessor::segmentColumn(int row) {
+    std::vector<int> colummSegment = {};
+    thresholdColumn(row, &colummSegment);
+    //groupColumnSegment(&colummSegment);
+    return colummSegment;
 }
 
 void* ImageProcessor::segmentationThread(void* arg) {
@@ -43,40 +40,36 @@ void* ImageProcessor::segmentationThread(void* arg) {
     ThreadArgs threadArgs = *(ThreadArgs*) arg;
     int &startRow = threadArgs.startRow;
     int &endRow = threadArgs.endRow;
-    int &skip = threadArgs.skip;
     Segmentation* segmentation = threadArgs.segmentation;
 
-    for (int row = startRow; row < endRow; row += (1 + skip)) {
-        segmentation->getRow(row).col = {}; // segment image
+    for (int row = startRow; row < endRow; row += (1 + skipRow)) {
+
+        ColumnSegment columnSegment = ColumnSegment(row);
+        columnSegment.col = segmentColumn(row);
+
+        segmentation->setRow(columnSegment); // segment image
     }
 }
 
 Segmentation ImageProcessor::segmentImage() {
-    int rows = image->rows;
+    int rows = image.rows;
     Segmentation segmentation = Segmentation(rows);
 
     // Init Thread arguments
     ThreadArgs targ[nThreads];
-    pthread_t tid[nThreads];
+    std::thread tid[nThreads];
 
     for (int n = 0; n < nThreads; n++) {
         targ[n].startRow = n * rows / nThreads;
         targ[n].endRow = (n + 1) * rows / nThreads;
         targ[n].segmentation = &segmentation;
-        targ[n].skip = skip;
 
-        if (pthread_create(&(tid[n]), NULL, &ImageProcessor::segmentationThread, &targ[n]) != 0) {
-            printf("Can't create thread %d\n", n);
-            return Segmentation(0);
-        }
+        tid[n] = std::thread(&ImageProcessor::segmentationThread, this,  &targ[n]);
     }
 
-    for (int i = 0; i < nThreads; i++) {
-        if (pthread_join(tid[i], NULL) != 0) {
-            printf("Can't join thread %d\n", i);
-        }
+    for (int n = 0; n < nThreads; n++) {
+        tid[n].join();
     }
 
     return segmentation;
 }
-

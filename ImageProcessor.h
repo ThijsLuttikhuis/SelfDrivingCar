@@ -16,29 +16,27 @@
 class ImageProcessor {
 private:
     int nThreads;
-    int skip;
-    cv::Mat* image;
-    cv::VideoCapture capture;
-    bool initShowImage = false;
+    int skipRow;
+    int skipCol;
+    int minimumDelta;
+    cv::Mat &image;
 
-    static void* segmentationThread(void* arg);
+    void* segmentationThread(void* arg);
+    std::vector<int> segmentColumn(int row);
+    void thresholdColumn(int row, std::vector<int>* columnSegment);
+    bool thresholdPixel(const cv::Vec3b &pixel);
 
 public:
-    ImageProcessor(int nThreads, int skip, cv::Mat* image) : nThreads(nThreads), skip(skip), image(image) {};
+    ImageProcessor(int nThreads, int skipRow, int skipCol, int minimumDelta, cv::Mat &image)
+    : nThreads(nThreads), skipRow(skipRow), skipCol(skipCol), minimumDelta(minimumDelta), image(image) {};
 
     Segmentation segmentImage();
-
-    bool startVideo(cv::String &filename);
-    bool getNextFrame();
-    bool showImage();
-    void closeVideo();
 };
 
 struct ThreadArgs {
     Segmentation* segmentation;
     int startRow;
     int endRow;
-    int skip;
 };
 
 
