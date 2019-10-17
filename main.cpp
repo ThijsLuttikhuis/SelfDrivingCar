@@ -18,7 +18,8 @@
 #define THRESHOLD 3
 
 // Debug mode
-#define DEBUG 1
+#define DEBUG true
+#define FRAME_BY_FRAME true
 
 
 int main(int argc, char** argv) {
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
         Segmentation segmentation = imageProcessor.segmentImage();
 
         // Show Image
-        if (!Drawer::showImage(image)) {
+        if (!Drawer::showImage(image, FRAME_BY_FRAME)) {
             break;
         }
 

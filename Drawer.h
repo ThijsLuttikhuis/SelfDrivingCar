@@ -18,7 +18,7 @@ private:
     static cv::VideoCapture capture;
 
 public:
-    static bool showImage(cv::Mat &image);
+    static bool showImage(cv::Mat &image, bool frameByFrame);
 
     static bool getNextFrame(cv::Mat &image);
 

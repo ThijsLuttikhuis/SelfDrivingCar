@@ -31,7 +31,7 @@ void Drawer::setPixel(cv::Mat &image, RowCol rowCol, const cv::Vec3b &color) {
     setPixel(image, rowCol.row, rowCol.col, color);
 }
 
-bool Drawer::showImage(cv::Mat &image) {
+bool Drawer::showImage(cv::Mat &image, bool frameByFrame) {
     if (!debug) return true;
 
     if (!initShowImage) {
@@ -40,7 +40,7 @@ bool Drawer::showImage(cv::Mat &image) {
         cv::resizeWindow("Display window", 1366, 768);
     }
     cv::imshow("Display window", image);
-    return cv::waitKey(1) != 27;
+    return cv::waitKey((int) !frameByFrame) != 27;
 }
 
 bool Drawer::startVideo(cv::String &filename) {
