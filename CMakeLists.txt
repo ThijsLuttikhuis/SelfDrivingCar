@@ -1,0 +1,22 @@
+cmake_minimum_required( VERSION 3.14 )
+set( CMAKE_CXX_STANDARD 14 )
+
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -Wall -Wextra")
+
+project( SelfDrivingCar )
+find_package( OpenCV REQUIRED )
+find_package( Threads REQUIRED )
+
+add_executable( SelfDrivingCar main.cpp
+
+        ImageProcessor.cpp
+        ImageProcessor.h
+        Timer.cpp
+        Timer.h
+        dataStructures/Segmentation.h
+        dataStructures/Segmentation.cpp
+        dataStructures/ColumnSegment.h
+        )
+
+target_link_libraries( SelfDrivingCar ${OpenCV_LIBS} )
+target_link_libraries( SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT} )
