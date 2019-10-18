@@ -15,8 +15,9 @@
 
 class ImageProcessor {
 private:
+    int xDist = 10;
     int nThreads;
-    int minimumDelta;
+    int minimumDelta = 10;
     int maxGap;
     cv::Mat &image;
 
@@ -26,8 +27,8 @@ private:
     bool thresholdPixel(const cv::Vec3b &pixel);
 
 public:
-    ImageProcessor(int nThreads, int minimumDelta, int maxGap, cv::Mat &image)
-    : nThreads(nThreads), minimumDelta(minimumDelta), maxGap(maxGap), image(image) {};
+    ImageProcessor(int nThreads, int maxGap, cv::Mat &image)
+    : nThreads(nThreads), maxGap(maxGap), image(image) {};
 
     Segmentation segmentImage();
 

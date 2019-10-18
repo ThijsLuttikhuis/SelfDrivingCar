@@ -8,7 +8,7 @@
 #include "Drawer.h"
 
 // Number of Threads
-#define N_THREADS 1
+#define N_THREADS 16
 
 // Minimum delta for threshold
 #define THRESHOLD 3
@@ -16,7 +16,7 @@
 
 // Debug mode
 #define DEBUG true
-#define FRAME_BY_FRAME true
+#define FRAME_BY_FRAME false
 
 
 int main(int argc, char** argv) {
@@ -29,10 +29,10 @@ int main(int argc, char** argv) {
 
     // Init image
     cv::Mat image;
-    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, THRESHOLD, MAX_GAP, image);
+    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, MAX_GAP, image);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_straight_long.mp4";
     if (!Drawer::startVideo(filename)) {
         return -1;
     }

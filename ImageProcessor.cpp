@@ -8,29 +8,14 @@
 #include <iostream>
 
 bool ImageProcessor::thresholdPixel(const cv::Vec3b &pixel) {
-    bool left = ((pixel[0] > (&pixel)[-1][0] + minimumDelta) &&
-                 (pixel[1] > (&pixel)[-1][1] + minimumDelta) &&
-                 (pixel[2] > (&pixel)[-1][2] + minimumDelta));
-    bool right = ((pixel[0] > (&pixel)[1][0] + minimumDelta) &&
-                  (pixel[1] > (&pixel)[1][1] + minimumDelta) &&
-                  (pixel[2] > (&pixel)[1][2] + minimumDelta));
+    bool left = ((pixel[0] > (&pixel)[-xDist][0] + minimumDelta) &&
+                 (pixel[1] > (&pixel)[-xDist][1] + minimumDelta) &&
+                 (pixel[2] > (&pixel)[-xDist][2] + minimumDelta));
+    bool right = ((pixel[0] > (&pixel)[xDist][0] + minimumDelta) &&
+                  (pixel[1] > (&pixel)[xDist][1] + minimumDelta) &&
+                  (pixel[2] > (&pixel)[xDist][2] + minimumDelta));
 
-    return left && !right ?
-           ((pixel[0] > (&pixel)[-2][0] + minimumDelta / 2) &&
-            (pixel[1] > (&pixel)[-2][1] + minimumDelta / 2) &&
-            (pixel[2] > (&pixel)[-2][2] + minimumDelta / 2)) :
-           right && !left ?
-           ((pixel[0] > (&pixel)[2][0] + minimumDelta / 2) &&
-            (pixel[1] > (&pixel)[2][1] + minimumDelta / 2) &&
-            (pixel[2] > (&pixel)[2][2] + minimumDelta / 2)) :
-           left && right ?
-           ((pixel[0] > (&pixel)[2][0] + minimumDelta / 2) &&
-            (pixel[1] > (&pixel)[2][1] + minimumDelta / 2) &&
-            (pixel[2] > (&pixel)[2][2] + minimumDelta / 2)) ||
-           ((pixel[0] > (&pixel)[-2][0] + minimumDelta / 2) &&
-            (pixel[1] > (&pixel)[-2][1] + minimumDelta / 2) &&
-            (pixel[2] > (&pixel)[-2][2] + minimumDelta / 2)) :
-           false;
+    return left && right;
 }
 
 void ImageProcessor::thresholdColumn(ColumnSegment* columnSegment) {
@@ -40,17 +25,9 @@ void ImageProcessor::thresholdColumn(ColumnSegment* columnSegment) {
     cv::Vec3b thresholdedColor = cv::Vec3b(255, 255, 127);
     int width = 5;
     for (int col = 0; col < cols - width; col++) {
-        cv::Vec3b* pixel[width];
-        int sum = 0;
-        for (int c = 0; c < width; c++) {
-            pixel[c] = &image.at<cv::Vec3b>(row, col);
-            if (thresholdPixel(*pixel[c])) {
-                sum++;
-            }
-        }
-        if (sum == width) {
-            Drawer::setPixel(*pixel[3], thresholdedColor);
-            columnSegment->col.at(col) = true;
+        auto &pixel = image.at<cv::Vec3b>(row, col);
+        if (thresholdPixel(pixel)) {
+            Drawer::setPixel(pixel, thresholdedColor);
         }
     }
 }
