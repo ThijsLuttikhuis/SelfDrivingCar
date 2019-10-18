@@ -16,21 +16,22 @@
 class ImageProcessor {
 private:
     int nThreads;
-    int skipRow;
-    int skipCol;
     int minimumDelta;
+    int maxGap;
     cv::Mat &image;
 
     void* segmentationThread(void* arg);
-    std::vector<int> segmentColumn(int row);
-    void thresholdColumn(int row, std::vector<int>* columnSegment);
+    void segmentColumn(ColumnSegment* columnSegment);
+    void thresholdColumn(ColumnSegment* columnSegment);
     bool thresholdPixel(const cv::Vec3b &pixel);
 
 public:
-    ImageProcessor(int nThreads, int skipRow, int skipCol, int minimumDelta, cv::Mat &image)
-    : nThreads(nThreads), skipRow(skipRow), skipCol(skipCol), minimumDelta(minimumDelta), image(image) {};
+    ImageProcessor(int nThreads, int minimumDelta, int maxGap, cv::Mat &image)
+    : nThreads(nThreads), minimumDelta(minimumDelta), maxGap(maxGap), image(image) {};
 
     Segmentation segmentImage();
+
+    void groupColumnSegment(ColumnSegment* pVector);
 };
 
 struct ThreadArgs {

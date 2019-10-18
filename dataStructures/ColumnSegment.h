@@ -9,10 +9,9 @@
 
 class ColumnSegment {
 public:
-    explicit ColumnSegment(int row) : row(row) {}
-
+    explicit ColumnSegment(int row, int col) : row(row), col(std::vector<bool>(col, false)) {}
     int row;
-    std::vector<int> col;
+    std::vector<bool> col;
 };
 
 

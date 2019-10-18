@@ -8,14 +8,11 @@
 #include "Drawer.h"
 
 // Number of Threads
-#define N_THREADS 4
-
-// Skip some pixels (for large images)
-#define SKIP_ROW 0
-#define SKIP_COL 0
+#define N_THREADS 1
 
 // Minimum delta for threshold
 #define THRESHOLD 3
+#define MAX_GAP 4
 
 // Debug mode
 #define DEBUG true
@@ -32,7 +29,7 @@ int main(int argc, char** argv) {
 
     // Init image
     cv::Mat image;
-    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, SKIP_ROW, SKIP_COL, THRESHOLD, image);
+    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, THRESHOLD, MAX_GAP, image);
 
     // Get Video
     cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
@@ -41,8 +38,11 @@ int main(int argc, char** argv) {
     }
 
     // Timing
-    Timer timer = Timer();
+    Timer timer = Timer("Processing time");
     timer.start();
+
+    Timer imshowTime = Timer("Imshow time");
+    imshowTime.start();
 
     while (true) {
         // Update Image
@@ -53,13 +53,18 @@ int main(int argc, char** argv) {
         // Segment image
         Segmentation segmentation = imageProcessor.segmentImage();
 
-        // Show Image
+        // Timing
+        timer.printMilliSeconds();
+        imshowTime.start();
+
+        // Show image
         if (!Drawer::showImage(image, FRAME_BY_FRAME)) {
             break;
         }
+        imshowTime.printMilliSeconds();
+        timer.start();
 
-        // Timing
-        timer.printMilliSeconds();
+
     }
 
     // Properly close windows
