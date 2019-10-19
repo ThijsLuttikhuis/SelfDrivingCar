@@ -21,28 +21,56 @@ bool ImageProcessor::thresholdPixel(const cv::Vec3b &pixel) {
 void ImageProcessor::thresholdColumn(ColumnSegment* columnSegment) {
     int cols = image.cols;
     const int &row = columnSegment->row;
-
-    cv::Vec3b thresholdedColor = cv::Vec3b(255, 255, 127);
-    int width = 5;
-    for (int col = 0; col < cols - width; col++) {
+    bool prev = false;
+    cv::Vec3b thresholdedColor[4] = {cv::Vec3b(63, 63, 127),
+                                     cv::Vec3b(63, 63, 0),
+                                     cv::Vec3b(0,0,0),
+                                     cv::Vec3b(255,255,255)};
+    for (int col = 0; col < cols-0; col++) {
         auto &pixel = image.at<cv::Vec3b>(row, col);
         if (thresholdPixel(pixel)) {
-            Drawer::setPixel(pixel, thresholdedColor);
+            if (!prev) {
+                Drawer::setPixel(row, col, thresholdedColor[0]);
+                columnSegment->col.at(col) = true;
+            }
+            else {
+                Drawer::setPixel(row, col, thresholdedColor[3]);
+            }
+            prev = true;
+        }
+        else {
+            if (prev) {
+                Drawer::setPixel(row, col, thresholdedColor[1]);
+                columnSegment->col.at(col) = true;
+            }
+            else {
+                Drawer::setPixel(row, col, thresholdedColor[2]);
+            }
+            prev = false;
         }
     }
 }
 
 void ImageProcessor::groupColumnSegment(ColumnSegment* columnSegment) {
 //    const int &row = columnSegment->row;
+//    cv::Vec3b red = cv::Vec3b(255, 0, 255);
+//    cv::Vec3b green = cv::Vec3b(255, 255, 0);
 //
-//    cv::Vec3b color = cv::Vec3b(0, 0, 255);
-//    for (int col = 0; col < image.cols-2;) {
-//        if (columnSegment->col.at(++col) && columnSegment->col.at(++col) && columnSegment->col.at(++col)) {
-//            Drawer::setPixel(image, row, col, color);
+//    for (int col = 1; col < image.cols-1; col++) {
+//        if (columnSegment->col.at(col)) {
+//            if (!columnSegment->col.at(col+1)) {
+//                auto &pixel = image.at<cv::Vec3b>(row, col);
+//                Drawer::setPixel(pixel, red);
+//            }
+//            else if (!columnSegment->col.at(col-1)) {
+//                auto &pixel = image.at<cv::Vec3b>(row, col);
+//                Drawer::setPixel(pixel, green);
+//            }
+//            else {
+//                columnSegment->col.at(col) = 2;
+//            }
 //        }
 //    }
-
-
 }
 
 void ImageProcessor::segmentColumn(ColumnSegment* columnSegment) {

@@ -6,8 +6,13 @@
 #include <iostream>
 #include "dataStructures/RowCol.h"
 
-bool Drawer::initShowImage = false;
-bool Drawer::debug = false;
+bool Drawer::initShowOriginalImage = false;
+bool Drawer::initShowSegmentedImage = false;
+
+int Drawer::debug = false;
+int Drawer::showOriginalImage = false;
+
+cv::Mat Drawer::copy;
 cv::VideoCapture Drawer::capture = {};
 
 void Drawer::setPixel(cv::Vec3b &pixel, const cv::Vec3b &color) {
@@ -18,39 +23,58 @@ void Drawer::setPixel(cv::Vec3b &pixel, const cv::Vec3b &color) {
     pixel[2] = color[2];
 }
 
-void Drawer::setPixel(cv::Mat &image, int row, int col, const cv::Vec3b &color) {
+void Drawer::setPixel(int row, int col, const cv::Vec3b &color) {
     if (!debug) return;
 
-    auto &pixel = image.at<cv::Vec3b>(row, col);
+    auto &pixel = copy.at<cv::Vec3b>(row, col);
     setPixel(pixel, color);
 }
 
-void Drawer::setPixel(cv::Mat &image, RowCol rowCol, const cv::Vec3b &color) {
+void Drawer::setPixel(RowCol rowCol, const cv::Vec3b &color) {
     if (!debug) return;
 
-    setPixel(image, rowCol.row, rowCol.col, color);
+    setPixel(rowCol.row, rowCol.col, color);
 }
 
 bool Drawer::showImage(cv::Mat &image, bool frameByFrame) {
     if (!debug) return true;
+    if (!showOriginalImage) return showImage(frameByFrame);
+    if (showOriginalImage > 1) showImage(frameByFrame);
 
-    if (!initShowImage) {
-        initShowImage=true;
-        cv::namedWindow("Display window", cv::WINDOW_NORMAL); // Create a window for display.
-        cv::resizeWindow("Display window", 1366, 768);
+    if (!initShowOriginalImage) {
+        initShowOriginalImage=true;
+        cv::namedWindow("Original Image window", cv::WINDOW_NORMAL); // Create a window for display.
+        cv::resizeWindow("Original Image window", 640, 480);
+        int dMove = 240;
+        cv::moveWindow("Original Image window", 640+dMove, dMove);
     }
-    cv::imshow("Display window", image);
+
+    cv::imshow("Original Image window", image);
     return cv::waitKey((int) !frameByFrame) != 27;
+}
+
+bool Drawer::showImage(bool frameByFrame) {
+    if (!debug) return true;
+
+    if (!initShowSegmentedImage) {
+        initShowSegmentedImage=true;
+        cv::namedWindow("Segmented Image window", cv::WINDOW_NORMAL); // Create a window for display.
+        cv::resizeWindow("Segmented Image window", 640, 480);
+        int dMove = 240;
+        cv::moveWindow("Segmented Image window", dMove, dMove);
+    }
+    cv::imshow("Segmented Image window", copy);
+    return cv::waitKey((int) !frameByFrame || showOriginalImage) != 27;
 }
 
 bool Drawer::startVideo(cv::String &filename) {
     cv::VideoCapture _capture(filename);
     capture = _capture;
-
     if (!capture.isOpened()) {
         std::cerr << "Error opening video stream or file" << std::endl;
         return false;
     }
+
     return true;
 }
 
@@ -64,6 +88,16 @@ bool Drawer::getNextFrame(cv::Mat &image) {
     return !image.empty();
 }
 
-void Drawer::setDebug() {
-    debug = true;
+void Drawer::clearCopy(cv::Mat &image) {
+    if (!debug) return;
+
+    image.copyTo(copy);
+}
+
+void Drawer::setDebug(int _debug) {
+    debug = _debug;
+}
+
+void Drawer::setShowOriginalImage(int _showOriginalImage) {
+    showOriginalImage = _showOriginalImage;
 }

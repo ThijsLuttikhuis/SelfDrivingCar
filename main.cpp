@@ -8,15 +8,16 @@
 #include "Drawer.h"
 
 // Number of Threads
-#define N_THREADS 16
+#define N_THREADS 1
 
 // Minimum delta for threshold
 #define THRESHOLD 3
 #define MAX_GAP 4
 
 // Debug mode
-#define DEBUG true
-#define FRAME_BY_FRAME false
+#define DEBUG 0
+#define FRAME_BY_FRAME 1
+#define SHOW_ORIGINAL_IMAGE 2
 
 
 int main(int argc, char** argv) {
@@ -25,7 +26,8 @@ int main(int argc, char** argv) {
     totalTime.start();
 
     // Set Debug
-    if (DEBUG) { Drawer::setDebug(); }
+    Drawer::setDebug(DEBUG);
+    Drawer::setShowOriginalImage(SHOW_ORIGINAL_IMAGE);
 
     // Init image
     cv::Mat image;
@@ -49,6 +51,7 @@ int main(int argc, char** argv) {
         if (!Drawer::getNextFrame(image)) {
             break;
         }
+        Drawer::clearCopy(image);
 
         // Segment image
         Segmentation segmentation = imageProcessor.segmentImage();
@@ -61,6 +64,8 @@ int main(int argc, char** argv) {
         if (!Drawer::showImage(image, FRAME_BY_FRAME)) {
             break;
         }
+
+        // Timing
         imshowTime.printMilliSeconds();
         timer.start();
 

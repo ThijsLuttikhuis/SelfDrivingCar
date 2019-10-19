@@ -12,10 +12,17 @@
 
 class Drawer {
 private:
-    static bool initShowImage;
-    static bool debug;
+    static bool initShowOriginalImage;
+    static bool initShowSegmentedImage;
 
+    static int debug;
+    static int showOriginalImage;
+
+    static cv::Mat copy;
     static cv::VideoCapture capture;
+
+    static void setPixel(cv::Vec3b &pixel, const cv::Vec3b &color);
+    static bool showImage(bool frameByFrame);
 
 public:
     static bool showImage(cv::Mat &image, bool frameByFrame);
@@ -26,13 +33,15 @@ public:
 
     static bool startVideo(cv::String &filename);
 
-    static void setPixel(cv::Vec3b &pixel, const cv::Vec3b &color);
+    static void setPixel(int row, int col, const cv::Vec3b &color);
 
-    static void setPixel(cv::Mat &image, int row, int col, const cv::Vec3b &color);
+    static void setPixel(RowCol rowCol, const cv::Vec3b &color);
 
-    static void setPixel(cv::Mat &image, RowCol rowCol, const cv::Vec3b &color);
+    static void clearCopy(cv::Mat &mat);
 
-    static void setDebug();
+    static void setDebug(int debug);
+
+    static void setShowOriginalImage(int showOriginaImage);
 };
 
 
