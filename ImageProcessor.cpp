@@ -72,24 +72,27 @@ RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int 
 
 }
 
-std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation) {
+std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double minLineLength, int horizon) {
     std::vector<Line> lines;
-    for (int row = 0; row < image.rows; row++) {
 
+    for (int row = 0; row < image.rows; row++) {
         const ColumnSegment &columnSegment = segmentation->getRow(row);
         for (int col = 0; col < (int)columnSegment.col.size(); col++) {
-
             PIXEL edge = columnSegment.col[col];
             if (edge == PIXEL::RIGHT_EDGE || edge == PIXEL::LEFT_EDGE) {
 
                 RowCol startOfLine = RowCol(row, col);
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, -1);
-                if (endOfLine.row == -1) continue;
+
+                // Filter out lines
+                if (endOfLine.row == -1 || endOfLine.col == -1) continue;
+                if (startOfLine.row < horizon) continue;
+                if (endOfLine.dist2(startOfLine) < minLineLength*minLineLength) continue;
 
                 Line line = Line(startOfLine, endOfLine);
                 line.draw(image);
                 lines.push_back(line);
-               // Drawer::showImage(image, false);
+                //Drawer::showImage(image, false);
             }
         }
     }

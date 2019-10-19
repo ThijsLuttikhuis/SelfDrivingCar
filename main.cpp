@@ -8,7 +8,11 @@
 #include "Drawer.h"
 
 // Number of Threads
-#define N_THREADS 1
+#define N_THREADS 8
+
+// Line Filters
+#define MIN_LINE_LENGTH 30
+#define HORIZON_ROW 170
 
 // Debug mode
 #define DEBUG 1
@@ -30,7 +34,7 @@ int main(int argc, char** argv) {
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_straight_long.mp4";
     if (!Drawer::startVideo(filename)) {
         return -1;
     }
@@ -53,7 +57,7 @@ int main(int argc, char** argv) {
         Segmentation segmentation = imageProcessor.segmentImage();
 
         // Combine lines
-        std::vector<Line> lines = imageProcessor.findLines(&segmentation);
+        std::vector<Line> lines = imageProcessor.findLines(&segmentation, MIN_LINE_LENGTH, HORIZON_ROW);
 
         // Timing
         timer.printMilliSeconds();

@@ -24,7 +24,7 @@ public:
 
     Segmentation segmentImage();
 
-    std::vector<Line> findLines(Segmentation* segmentation);
+    std::vector<Line> findLines(Segmentation* segmentation, double minLineLength, int horizon);
 
     RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
 
