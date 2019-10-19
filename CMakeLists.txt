@@ -11,12 +11,14 @@ add_executable( SelfDrivingCar main.cpp
 
         ImageProcessor.cpp
         ImageProcessor.h
+        Drawer.cpp
+        Drawer.h
         Timer.cpp
         Timer.h
         dataStructures/Segmentation.h
         dataStructures/Segmentation.cpp
         dataStructures/ColumnSegment.h
-        )
+        dataStructures/RowCol.h)
 
 target_link_libraries( SelfDrivingCar ${OpenCV_LIBS} )
 target_link_libraries( SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT} )

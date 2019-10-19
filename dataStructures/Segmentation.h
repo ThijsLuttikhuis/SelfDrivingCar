@@ -8,9 +8,10 @@
 #define SELFDRIVINGCAR_SEGMENTATION_H
 
 class Segmentation {
+private:
     std::vector<ColumnSegment> row;
 public:
-    Segmentation(int _rows);
+    Segmentation(int _rows, int _cols);
 
     ColumnSegment getRow(int row);
     void setRow(ColumnSegment columnSegment);

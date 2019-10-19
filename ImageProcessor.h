@@ -12,33 +12,32 @@
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
 
-
 class ImageProcessor {
 private:
+    int xDist = 10;
     int nThreads;
-    int skip;
-    cv::Mat* image;
-    cv::VideoCapture capture;
-    bool initShowImage = false;
+    int minimumDelta = 10;
+    int maxGap;
+    cv::Mat &image;
 
-    static void* segmentationThread(void* arg);
+    void* segmentationThread(void* arg);
+    void segmentColumn(ColumnSegment* columnSegment);
+    void thresholdColumn(ColumnSegment* columnSegment);
+    bool thresholdPixel(const cv::Vec3b &pixel);
 
 public:
-    ImageProcessor(int nThreads, int skip, cv::Mat* image) : nThreads(nThreads), skip(skip), image(image) {};
+    ImageProcessor(int nThreads, int maxGap, cv::Mat &image)
+    : nThreads(nThreads), maxGap(maxGap), image(image) {};
 
     Segmentation segmentImage();
 
-    bool startVideo(cv::String &filename);
-    bool getNextFrame();
-    bool showImage();
-    void closeVideo();
+    void groupColumnSegment(ColumnSegment* pVector);
 };
 
 struct ThreadArgs {
     Segmentation* segmentation;
     int startRow;
     int endRow;
-    int skip;
 };
 
 
