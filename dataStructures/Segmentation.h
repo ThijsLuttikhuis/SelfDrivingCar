@@ -28,9 +28,9 @@ private:
 public:
     explicit Segmentation(cv::Mat &_image);
 
-    ColumnSegment getRow(int row);
+    ColumnSegment getRow(int row) const;
 
-    void setRow(ColumnSegment columnSegment);
+    void setRow(const ColumnSegment& columnSegment);
 
     void segmentImage(int nThreads);
 

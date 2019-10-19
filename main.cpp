@@ -52,6 +52,9 @@ int main(int argc, char** argv) {
         // Segment image
         Segmentation segmentation = imageProcessor.segmentImage();
 
+        // Combine lines
+        Line lines = imageProcessor.joinLines(&segmentation);
+
         // Timing
         timer.printMilliSeconds();
         imshowTime.start();

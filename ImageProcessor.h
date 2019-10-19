@@ -8,6 +8,7 @@
 
 #include "dataStructures/ColumnSegment.h"
 #include "dataStructures/Segmentation.h"
+#include "dataStructures/Line.h"
 
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
@@ -22,6 +23,8 @@ public:
     : nThreads(nThreads), image(image) {};
 
     Segmentation segmentImage();
+
+    Line joinLines(Segmentation* segmentation);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

@@ -26,11 +26,11 @@ Segmentation::Segmentation(cv::Mat &_image) : image(_image) {
     }
 }
 
-ColumnSegment Segmentation::getRow(int _row) {
+ColumnSegment Segmentation::getRow(int _row) const {
     return this->segmentationRow[_row];
 }
 
-void Segmentation::setRow(ColumnSegment columnSegment) {
+void Segmentation::setRow(const ColumnSegment &columnSegment) {
     int _row = columnSegment.row;
     this->segmentationRow[_row] = columnSegment;
 }
