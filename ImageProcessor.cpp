@@ -89,7 +89,7 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation) {
             }
         }
     }
-    
+
     return lines;
 }
 
