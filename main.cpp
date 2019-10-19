@@ -10,13 +10,9 @@
 // Number of Threads
 #define N_THREADS 1
 
-// Minimum delta for threshold
-#define THRESHOLD 3
-#define MAX_GAP 4
-
 // Debug mode
 #define DEBUG 1
-#define FRAME_BY_FRAME 0
+#define FRAME_BY_FRAME 1
 #define SHOW_ORIGINAL_IMAGE 2
 
 
@@ -31,7 +27,7 @@ int main(int argc, char** argv) {
 
     // Init image
     cv::Mat image;
-    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, MAX_GAP, image);
+    ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
 
     // Get Video
     cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";

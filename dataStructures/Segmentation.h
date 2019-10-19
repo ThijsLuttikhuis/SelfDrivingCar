@@ -2,6 +2,9 @@
 // Created by thijs on 17-10-19.
 //
 
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
 #include "ColumnSegment.h"
 
 #ifndef SELFDRIVINGCAR_SEGMENTATION_H
@@ -9,12 +12,34 @@
 
 class Segmentation {
 private:
-    std::vector<ColumnSegment> row;
+    cv::Mat &image;
+    std::vector<ColumnSegment> segmentationRow;
+    int xDist = 10;
+    int minimumDelta = 10;
+
+    void* segmentationThread(void* arg);
+
+    void segmentColumn(ColumnSegment* columnSegment);
+
+    void thresholdColumn(ColumnSegment* columnSegment);
+
+    bool thresholdPixel(const cv::Vec3b &pixel);
+
 public:
-    Segmentation(int _rows, int _cols);
+    explicit Segmentation(cv::Mat &_image);
 
     ColumnSegment getRow(int row);
+
     void setRow(ColumnSegment columnSegment);
+
+    void segmentImage(int nThreads);
+
 };
+
+struct ThreadArgs {
+    int startRow;
+    int endRow;
+};
+
 
 #endif //SELFDRIVINGCAR_SEGMENTATION_H
