@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
         Segmentation segmentation = imageProcessor.segmentImage();
 
         // Combine lines
-        Line lines = imageProcessor.joinLines(&segmentation);
+        std::vector<Line> lines = imageProcessor.findLines(&segmentation);
 
         // Timing
         timer.printMilliSeconds();

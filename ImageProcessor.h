@@ -17,14 +17,16 @@ class ImageProcessor {
 private:
     int nThreads;
     cv::Mat &image;
-
+    int maxTimeOut = 8;
 public:
     ImageProcessor(int nThreads, cv::Mat &image)
     : nThreads(nThreads), image(image) {};
 
     Segmentation segmentImage();
 
-    Line joinLines(Segmentation* segmentation);
+    std::vector<Line> findLines(Segmentation* segmentation);
+
+    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

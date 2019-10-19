@@ -6,6 +6,15 @@
 #include <thread>
 #include "../Drawer.h"
 
+Segmentation::Segmentation(cv::Mat &_image) : image(_image) {
+    int _rows = image.rows;
+    int _cols = image.cols;
+    for (int _row = 0; _row < _rows; _row++) {
+        ColumnSegment columnSegment = ColumnSegment(_row, _cols);
+        this->segmentationRow.emplace_back(columnSegment);
+    }
+}
+
 bool Segmentation::thresholdPixel(const cv::Vec3b &pixel) {
     bool left = ((pixel[0] > (&pixel)[-xDist][0] + minimumDelta) &&
                  (pixel[1] > (&pixel)[-xDist][1] + minimumDelta) &&
@@ -17,16 +26,7 @@ bool Segmentation::thresholdPixel(const cv::Vec3b &pixel) {
     return left && right;
 }
 
-Segmentation::Segmentation(cv::Mat &_image) : image(_image) {
-    int _rows = image.rows;
-    int _cols = image.cols;
-    for (int _row = 0; _row < _rows; _row++) {
-        ColumnSegment columnSegment = ColumnSegment(_row, _cols);
-        this->segmentationRow.emplace_back(columnSegment);
-    }
-}
-
-ColumnSegment Segmentation::getRow(int _row) const {
+ColumnSegment Segmentation::getRow(int _row) {
     return this->segmentationRow[_row];
 }
 
@@ -45,28 +45,21 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
         auto &pixel = image.at<cv::Vec3b>(row, col);
         if (thresholdPixel(pixel)) {
             if (!prev) {
-                Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::LEFT_EDGE]);
+                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::LEFT_EDGE]);
                 columnSegment->col.at(col) = PIXEL::LEFT_EDGE;
             } else {
-                Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::BETWEEN_EDGE]);
+                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::BETWEEN_EDGE]);
                 columnSegment->col.at(col) = PIXEL::BETWEEN_EDGE;
             }
             prev = true;
         } else {
             if (prev) {
-                Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::RIGHT_EDGE]);
+                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::RIGHT_EDGE]);
                 columnSegment->col.at(col) = PIXEL::RIGHT_EDGE;
             }
             prev = false;
         }
     }
-}
-
-void Segmentation::segmentColumn(ColumnSegment* columnSegment) {
-    const int &row = columnSegment->row;
-    int &cols = image.cols;
-    ColumnSegment colummSegment = ColumnSegment(row, cols);
-    thresholdColumn(&colummSegment);
 }
 
 void* Segmentation::segmentationThread(void* arg) {
@@ -78,7 +71,7 @@ void* Segmentation::segmentationThread(void* arg) {
     // Segmentation of columns
     for (int row = startRow; row < endRow; row++) {
         ColumnSegment columnSegment = getRow(row);
-        segmentColumn(&columnSegment);
+        thresholdColumn(&columnSegment);
         setRow(columnSegment);
     }
 }

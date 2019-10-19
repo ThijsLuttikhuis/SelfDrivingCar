@@ -19,8 +19,6 @@ private:
 
     void* segmentationThread(void* arg);
 
-    void segmentColumn(ColumnSegment* columnSegment);
-
     void thresholdColumn(ColumnSegment* columnSegment);
 
     bool thresholdPixel(const cv::Vec3b &pixel);
@@ -28,7 +26,7 @@ private:
 public:
     explicit Segmentation(cv::Mat &_image);
 
-    ColumnSegment getRow(int row) const;
+    ColumnSegment getRow(int row);
 
     void setRow(const ColumnSegment& columnSegment);
 
