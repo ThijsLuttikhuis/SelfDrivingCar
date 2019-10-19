@@ -16,12 +16,20 @@ class Line {
 public:
     Line() = default;
 
-    Line(RowCol start, RowCol end) : start(start), end(end) {};
+    Line(RowCol start, RowCol end) : start(start), end(end) {
+        a = (double) (end.row - start.row) / (end.col - start.col);
+        b = (double) start.row + a * -start.col;
+    };
 
-    Line(RowCol start, RowCol end, uchar color) : start(start), end(end), color(color) {};
+    Line(RowCol start, RowCol end, uchar color) : start(start), end(end), color(color) {
+        a = (double) (end.row - start.row) / (end.col - start.col);
+        b = (double) start.row + a * -start.col;
+    };
 
     RowCol start;
     RowCol end;
+    double a;
+    double b;
     uchar color = 0;
 
     void draw(cv::Mat &image, int thickness) {
@@ -41,10 +49,6 @@ public:
     void draw(cv::Mat &image, int startRow, int endRow, int delta = 0) {
         if (!color) color = 255;
 
-        // y = ax + b
-        auto a = (double) (end.row - start.row) / (end.col - start.col);
-        auto b = (double) start.row + a * -start.col;
-
         for (int row = startRow; row < endRow; row++) {
             auto col = (int) ((row - b) / a) + delta;
             if (col >= 0 && col < image.cols) {
@@ -59,7 +63,11 @@ public:
         }
     }
 
-
+    double dist2ToPoint(int row, int col) {
+        auto _col = (double) ((row - b) / a);
+        auto _row = (double) (col * a + b);
+        return (_col-col)*(_col-col) + (_row-row)*(_row-row);
+    }
 
 //    bool isCloseTo(Line &other) {
 //       return true;

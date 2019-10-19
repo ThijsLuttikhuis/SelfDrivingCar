@@ -12,7 +12,7 @@
 
 // Debug mode
 #define DEBUG 1
-#define FRAME_BY_FRAME 1
+#define FRAME_BY_FRAME 0
 #define SHOW_ORIGINAL_IMAGE 2
 
 

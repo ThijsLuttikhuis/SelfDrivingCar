@@ -27,6 +27,7 @@ public:
     std::vector<Line> findLines(Segmentation* segmentation);
 
     RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
+
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

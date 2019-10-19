@@ -16,7 +16,9 @@ enum PIXEL : char {
     NO_EDGE_GO_LEFT = 4,
     NO_EDGE_GO_RIGHT = 5,
     BETWEEN_EDGE_GO_LEFT = 6,
-    BETWEEN_EDGE_GO_RIGHT = 7
+    BETWEEN_EDGE_GO_RIGHT = 7,
+
+    UNDEFINED = 8
 };
 
 class ColumnSegment {

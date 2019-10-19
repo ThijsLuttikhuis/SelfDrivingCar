@@ -15,6 +15,10 @@ Segmentation ImageProcessor::segmentImage() {
 }
 
 RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut = -1) {
+    if (row < 0 || row >= image.cols || col < 0 || col >= image.cols) {
+        return {-1,-1};
+    }
+
     if (--timeOut == 0) {
         if (previousEdge == PIXEL::NO_EDGE_GO_RIGHT) {
             return {row, col-maxTimeOut};
@@ -28,7 +32,7 @@ RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int 
     }
 
     PIXEL edge = segmentation->getRow(row).col[col];
-    segmentation->getRow(row).col[col] = PIXEL::NO_EDGE;
+    segmentation->getRow(row).col[col] = PIXEL::UNDEFINED;
 
     if (edge == PIXEL::LEFT_EDGE) {
         return recursiveSearch(segmentation, row+1, col, PIXEL::LEFT_EDGE);
@@ -74,8 +78,8 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation) {
 
         const ColumnSegment &columnSegment = segmentation->getRow(row);
         for (int col = 0; col < (int)columnSegment.col.size(); col++) {
-            PIXEL edge = columnSegment.col[col];
 
+            PIXEL edge = columnSegment.col[col];
             if (edge == PIXEL::RIGHT_EDGE || edge == PIXEL::LEFT_EDGE) {
 
                 RowCol startOfLine = RowCol(row, col);
@@ -92,5 +96,4 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation) {
 
     return lines;
 }
-
 
