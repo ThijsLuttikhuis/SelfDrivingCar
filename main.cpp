@@ -15,8 +15,8 @@
 #define MAX_GAP 4
 
 // Debug mode
-#define DEBUG 0
-#define FRAME_BY_FRAME 1
+#define DEBUG 1
+#define FRAME_BY_FRAME 0
 #define SHOW_ORIGINAL_IMAGE 2
 
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, MAX_GAP, image);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_straight_long.mp4";
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
     if (!Drawer::startVideo(filename)) {
         return -1;
     }

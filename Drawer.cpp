@@ -15,22 +15,21 @@ int Drawer::showOriginalImage = false;
 cv::Mat Drawer::copy;
 cv::VideoCapture Drawer::capture = {};
 
-void Drawer::setPixel(cv::Vec3b &pixel, const cv::Vec3b &color) {
+void Drawer::setPixel(char &pixel, const uchar &color) {
     if (!debug) return;
 
-    pixel[0] = color[0];
-    pixel[1] = color[1];
-    pixel[2] = color[2];
+    pixel = color;
+
 }
 
-void Drawer::setPixel(int row, int col, const cv::Vec3b &color) {
+void Drawer::setPixel(int row, int col, const uchar &color) {
     if (!debug) return;
 
-    auto &pixel = copy.at<cv::Vec3b>(row, col);
+    auto &pixel = copy.at<char>(row, col);
     setPixel(pixel, color);
 }
 
-void Drawer::setPixel(RowCol rowCol, const cv::Vec3b &color) {
+void Drawer::setPixel(RowCol rowCol, const uchar &color) {
     if (!debug) return;
 
     setPixel(rowCol.row, rowCol.col, color);
@@ -45,8 +44,7 @@ bool Drawer::showImage(cv::Mat &image, bool frameByFrame) {
         initShowOriginalImage=true;
         cv::namedWindow("Original Image window", cv::WINDOW_NORMAL); // Create a window for display.
         cv::resizeWindow("Original Image window", 640, 480);
-        int dMove = 240;
-        cv::moveWindow("Original Image window", 640+dMove, dMove);
+        cv::moveWindow("Original Image window", 700, 60);
     }
 
     cv::imshow("Original Image window", image);
@@ -60,8 +58,7 @@ bool Drawer::showImage(bool frameByFrame) {
         initShowSegmentedImage=true;
         cv::namedWindow("Segmented Image window", cv::WINDOW_NORMAL); // Create a window for display.
         cv::resizeWindow("Segmented Image window", 640, 480);
-        int dMove = 240;
-        cv::moveWindow("Segmented Image window", dMove, dMove);
+        cv::moveWindow("Segmented Image window", 60, 60);
     }
     cv::imshow("Segmented Image window", copy);
     return cv::waitKey((int) !frameByFrame || showOriginalImage) != 27;
@@ -91,7 +88,9 @@ bool Drawer::getNextFrame(cv::Mat &image) {
 void Drawer::clearCopy(cv::Mat &image) {
     if (!debug) return;
 
-    image.copyTo(copy);
+    copy = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
+
+   // image.copyTo(copy);
 }
 
 void Drawer::setDebug(int _debug) {

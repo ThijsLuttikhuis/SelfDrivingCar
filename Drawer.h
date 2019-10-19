@@ -21,7 +21,7 @@ private:
     static cv::Mat copy;
     static cv::VideoCapture capture;
 
-    static void setPixel(cv::Vec3b &pixel, const cv::Vec3b &color);
+    static void setPixel(char &pixel, const uchar &color);
     static bool showImage(bool frameByFrame);
 
 public:
@@ -33,9 +33,9 @@ public:
 
     static bool startVideo(cv::String &filename);
 
-    static void setPixel(int row, int col, const cv::Vec3b &color);
+    static void setPixel(int row, int col, const uchar &color);
 
-    static void setPixel(RowCol rowCol, const cv::Vec3b &color);
+    static void setPixel(RowCol rowCol, const uchar &color);
 
     static void clearCopy(cv::Mat &mat);
 

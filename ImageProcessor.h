@@ -12,7 +12,6 @@
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
 
-
 class ImageProcessor {
 private:
     int xDist = 10;
