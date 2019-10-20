@@ -79,21 +79,29 @@ void* Segmentation::segmentationThread(void* arg) {
 void Segmentation::segmentImage(int nThreads) {
     int &rows = image.rows;
 
-    // Init Thread arguments
-    ThreadArgs targ[nThreads];
-    std::thread tid[nThreads];
+    if (nThreads > 1) {
+        // Init Thread arguments
+        ThreadArgs targ[nThreads];
+        std::thread tid[nThreads];
 
-    for (int n = 0; n < nThreads; n++) {
-        targ[n].startRow = n * rows / nThreads;
-        targ[n].endRow = (n + 1) * rows / nThreads;
+        for (int n = 0; n < nThreads; n++) {
+            targ[n].startRow = n * rows / nThreads;
+            targ[n].endRow = (n + 1) * rows / nThreads;
 
-        tid[n] = std::thread(&Segmentation::segmentationThread, this, &targ[n]);
+            tid[n] = std::thread(&Segmentation::segmentationThread, this, &targ[n]);
+        }
+
+        for (int n = 0; n < nThreads; n++) {
+            tid[n].join();
+        }
+
     }
-
-    for (int n = 0; n < nThreads; n++) {
-        tid[n].join();
+    else {
+        ThreadArgs targ{};
+        targ.startRow = 0;
+        targ.endRow = rows;
+        segmentationThread(&targ);
     }
-
 }
 
 

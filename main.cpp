@@ -6,13 +6,17 @@
 #include "dataStructures/Segmentation.h"
 #include "dataStructures/ColumnSegment.h"
 #include "Drawer.h"
+#include "dataStructures/RowCol.h"
 
 // Number of Threads
 #define N_THREADS 8
 
 // Line Filters
-#define MIN_LINE_LENGTH 30
-#define HORIZON_ROW 170
+#define MIN_LINE_LENGTH 10
+#define HORIZON RowCol(420, 450)
+#define MAX_LINE_D2H 300
+#define MIN_LINE_SEGMENT_D2H 100
+#define MIN_RATIO_LINE_SEGMENT_D2H 2
 
 // Debug mode
 #define DEBUG 1
@@ -32,9 +36,11 @@ int main(int argc, char** argv) {
     // Init image
     cv::Mat image;
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
+    imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MIN_RATIO_LINE_SEGMENT_D2H, MAX_LINE_D2H);
+    imageProcessor.setHorizon(HORIZON);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_straight_long.mp4";
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_compilation720.mp4";
     if (!Drawer::startVideo(filename)) {
         return -1;
     }
@@ -57,7 +63,7 @@ int main(int argc, char** argv) {
         Segmentation segmentation = imageProcessor.segmentImage();
 
         // Combine lines
-        std::vector<Line> lines = imageProcessor.findLines(&segmentation, MIN_LINE_LENGTH, HORIZON_ROW);
+        std::vector<Line> lines = imageProcessor.findLines(&segmentation, MIN_LINE_LENGTH);
 
         // Timing
         timer.printMilliSeconds();
@@ -71,7 +77,6 @@ int main(int argc, char** argv) {
         // Timing
         imshowTime.printMilliSeconds();
         timer.start();
-
 
     }
 

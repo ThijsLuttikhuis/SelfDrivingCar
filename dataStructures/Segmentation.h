@@ -15,7 +15,7 @@ private:
     cv::Mat &image;
     std::vector<ColumnSegment> segmentationRow;
     int xDist = 10;
-    int minimumDelta = 10;
+    int minimumDelta = 20;
 
     void* segmentationThread(void* arg);
 

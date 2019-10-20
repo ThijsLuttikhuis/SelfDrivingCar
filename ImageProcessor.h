@@ -18,16 +18,24 @@ private:
     int nThreads;
     cv::Mat &image;
     int maxTimeOut = 8;
+
+    // Horizon settings
+    RowCol horizon;
+    int minLineSegmentDistToHorizon = 20;
+    int minRatioLineSegmentDistToHorizon = 2;
+    int maxLineDistToHorizon = 60;
+
 public:
     ImageProcessor(int nThreads, cv::Mat &image)
-    : nThreads(nThreads), image(image) {};
+    : nThreads(nThreads), image(image), horizon(image.rows/2, image.cols/2){ }
 
     Segmentation segmentImage();
 
-    std::vector<Line> findLines(Segmentation* segmentation, double minLineLength, int horizon);
+    std::vector<Line> findLines(Segmentation* segmentation, double minLineLength);
 
     RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
 
+    void setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizon = 20, int _minRatioLineSegmentDistToHorizon = 2, int _maxLineDistToHorizon = 50);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H
