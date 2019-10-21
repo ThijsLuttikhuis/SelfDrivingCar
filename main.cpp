@@ -9,18 +9,18 @@
 #include "dataStructures/RowCol.h"
 
 // Number of Threads
-#define N_THREADS 8
+#define N_THREADS 1
 
 // Line Filters
-#define MIN_LINE_LENGTH 10
-#define HORIZON RowCol(420, 450)
-#define MAX_LINE_D2H 300
-#define MIN_LINE_SEGMENT_D2H 100
+#define MIN_LINE_LENGTH 5
+#define HORIZON RowCol(410, 500)
+#define MAX_LINE_D2H 100
+#define MIN_LINE_SEGMENT_D2H 200
 #define MIN_RATIO_LINE_SEGMENT_D2H 2
 
 // Debug mode
 #define DEBUG 1
-#define FRAME_BY_FRAME 0
+#define FRAME_BY_FRAME 1
 #define SHOW_ORIGINAL_IMAGE 2
 
 
@@ -37,7 +37,6 @@ int main(int argc, char** argv) {
     cv::Mat image;
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
     imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MIN_RATIO_LINE_SEGMENT_D2H, MAX_LINE_D2H);
-    imageProcessor.setHorizon(HORIZON);
 
     // Get Video
     cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_compilation720.mp4";

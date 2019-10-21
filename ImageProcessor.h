@@ -21,9 +21,9 @@ private:
 
     // Horizon settings
     RowCol horizon;
-    int minLineSegmentDistToHorizon = 20;
-    int minRatioLineSegmentDistToHorizon = 2;
-    int maxLineDistToHorizon = 60;
+    int minLineSegmentDistToHorizon;
+    int minRatioLineSegmentDistToHorizon;
+    int maxLineDistToHorizon;
 
 public:
     ImageProcessor(int nThreads, cv::Mat &image)
@@ -35,7 +35,7 @@ public:
 
     RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
 
-    void setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizon = 20, int _minRatioLineSegmentDistToHorizon = 2, int _maxLineDistToHorizon = 50);
+    void setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizon, int _minRatioLineSegmentDistToHorizon, int _maxLineDistToHorizon);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

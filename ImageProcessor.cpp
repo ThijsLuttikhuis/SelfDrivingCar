@@ -10,7 +10,7 @@
 
 Segmentation ImageProcessor::segmentImage() {
     Segmentation segmentation = Segmentation(image);
-    segmentation.segmentImage(nThreads);
+    segmentation.segmentImage(nThreads, horizon.row, image.rows);
     return segmentation;
 }
 
@@ -32,8 +32,8 @@ RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int 
         }
     }
 
-    PIXEL edge = segmentation->getRow(row).col[col];
-    segmentation->getRow(row).col[col] = PIXEL::UNDEFINED;
+    PIXEL edge = segmentation->segmentationRow[row].col[col];
+    segmentation->segmentationRow[row].col[col] = PIXEL::UNDEFINED;
 
     if (edge == PIXEL::LEFT_EDGE) {
         return recursiveSearch(segmentation, row+1, col, PIXEL::LEFT_EDGE);
@@ -78,37 +78,25 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double m
     double minDistToLine = 2.0;
     double minDistToLine2 = minDistToLine*minDistToLine;
 
-    for (int row = 0; row < image.rows; row++) {
-        const ColumnSegment &columnSegment = segmentation->getRow(row);
+    for (int row = horizon.row; row < image.rows; row++) {
+        const ColumnSegment &columnSegment = segmentation->segmentationRow[row];
         for (int col = 0; col < (int)columnSegment.col.size(); col++) {
             if (row < horizon.row) continue;
 
             PIXEL edge = columnSegment.col[col];
             if (edge == PIXEL::RIGHT_EDGE || edge == PIXEL::LEFT_EDGE) {
-                bool isCloseToLine = false;
-                double distance = 0;
-                for (auto &l : lines) {
-                    distance = l.dist2ToPoint(row, col);
-                    if (distance < minDistToLine2) {
-                        Drawer::setPixel(row, col, 100);
-                        //Drawer::showImage(image, false);
-                        isCloseToLine = true;
-                        break;
-                    }
-                }
-                if (isCloseToLine) {
-                    //col += (int)(minDistToLine-distance);
-                    continue;
-                }
-
                 RowCol startOfLine = RowCol(row, col);
+
+                // Filters before
+                if (startOfLine.dist2(horizon) < minLineSegmentDistToHorizon) continue;
+
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge);
                 // Create line
                 Line line = Line(startOfLine, endOfLine);
 
                 // Filter out lines
                 if (line.end.row == -1 || line.end.col == -1) continue;
-                if (line.start.row < horizon.row) continue;
+                //if (line.start.row < horizon.row) continue;
                 if (line.length2() < minLineLength*minLineLength) continue;
                 if (line.dist2ToPoint(horizon) > maxLineDistToHorizon*maxLineDistToHorizon) continue;
                 if (line.start.dist2(horizon) < minLineSegmentDistToHorizon) continue;
@@ -123,14 +111,14 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double m
                 if (isCloseToOtherLine) continue;
 
                 // Make and draw line
-                line.draw(image, 1);
+                line.draw(image, 3);
                 //line.draw(image, 0, image.rows);
                 lines.push_back(line);
-//                Drawer::showImage(image, false);
+                Drawer::showImage(image, false);
             }
         }
     }
-
+    std::cout << lines.size() << " lines found!" << std::endl;
     return lines;
 }
 
@@ -139,6 +127,5 @@ void ImageProcessor::setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizo
     minLineSegmentDistToHorizon = _minLineSegmentDistToHorizon;
     minRatioLineSegmentDistToHorizon = _minRatioLineSegmentDistToHorizon;
     maxLineDistToHorizon = _maxLineDistToHorizon;
-
 }
 

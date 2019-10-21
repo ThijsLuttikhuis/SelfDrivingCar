@@ -26,15 +26,6 @@ bool Segmentation::thresholdPixel(const cv::Vec3b &pixel) {
     return left && right;
 }
 
-ColumnSegment Segmentation::getRow(int _row) {
-    return this->segmentationRow[_row];
-}
-
-void Segmentation::setRow(const ColumnSegment &columnSegment) {
-    int _row = columnSegment.row;
-    this->segmentationRow[_row] = columnSegment;
-}
-
 
 void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
     int cols = image.cols;
@@ -70,23 +61,23 @@ void* Segmentation::segmentationThread(void* arg) {
 
     // Segmentation of columns
     for (int row = startRow; row < endRow; row++) {
-        ColumnSegment columnSegment = getRow(row);
+        ColumnSegment columnSegment = segmentationRow[row];
         thresholdColumn(&columnSegment);
-        setRow(columnSegment);
+        segmentationRow[row] = columnSegment;
     }
 }
-
 void Segmentation::segmentImage(int nThreads) {
-    int &rows = image.rows;
-
+    segmentImage(nThreads, 0, image.rows);
+}
+void Segmentation::segmentImage(int nThreads, int startRow, int endRow) {
     if (nThreads > 1) {
         // Init Thread arguments
         ThreadArgs targ[nThreads];
         std::thread tid[nThreads];
 
         for (int n = 0; n < nThreads; n++) {
-            targ[n].startRow = n * rows / nThreads;
-            targ[n].endRow = (n + 1) * rows / nThreads;
+            targ[n].startRow = startRow + n * (endRow-startRow) / nThreads;
+            targ[n].endRow = startRow + (n + 1) * (endRow-startRow) / nThreads;
 
             tid[n] = std::thread(&Segmentation::segmentationThread, this, &targ[n]);
         }
@@ -98,8 +89,8 @@ void Segmentation::segmentImage(int nThreads) {
     }
     else {
         ThreadArgs targ{};
-        targ.startRow = 0;
-        targ.endRow = rows;
+        targ.startRow = startRow;
+        targ.endRow = endRow;
         segmentationThread(&targ);
     }
 }

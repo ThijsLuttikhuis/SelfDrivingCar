@@ -13,8 +13,8 @@
 class Segmentation {
 private:
     cv::Mat &image;
-    std::vector<ColumnSegment> segmentationRow;
-    int xDist = 10;
+
+    int xDist = 18;
     int minimumDelta = 20;
 
     void* segmentationThread(void* arg);
@@ -24,12 +24,11 @@ private:
     bool thresholdPixel(const cv::Vec3b &pixel);
 
 public:
+    std::vector<ColumnSegment> segmentationRow;
+
     explicit Segmentation(cv::Mat &_image);
 
-    ColumnSegment getRow(int row);
-
-    void setRow(const ColumnSegment& columnSegment);
-
+    void segmentImage(int nThreads, int startRow, int endRow);
     void segmentImage(int nThreads);
 
 };
