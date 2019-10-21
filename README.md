@@ -2,6 +2,11 @@
 
 Made for Ubuntu or Raspbian
 
+The following additional packages are required for Raspbian:
+```
+???
+```
+
 To compile the project you need OpenCV:
 ```
  cd /tmp
@@ -14,6 +19,6 @@ To compile the project you need OpenCV:
  mkdir build
  cd build
 cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DWITH_TBB=ON -DWITH_V4L=ON -DWITH_QT=OFF -DWITH_GTK=ON -DWITH_OPENGL=ON ..
- make -j7
+ make -j3
  sudo make install
  ```
