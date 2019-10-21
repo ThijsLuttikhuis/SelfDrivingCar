@@ -4,6 +4,7 @@ Made for Ubuntu or Raspbian
 
 The following additional packages are required for Raspbian:
 ```
+https://raspberrypi.stackexchange.com/questions/8858/what-tools-can-i-use-for-a-basic-c-interface-on-raspberry-pi-running-rasbian
 ???
 ```
 
