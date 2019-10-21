@@ -6,7 +6,7 @@
 #include <thread>
 #include "../Drawer.h"
 
-Segmentation::Segmentation(cv::Mat &_image) : image(_image) {
+Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation) : image(_image), showSegmentation(showSegmentation) {
     int _rows = image.rows;
     int _cols = image.cols;
     for (int _row = 0; _row < _rows; _row++) {
@@ -31,21 +31,27 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
     int cols = image.cols;
     const int &row = columnSegment->row;
     bool prev = false;
-    uchar thresholdedColor[4] = {0, 127, 255, 191};
+    uchar thresholdedColor[4] = {0, 30, 140, 200};
     for (int col = 0; col < cols - 0; col++) {
         auto &pixel = image.at<cv::Vec3b>(row, col);
         if (thresholdPixel(pixel)) {
             if (!prev) {
-                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::LEFT_EDGE]);
+                if (showSegmentation) {
+                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::LEFT_EDGE]);
+                }
                 columnSegment->col.at(col) = PIXEL::LEFT_EDGE;
             } else {
-                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::BETWEEN_EDGE]);
+                if (showSegmentation) {
+                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::BETWEEN_EDGE]);
+                }
                 columnSegment->col.at(col) = PIXEL::BETWEEN_EDGE;
             }
             prev = true;
         } else {
             if (prev) {
-                //Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::RIGHT_EDGE]);
+                if (showSegmentation) {
+                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::RIGHT_EDGE]);
+                }
                 columnSegment->col.at(col) = PIXEL::RIGHT_EDGE;
             }
             prev = false;

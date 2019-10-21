@@ -8,16 +8,16 @@
 #include "dataStructures/Line.h"
 #include "dataStructures/Segmentation.h"
 
-Segmentation ImageProcessor::segmentImage() {
-    Segmentation segmentation = Segmentation(image);
+Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
+    Segmentation segmentation = Segmentation(image, showSegmentation);
     segmentation.segmentImage(nThreads, horizon.row, image.rows);
     return segmentation;
 }
 
 RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut = -1) {
 
-    if (row < 0 || row >= image.rows || col < 0 || col >= image.cols) {
-        return {-1,-1};
+    if (row == 0 || row == image.rows-1 || col == 0 || col == image.cols-1) {
+        return {row, col};
     }
 
     if (--timeOut == 0) {
@@ -75,8 +75,6 @@ RowCol ImageProcessor::recursiveSearch(Segmentation* segmentation, int row, int 
 
 std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double minLineLength) {
     std::vector<Line> lines;
-    double minDistToLine = 2.0;
-    double minDistToLine2 = minDistToLine*minDistToLine;
 
     for (int row = horizon.row; row < image.rows; row++) {
         const ColumnSegment &columnSegment = segmentation->segmentationRow[row];
@@ -94,12 +92,15 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double m
                 // Create line
                 Line line = Line(startOfLine, endOfLine);
 
-                // Filter out lines
+                // Filters after
                 if (line.end.row == -1 || line.end.col == -1) continue;
-                //if (line.start.row < horizon.row) continue;
+
+                // Filter line length
                 if (line.length2() < minLineLength*minLineLength) continue;
-                if (line.dist2ToPoint(horizon) > maxLineDistToHorizon*maxLineDistToHorizon) continue;
-                if (line.start.dist2(horizon) < minLineSegmentDistToHorizon) continue;
+
+                // Fiter direction of the line (towards horizon point)
+                double distanceToHorizon = line.dist2ToPoint(horizon); // left ==> dth < 0
+                if (distanceToHorizon > maxLineDistToHorizon*maxLineDistToHorizon) continue;
 
                 bool isCloseToOtherLine = false;
                 for (auto &otherLine : lines) {
@@ -111,10 +112,10 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, double m
                 if (isCloseToOtherLine) continue;
 
                 // Make and draw line
-                line.draw(image, 3);
-                //line.draw(image, 0, image.rows);
+                line.draw(image, 7);
+                line.draw(image, horizon.row, image.rows);
                 lines.push_back(line);
-                Drawer::showImage(image, false);
+                //Drawer::showImage(image, true);
             }
         }
     }

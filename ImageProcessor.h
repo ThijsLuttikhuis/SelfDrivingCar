@@ -29,7 +29,7 @@ public:
     ImageProcessor(int nThreads, cv::Mat &image)
     : nThreads(nThreads), image(image), horizon(image.rows/2, image.cols/2){ }
 
-    Segmentation segmentImage();
+    Segmentation segmentImage(bool showSegentation = false);
 
     std::vector<Line> findLines(Segmentation* segmentation, double minLineLength);
 

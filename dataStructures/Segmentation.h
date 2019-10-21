@@ -14,8 +14,9 @@ class Segmentation {
 private:
     cv::Mat &image;
 
-    int xDist = 18;
-    int minimumDelta = 20;
+    int xDist = 15;
+    int minimumDelta = 30                 ;
+    bool showSegmentation;
 
     void* segmentationThread(void* arg);
 
@@ -26,7 +27,7 @@ private:
 public:
     std::vector<ColumnSegment> segmentationRow;
 
-    explicit Segmentation(cv::Mat &_image);
+    explicit Segmentation(cv::Mat &_image, bool showSegmentation);
 
     void segmentImage(int nThreads, int startRow, int endRow);
     void segmentImage(int nThreads);
