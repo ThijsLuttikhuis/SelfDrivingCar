@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     // Init image
     cv::Mat image;
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
-    imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MIN_RATIO_LINE_SEGMENT_D2H, MAX_LINE_D2H);
+    imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MAX_LINE_D2H);
     imageProcessor.setMinLineLength(MIN_LINE_LENGTH);
 
     // Get Video

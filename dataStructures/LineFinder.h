@@ -21,6 +21,8 @@ private:
     int minDistToHorizon;
     int maxLineDistToHorizon;
 
+    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut = -1);
+
 public:
     LineFinder(cv::Mat &image, int minLineLength, RowCol horizon, int minDistToHorizon, int maxLineDistToHorizon) :
     image(image), minLineLength(minLineLength), horizon(horizon),
@@ -29,7 +31,9 @@ public:
 
     std::vector<Line> findLines(Segmentation* segmentation);
 
-    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut);
+    bool preFilter(const RowCol &startOfLine);
+
+    bool lineFilter(const Line &line, const std::vector<Line> &otherLines);
 };
 
 
