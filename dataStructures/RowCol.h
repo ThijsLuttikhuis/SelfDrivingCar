@@ -11,6 +11,7 @@ public:
     int col;
 
     RowCol(int row, int col) : row(row), col(col) {}
+    RowCol() : row(-1), col(-1) {}
 
     bool operator ==(RowCol &other) {
         return (this->row == other.row) && (this->col == other.col);

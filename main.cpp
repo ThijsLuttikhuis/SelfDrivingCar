@@ -40,6 +40,7 @@ int main(int argc, char** argv) {
     cv::Mat image;
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
     imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MIN_RATIO_LINE_SEGMENT_D2H, MAX_LINE_D2H);
+    imageProcessor.setMinLineLength(MIN_LINE_LENGTH);
 
     // Get Video
     cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
@@ -65,7 +66,7 @@ int main(int argc, char** argv) {
         Segmentation segmentation = imageProcessor.segmentImage(SHOW_SEGMENTATION);
 
         // Combine lines
-        std::vector<Line> lines = imageProcessor.findLines(&segmentation, MIN_LINE_LENGTH);
+        std::vector<Line> lines = imageProcessor.findLines(&segmentation);
 
         // Timing
         timer.printMilliSeconds();

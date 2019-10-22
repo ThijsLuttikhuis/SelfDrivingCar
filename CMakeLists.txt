@@ -19,7 +19,7 @@ add_executable( SelfDrivingCar main.cpp
         dataStructures/Segmentation.h
         dataStructures/Segmentation.cpp
         dataStructures/ColumnSegment.h
-        dataStructures/RowCol.h dataStructures/Line.cpp dataStructures/Line.h)
+        dataStructures/RowCol.h dataStructures/Line.cpp dataStructures/Line.h dataStructures/LineFinder.cpp dataStructures/LineFinder.h)
 
 target_link_libraries( SelfDrivingCar ${OpenCV_LIBS} )
 target_link_libraries( SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT} )
