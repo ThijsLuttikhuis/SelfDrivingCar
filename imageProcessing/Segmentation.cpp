@@ -4,7 +4,7 @@
 
 #include "Segmentation.h"
 #include <thread>
-#include "../Drawer.h"
+#include "../utilities/Drawer.h"
 
 Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation) : image(_image), showSegmentation(showSegmentation) {
     int _rows = image.rows;
@@ -31,18 +31,18 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
     int cols = image.cols;
     const int &row = columnSegment->row;
     bool prev = false;
-    uchar thresholdedColor[4] = {0, 30, 140, 200};
+    uchar thresholdedColor[4] = {0, 127, 63, 191};
     for (int col = 0; col < cols - 0; col++) {
         auto &pixel = image.at<cv::Vec3b>(row, col);
         if (thresholdPixel(pixel)) {
             if (!prev) {
                 if (showSegmentation) {
-                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::LEFT_EDGE]);
+                    Drawer::setPixel(row, col, thresholdedColor[1]);
                 }
                 columnSegment->col.at(col) = PIXEL::LEFT_EDGE;
             } else {
                 if (showSegmentation) {
-                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::BETWEEN_EDGE]);
+                    Drawer::setPixel(row, col, thresholdedColor[2]);
                 }
                 columnSegment->col.at(col) = PIXEL::BETWEEN_EDGE;
             }
@@ -50,7 +50,7 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
         } else {
             if (prev) {
                 if (showSegmentation) {
-                    Drawer::setPixel(row, col, thresholdedColor[(int) PIXEL::RIGHT_EDGE]);
+                    Drawer::setPixel(row, col, thresholdedColor[3]);
                 }
                 columnSegment->col.at(col) = PIXEL::RIGHT_EDGE;
             }
@@ -72,9 +72,11 @@ void* Segmentation::segmentationThread(void* arg) {
         segmentationRow[row] = columnSegment;
     }
 }
+
 void Segmentation::segmentImage(int nThreads) {
     segmentImage(nThreads, 0, image.rows);
 }
+
 void Segmentation::segmentImage(int nThreads, int startRow, int endRow) {
     if (nThreads > 1) {
         // Init Thread arguments

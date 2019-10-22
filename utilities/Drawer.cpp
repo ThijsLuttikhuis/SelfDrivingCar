@@ -4,7 +4,7 @@
 
 #include "Drawer.h"
 #include <iostream>
-#include "dataStructures/RowCol.h"
+#include "../dataStructures/RowCol.h"
 
 bool Drawer::initShowOriginalImage = false;
 bool Drawer::initShowSegmentedImage = false;

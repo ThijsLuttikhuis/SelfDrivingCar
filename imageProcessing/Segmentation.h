@@ -5,7 +5,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include "ColumnSegment.h"
+#include "../dataStructures/ColumnSegment.h"
 
 #ifndef SELFDRIVINGCAR_SEGMENTATION_H
 #define SELFDRIVINGCAR_SEGMENTATION_H

@@ -5,7 +5,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include "dataStructures/RowCol.h"
+#include "../dataStructures/RowCol.h"
 
 #ifndef SELFDRIVINGCAR_DRAWER_H
 #define SELFDRIVINGCAR_DRAWER_H

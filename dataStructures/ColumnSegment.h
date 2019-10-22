@@ -8,17 +8,20 @@
 #define SELFDRIVINGCAR_COLUMNSEGMENT_H
 
 enum PIXEL : char {
-    NO_EDGE = 0,
-    BETWEEN_EDGE = 1,
-    LEFT_EDGE = 2,
-    RIGHT_EDGE = 3,
+    // Dont touch the numbers!
 
-    NO_EDGE_GO_LEFT = 4,
-    NO_EDGE_GO_RIGHT = 5,
-    BETWEEN_EDGE_GO_LEFT = 6,
-    BETWEEN_EDGE_GO_RIGHT = 7,
+    BETWEEN_EDGE_GO_LEFT = -3,
+    NO_EDGE_GO_LEFT = 2,
 
-    UNDEFINED = 8
+    LEFT_EDGE = -1,
+    BETWEEN_EDGE = 0,
+    RIGHT_EDGE = 1,
+
+    NO_EDGE_GO_RIGHT = -2,
+    BETWEEN_EDGE_GO_RIGHT = 3,
+
+    NO_EDGE = 63,
+    UNDEFINED = 127
 };
 
 class ColumnSegment {

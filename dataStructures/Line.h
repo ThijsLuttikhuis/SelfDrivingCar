@@ -10,7 +10,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "RowCol.h"
-#include "../Drawer.h"
+#include "../utilities/Drawer.h"
 
 class Line {
 public:
@@ -37,11 +37,11 @@ public:
         return (this->start == other.start) && (this->end == other.end);
     }
 
-    double dist2ToPoint(int row, int col) const;
+    double horizontalDist2ToPoint(int row, int col) const;
 
     double length2() const;
 
-    double dist2ToPoint(RowCol &point) const;
+    double horizontalDist2ToPoint(RowCol &point) const;
 };
 
 

@@ -1,28 +1,31 @@
 #include <opencv2/core.hpp>
 
-#include "Timer.h"
-#include "ImageProcessor.h"
+#include "utilities/Timer.h"
+#include "imageProcessing/ImageProcessor.h"
 
-#include "dataStructures/Segmentation.h"
+#include "imageProcessing/Segmentation.h"
 #include "dataStructures/ColumnSegment.h"
-#include "Drawer.h"
+#include "utilities/Drawer.h"
 #include "dataStructures/RowCol.h"
+#include <iostream>
 
 // Number of Threads
-#define N_THREADS 1
+#define N_THREADS 16
 
 // Line Filters
 #define MIN_LINE_LENGTH 8
+
 //#define HORIZON RowCol(410, 500) // compilation720
 //#define HORIZON RowCol(174, 280) // straight_long
 #define HORIZON RowCol(210, 210) // night
+
 #define MAX_LINE_D2H 30
 #define MIN_LINE_SEGMENT_D2H 200
-#define MIN_RATIO_LINE_SEGMENT_D2H 2
 
 // Debug mode
 #define DEBUG 1
-#define SHOW_SEGMENTATION 0
+#define SHOW_SEGMENTATION 1
+#define SHOW_LINES 1
 #define FRAME_BY_FRAME 1
 #define SHOW_ORIGINAL_IMAGE 2
 
@@ -65,8 +68,12 @@ int main(int argc, char** argv) {
         // Segment image
         Segmentation segmentation = imageProcessor.segmentImage(SHOW_SEGMENTATION);
 
-        // Combine lines
-        std::vector<Line> lines = imageProcessor.findLines(&segmentation);
+        // Combine lines and filter them
+        std::vector<Line> lines = imageProcessor.findLines(&segmentation, SHOW_LINES);
+        std::cout << lines.size() << " lines found!" << std::endl;
+
+        // Get actual position of lines
+        std::vector<RowCol> roadLines = imageProcessor.getLinePositions(&lines);
 
         // Timing
         timer.printMilliSeconds();
