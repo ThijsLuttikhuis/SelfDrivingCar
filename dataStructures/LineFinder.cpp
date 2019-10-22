@@ -19,32 +19,16 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 RowCol startOfLine = RowCol(row, col);
 
                 // Filters before
-                if (startOfLine.dist2(horizon) < minDistToHorizon) continue;
+                if (!preFilter(startOfLine)) continue;
 
-                RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge);
                 // Create line
+                RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge);
                 Line line = Line(startOfLine, endOfLine);
 
                 // Filters after
-                if (line.end.row == -1 || line.end.col == -1) continue;
+                if (!lineFilter(line, lines)) continue;
 
-                // Filter line length
-                if (line.length2() < minLineLength*minLineLength) continue;
-
-                // Fiter direction of the line (towards horizon point)
-                double distanceToHorizon = line.dist2ToPoint(horizon); // left ==> dth < 0
-                if (distanceToHorizon > maxLineDistToHorizon*maxLineDistToHorizon) continue;
-
-                bool isCloseToOtherLine = false;
-                for (auto &otherLine : lines) {
-                    if (otherLine.start.dist2(line.start) < 30 && otherLine.end.dist2(line.end) < 30) {
-                        isCloseToOtherLine = true;
-                        break;
-                    }
-                }
-                if (isCloseToOtherLine) continue;
-
-                // Make and draw line
+                // draw line
                 line.draw(image, 7);
                 line.draw(image, horizon.row, image.rows);
                 lines.push_back(line);
@@ -56,7 +40,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
     return lines;
 }
 
-RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut = -1) {
+RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, int timeOut) {
 
     if (row == 0 || row == image.rows-1 || col == 0 || col == image.cols-1) {
         return {row, col};
@@ -112,4 +96,34 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int row, int col,
         }
     }
     return {-1, -1};
+}
+
+bool LineFinder::preFilter(const RowCol &startOfLine) {
+    // filter lines too close to the horizon
+    if (startOfLine.dist2(horizon) < minDistToHorizon) return false;
+
+    return true;
+}
+
+bool LineFinder::lineFilter(const Line &line, const std::vector<Line> &otherLines) {
+    // Filters after
+    if (line.end.row == -1 || line.end.col == -1) return false;
+
+    // Filter line length
+    if (line.length2() < minLineLength*minLineLength) return false;
+
+    // Fiter direction of the line (towards horizon point)
+    double distanceToHorizon = line.dist2ToPoint(horizon); // left ==> dth < 0
+    if (distanceToHorizon > maxLineDistToHorizon*maxLineDistToHorizon) return false;
+
+    bool isCloseToOtherLine = false;
+    for (auto &otherLine : otherLines) {
+        if (otherLine.start.dist2(line.start) < 6*6 && otherLine.end.dist2(line.end) < 6*6) {
+            isCloseToOtherLine = true;
+            break;
+        }
+    }
+    if (isCloseToOtherLine) return false;
+
+    return true;
 }

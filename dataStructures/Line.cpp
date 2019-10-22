@@ -6,7 +6,7 @@
 
 uchar Line::color = 0;
 
-void Line::draw(cv::Mat &image, int thickness) {
+void Line::draw(const cv::Mat &image, int thickness) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
     for (int i = -thickness; i < thickness; i++) {
@@ -14,13 +14,13 @@ void Line::draw(cv::Mat &image, int thickness) {
     }
 }
 
-void Line::draw(cv::Mat &image) {
+void Line::draw(const cv::Mat &image) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
     this->draw(image, startRow, endRow);
 }
 
-void Line::draw(cv::Mat &image, int startRow, int endRow, int delta) {
+void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const {
     color = 255;
 
     for (int row = startRow; row < endRow; row++) {
@@ -37,23 +37,16 @@ void Line::draw(cv::Mat &image, int startRow, int endRow, int delta) {
     }
 }
 
-double Line::dist2ToPoint(RowCol &point) {
+double Line::dist2ToPoint(RowCol &point) const {
     return dist2ToPoint(point.row, point.col);
 }
 
-double Line::dist2ToPoint(int row, int col) {
+double Line::dist2ToPoint(int row, int col) const {
     auto _colC = (double) ((row - b) / a);
     auto _rowC = (double) (_colC * a + b);
-
-//    auto _rowR = (double) (col * a + b);
-//    auto _colR = (double) ((_rowR - b) / a);
-
-    //Drawer::setPixel(_rowC, _colC, 50);
-    //Drawer::setPixel(_rowR, _colR, 80);
-
-    return (_colC-col)*(_colC-col) + (_rowC-row)*(_rowC -row);
+    return (_colC-col)*(_colC-col) + (_rowC-row)*(_rowC-row);
 }
 
-double Line::length2() {
+double Line::length2() const {
     return start.dist2(end);
 }

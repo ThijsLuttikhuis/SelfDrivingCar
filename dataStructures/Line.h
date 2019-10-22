@@ -14,7 +14,7 @@
 
 class Line {
 public:
-    Line() = default;
+    Line() : Line({}, {}) { };
 
     Line(RowCol start, RowCol end) : start(start), end(end) {
         a = (double) (end.row - start.row) / (end.col - start.col);
@@ -27,21 +27,21 @@ public:
     double b;
     static uchar color;
 
-    void draw(cv::Mat &image, int thickness);
+    void draw(const cv::Mat &image, int thickness) const;
 
-    void draw(cv::Mat &image);
+    void draw(const cv::Mat &image) const;
 
-    void draw(cv::Mat &image, int startRow, int endRow, int delta = 0);
+    void draw(const cv::Mat &image, int startRow, int endRow, int delta = 0) const;
 
-    bool operator ==(Line &other) {
+    bool operator ==(const Line &other) const {
         return (this->start == other.start) && (this->end == other.end);
     }
 
-    double dist2ToPoint(int row, int col);
+    double dist2ToPoint(int row, int col) const;
 
-    double length2();
+    double length2() const;
 
-    double dist2ToPoint(RowCol &point);
+    double dist2ToPoint(RowCol &point) const;
 };
 
 
