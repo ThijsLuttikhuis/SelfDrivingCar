@@ -29,7 +29,7 @@ set(DATA_STRUCTURES_SOURCES
         dataStructures/Line.h
         imageProcessing/LineFinder.cpp
         imageProcessing/LineFinder.h
-        )
+        dataStructures/Filters.h dataStructures/Pixel.h dataStructures/ThreadArgs.h)
 
 add_executable(SelfDrivingCar
         main.cpp

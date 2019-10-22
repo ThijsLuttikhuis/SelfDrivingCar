@@ -15,7 +15,7 @@ private:
     cv::Mat &image;
 
     int xDist = 15;
-    int minimumDelta = 30                 ;
+    int minimumDelta = 30;
     bool showSegmentation;
 
     void* segmentationThread(void* arg);
@@ -34,10 +34,6 @@ public:
 
 };
 
-struct ThreadArgs {
-    int startRow;
-    int endRow;
-};
 
 
 #endif //SELFDRIVINGCAR_SEGMENTATION_H

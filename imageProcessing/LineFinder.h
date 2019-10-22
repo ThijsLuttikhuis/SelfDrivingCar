@@ -9,19 +9,8 @@
 #include <vector>
 #include "../dataStructures/Line.h"
 #include "Segmentation.h"
+#include "../dataStructures/Filters.h"
 
-
-struct Filters {
-public:
-    RowCol horizon;
-    int minLineLength;
-    int minDistToHorizon;
-    int maxLineDistToHorizon;
-
-    Filters() : Filters({}, 0, 0, 0) {};
-    Filters(RowCol horizon, int minLineLength, int minDistToHorizon, int maxLineDistToHorizon) :
-          horizon(horizon), minLineLength(minLineLength), minDistToHorizon(minDistToHorizon), maxLineDistToHorizon(maxLineDistToHorizon) {};
-};
 
 class LineFinder {
 private:

@@ -5,6 +5,7 @@
 #include "Segmentation.h"
 #include <thread>
 #include "../utilities/Drawer.h"
+#include "../dataStructures/ThreadArgs.h"
 
 Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation) : image(_image), showSegmentation(showSegmentation) {
     int _rows = image.rows;
