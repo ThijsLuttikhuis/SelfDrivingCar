@@ -9,6 +9,7 @@
 #include "../dataStructures/ColumnSegment.h"
 #include "Segmentation.h"
 #include "../dataStructures/Line.h"
+#include "LineFinder.h"
 
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
@@ -18,11 +19,8 @@ private:
     int nThreads;
     cv::Mat &image;
 
-    // Horizon settings
-    RowCol horizon;
-    int minDistToHorizon;
-    int maxLineDistToHorizon;
-    int minLineLength;
+    // Filters
+    Filters filters = {};
 
 public:
     ImageProcessor(int nThreads, cv::Mat &image)
@@ -34,9 +32,9 @@ public:
 
 
 
-    void setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizon, int _maxLineDistToHorizon);
+    void setHorizon(RowCol horizon, int minLineSegmentDistToHorizon, int maxLineDistToHorizon);
 
-    void setMinLineLength(int _minLineLength);
+    void setMinLineLength(int minLineLength);
 
     std::vector<RowCol> getLinePositions(std::vector<Line>* lines);
 };

@@ -10,25 +10,24 @@
 
 Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
     Segmentation segmentation = Segmentation(image, showSegmentation);
-    segmentation.segmentImage(nThreads, horizon.row, image.rows);
+    segmentation.segmentImage(nThreads, filters.horizon.row, image.rows);
     return segmentation;
 }
 
 std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, bool showLines) {
-    Filters filters = {horizon, minLineLength, minDistToHorizon, maxLineDistToHorizon};
     LineFinder lineFinder = LineFinder(image, filters, showLines);
     std::vector<Line> lines = lineFinder.findLines(segmentation);
    return lines;
 }
 
-void ImageProcessor::setHorizon(RowCol _horizon, int _minLineSegmentDistToHorizon, int _maxLineDistToHorizon) {
-    horizon = _horizon;
-    minDistToHorizon = _minLineSegmentDistToHorizon;
-    maxLineDistToHorizon = _maxLineDistToHorizon;
+void ImageProcessor::setHorizon(RowCol horizon, int minDistToHorizon, int maxLineDistToHorizon) {
+    filters.horizon = horizon;
+    filters.minDistToHorizon = minDistToHorizon;
+    filters.maxLineDistToHorizon = maxLineDistToHorizon;
 }
 
-void ImageProcessor::setMinLineLength(int _minLineLength) {
-    minLineLength = _minLineLength;
+void ImageProcessor::setMinLineLength(int minLineLength) {
+    filters.minLineLength = minLineLength;
 }
 
 std::vector<RowCol> ImageProcessor::getLinePositions(std::vector<Line>* lines) {

@@ -9,10 +9,10 @@
 std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
     std::vector<Line> lines;
 
-    for (int row = horizon.row; row < image.rows; row++) {
+    for (int row = filters.horizon.row; row < image.rows; row++) {
         const ColumnSegment &columnSegment = segmentation->segmentationRow[row];
         for (int col = 0; col < (int)columnSegment.col.size(); col++) {
-            if (row < horizon.row) continue;
+            if (row < filters.horizon.row) continue;
 
             PIXEL edge = columnSegment.col[col];
             if (edge == PIXEL::RIGHT_EDGE || edge == PIXEL::LEFT_EDGE) {
@@ -31,7 +31,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 // draw line
                 if (showLines) {
                     line.draw(image, 7);
-                    line.draw(image, horizon.row, image.rows);
+                    line.draw(image, filters.horizon.row, image.rows);
                     //Drawer::showImage(image, true);
                 }
                 lines.push_back(line);
@@ -100,7 +100,7 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
 
 bool LineFinder::preFilter(const RowCol &startOfLine) {
     // filter lines too close to the horizon
-    if (startOfLine.dist2(horizon) < minDistToHorizon) return false;
+    if (startOfLine.dist2(filters.horizon) < filters.minDistToHorizon) return false;
 
     return true;
 }
@@ -110,11 +110,11 @@ bool LineFinder::lineFilter(const Line &line, const std::vector<Line> &otherLine
     if (line.end.row == -1 || line.end.col == -1) return false;
 
     // Filter line length
-    if (line.length2() < minLineLength*minLineLength) return false;
+    if (line.length2() < filters.minLineLength*filters.minLineLength) return false;
 
     // Fiter direction of the line (towards horizon point)
-    double distanceToHorizon = line.horizontalDist2ToPoint(horizon); // left ==> dth < 0
-    if (distanceToHorizon > maxLineDistToHorizon*maxLineDistToHorizon) return false;
+    double distanceToHorizon = line.horizontalDist2ToPoint(filters.horizon); // left ==> dth < 0
+    if (distanceToHorizon > filters.maxLineDistToHorizon*filters.maxLineDistToHorizon) return false;
 
     bool isCloseToOtherLine = false;
     for (auto &otherLine : otherLines) {
