@@ -17,8 +17,15 @@ public:
     Line() : Line({}, {}) { };
 
     Line(RowCol start, RowCol end) : start(start), end(end) {
-        a = (double) (end.row - start.row) / (end.col - start.col);
-        b = (double) start.row + a * -start.col;
+        if (end.col == start.col) {
+            a = (double) 99999;
+            b = (double) start.row + a * -start.col;
+        }
+        else {
+            a = (double) (end.row - start.row) / (end.col - start.col);
+            b = (double) start.row + a * -start.col;
+        }
+
     };
 
     RowCol start;
@@ -43,6 +50,10 @@ public:
     double length2() const;
 
     double horizontalDist2ToPoint(RowCol &point) const;
+
+    double getColAtRow(int row) const;
+
+    double getRowAtCol(int col) const;
 };
 
 

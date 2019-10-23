@@ -2,11 +2,14 @@
 // Created by thijs on 17-10-19.
 //
 
+#include <iostream>
 #include "ImageProcessor.h"
 #include "../utilities/Drawer.h"
 #include "../dataStructures/Line.h"
 #include "Segmentation.h"
 #include "LineFinder.h"
+#include "LinePositionFinder.h"
+#include "RoadLine.h"
 
 Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
     Segmentation segmentation = Segmentation(image, showSegmentation);
@@ -30,8 +33,10 @@ void ImageProcessor::setMinLineLength(int minLineLength) {
     filters.minLineLength = minLineLength;
 }
 
-std::vector<RowCol> ImageProcessor::getLinePositions(std::vector<Line>* lines) {
+std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines) {
+    LinePositionFinder linePositionFinder = LinePositionFinder(image);
+    std::vector<RoadLine> lineCols = linePositionFinder.findLinePositions(lines);
 
-    return std::vector<RowCol>();
+    return lineCols;
 }
 

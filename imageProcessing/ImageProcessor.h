@@ -10,6 +10,7 @@
 #include "Segmentation.h"
 #include "../dataStructures/Line.h"
 #include "LineFinder.h"
+#include "RoadLine.h"
 
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
@@ -36,7 +37,7 @@ public:
 
     void setMinLineLength(int minLineLength);
 
-    std::vector<RowCol> getLinePositions(std::vector<Line>* lines);
+    std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

@@ -7,6 +7,7 @@
 #include "dataStructures/ColumnSegment.h"
 #include "utilities/Drawer.h"
 #include "dataStructures/RowCol.h"
+#include "imageProcessing/RoadLine.h"
 #include <iostream>
 
 // Number of Threads
@@ -73,7 +74,26 @@ int main(int argc, char** argv) {
         std::cout << lines.size() << " lines found!" << std::endl;
 
         // Get actual position of lines
-        std::vector<RowCol> roadLines = imageProcessor.getLinePositions(&lines);
+        std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
+        for (auto &roadLine : roadLines) {
+            int size = 20;
+
+            auto col = roadLine.lineColAtCar;
+            auto row = image.rows - size - 1;
+            for (int i = -size; i < size; i++) {
+                for (int j = -size; j < size; j++) {
+                    uchar color = 100;
+                    int _col = col + i;
+                    int _row = row + j;
+
+                    if (_col > 0 && _col < image.cols && _row > 0 && _row < image.rows) {
+                        Drawer::setPixel(_row, _col, color);
+                    }
+                }
+            }
+        }
+
+
 
         // Timing
         timer.printMilliSeconds();

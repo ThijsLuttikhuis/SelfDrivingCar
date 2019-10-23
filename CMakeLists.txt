@@ -11,8 +11,14 @@ find_package(Threads REQUIRED)
 set(IMAGE_PROCESSING_SOURCES
         imageProcessing/ImageProcessor.cpp
         imageProcessing/ImageProcessor.h
+
+        # Processing parts
         imageProcessing/Segmentation.h
         imageProcessing/Segmentation.cpp
+        imageProcessing/LineFinder.cpp
+        imageProcessing/LineFinder.h
+        imageProcessing/LinePositionFinder.cpp
+        imageProcessing/LinePositionFinder.h
         )
 
 set(UTILITIES_SOURCES
@@ -23,13 +29,18 @@ set(UTILITIES_SOURCES
         )
 
 set(DATA_STRUCTURES_SOURCES
-        dataStructures/ColumnSegment.h
         dataStructures/RowCol.h
+        dataStructures/ColumnSegment.h
         dataStructures/Line.cpp
         dataStructures/Line.h
-        imageProcessing/LineFinder.cpp
-        imageProcessing/LineFinder.h
-        dataStructures/Filters.h dataStructures/Pixel.h dataStructures/ThreadArgs.h)
+        imageProcessing/RoadLine.cpp
+        imageProcessing/RoadLine.h
+
+        # Helper structures
+        dataStructures/Filters.h
+        dataStructures/Pixel.h
+        dataStructures/ThreadArgs.h
+        )
 
 add_executable(SelfDrivingCar
         main.cpp

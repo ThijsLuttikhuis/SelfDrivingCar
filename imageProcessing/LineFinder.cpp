@@ -125,12 +125,14 @@ bool LineFinder::lineFilter(Line &line, const std::vector<Line> &otherLines, con
 
     // Fiter direction of the line (towards horizon point)
     double distanceToHorizon = line.horizontalDist2ToPoint(filters.horizon); // left ==> dth < 0
-
     if (distanceToHorizon > filters.maxLineDistToHorizon * filters.maxLineDistToHorizon) {
-        // Actually fine, but line is not straight, or the car is not straight.
+        // Actually fine, if the line is long enough, but line is not straight, or the car is not straight.
+        if (line.length2() < filters.minLineLength*filters.minLineLength*2*2) return false;
         line.isCurved = true;
+        return false;
     }
 
+    // Filter if another line is already very close
     bool isCloseToOtherLine = false;
     for (auto &otherLine : otherLines) {
         if (otherLine.start.dist2(line.start) < 6 * 6 && otherLine.end.dist2(line.end) < 6 * 6) {
