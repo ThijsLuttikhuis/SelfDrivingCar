@@ -26,6 +26,7 @@ public:
     double a;
     double b;
     static uchar color;
+    bool isCurved = false;
 
     void draw(const cv::Mat &image, int thickness) const;
 

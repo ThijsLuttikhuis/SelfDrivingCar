@@ -21,11 +21,11 @@ private:
     int maxTimeOut = 8;
     bool showLines;
 
-    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge);
+    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, std::vector<double>* dColDRow);
 
     bool preFilter(const RowCol &startOfLine);
 
-    bool lineFilter(const Line &line, const std::vector<Line> &otherLines);
+    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<double>* dColDRow);
 public:
     LineFinder(cv::Mat &image, Filters filters, bool showLines) :
     image(image), filters(filters), showLines(showLines) {};
