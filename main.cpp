@@ -20,9 +20,9 @@
 //#define HORIZON RowCol(410, 500) // compilation720
 //#define HORIZON RowCol(174, 280) // straight_long
 //#define HORIZON RowCol(210, 210) // night
-#define HORIZON RowCol(175, 310) // Lenovo WebCam
+#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
-#define MAX_LINE_D2H 50
+#define MAX_LINE_D2H 80
 #define MIN_LINE_SEGMENT_D2H 200
 
 // Debug mode
@@ -35,7 +35,7 @@
 // Edge detection threshold parameters
 #define LINES_ARE_DARK 1
 #define THRESHOLD_COL_DISTANCE 15
-#define THRESHOLD_MINIMUM_DELTA 15
+#define THRESHOLD_MINIMUM_DELTA 25
 
 // Use webcam or video
 #define USE_WEBCAM 1
@@ -98,21 +98,34 @@ int main(int argc, char** argv) {
 
         // Get actual position of lines
         std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
+
+        bool lineExistsLeft = false;
+        bool lineExistsRight = false;
+        double closestLineColLeft = filters.horizon.col;
+        double closestLineColRight = filters.horizon.col;
         for (auto &roadLine : roadLines) {
-            int size = 20;
+            roadLine.drawColumn(image);
 
-            auto col = roadLine.lineColAtCar;
-            auto row = image.rows - size - 1;
-            for (int i = -size; i < size; i++) {
-                for (int j = -size; j < size; j++) {
-                    uchar color = 100;
-                    int _col = col + i;
-                    int _row = row + j;
-
-                    if (_col > 0 && _col < image.cols && _row > 0 && _row < image.rows) {
-                        Drawer::setPixel(_row, _col, color);
-                    }
+            double col = roadLine.lineColAtCar;
+            if (col < filters.horizon.col) {
+                lineExistsLeft = true;
+                if (col < closestLineColLeft) {
+                    closestLineColLeft = col;
                 }
+            }
+            else {
+                lineExistsRight = true;
+                if (col > closestLineColRight) {
+                    closestLineColRight = col;
+                }
+            }
+        }
+        if (lineExistsLeft && lineExistsRight) {
+            if (fabs(closestLineColLeft - filters.horizon.col) > fabs(closestLineColRight - filters.horizon.col)) {
+                Drawer::drawArrowLeft(image);
+            }
+            else {
+                Drawer::drawArrowRight(image);
             }
         }
 

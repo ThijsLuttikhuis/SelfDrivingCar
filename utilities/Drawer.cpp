@@ -103,3 +103,24 @@ void Drawer::setDebug(int _debug) {
 void Drawer::setShowOriginalImage(int _showOriginalImage) {
     showOriginalImage = _showOriginalImage;
 }
+
+void Drawer::drawArrowLeft(cv::Mat &image) {
+    RowCol start = RowCol(image.rows / 2, image.cols / 8);
+    RowCol end = RowCol(image.rows / 2, 0);
+    Drawer::drawArrow(start, end, 10);
+}
+
+void Drawer::drawArrowRight(cv::Mat &image) {
+    RowCol start = RowCol(image.rows / 2, 7 * image.cols / 8);
+    RowCol end = RowCol(image.rows / 2, image.cols-1);
+    Drawer::drawArrow(start, end, 10);
+}
+
+void Drawer::drawArrow(RowCol start, RowCol end, int thickness) {
+    for (int i = -thickness; i < thickness; i++) {
+        int row = start.row + i;
+        for (int col = start.col; col != end.col; col += (start.col-end.col) > 0 ? -1 : 1) {
+            setPixel(row, col, 255);
+        }
+    }
+}

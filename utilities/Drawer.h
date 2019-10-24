@@ -42,6 +42,12 @@ public:
     static void setDebug(int debug);
 
     static void setShowOriginalImage(int showOriginaImage);
+
+    static void drawArrowLeft(cv::Mat &image);
+
+    static void drawArrowRight(cv::Mat &image);
+
+    static void drawArrow(RowCol start, RowCol end, int thickness);
 };
 
 
