@@ -7,7 +7,8 @@
 #include "../utilities/Drawer.h"
 #include "../dataStructures/ThreadArgs.h"
 
-Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation) : image(_image), showSegmentation(showSegmentation) {
+Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation, int thresholdMinimumDelta, int thresholdColDistance)
+      : image(_image), showSegmentation(showSegmentation), minimumDelta(thresholdMinimumDelta), thresholdColDistance(thresholdColDistance) {
     int _rows = image.rows;
     int _cols = image.cols;
     for (int _row = 0; _row < _rows; _row++) {
@@ -17,13 +18,20 @@ Segmentation::Segmentation(cv::Mat &_image, bool showSegmentation) : image(_imag
 }
 
 bool Segmentation::thresholdPixel(const cv::Vec3b &pixel) {
-    bool left = ((pixel[0] > (&pixel)[-xDist][0] + minimumDelta) &&
-                 (pixel[1] > (&pixel)[-xDist][1] + minimumDelta) &&
-                 (pixel[2] > (&pixel)[-xDist][2] + minimumDelta));
-    bool right = ((pixel[0] > (&pixel)[xDist][0] + minimumDelta) &&
-                  (pixel[1] > (&pixel)[xDist][1] + minimumDelta) &&
-                  (pixel[2] > (&pixel)[xDist][2] + minimumDelta));
-
+    bool left = true;
+    bool right = true;
+    if (minimumDelta > 0) {
+        for (int i = 0; i < 2; i++) {
+            left &= (pixel[i] > (&pixel)[-thresholdColDistance][i] + minimumDelta);
+            right &= (pixel[0] > (&pixel)[thresholdColDistance][0] + minimumDelta);
+        }
+    }
+    else {
+        for (int i = 0; i < 2; i++) {
+            left &= (pixel[i] < (&pixel)[-thresholdColDistance][i] + minimumDelta);
+            right &= (pixel[0] < (&pixel)[thresholdColDistance][0] + minimumDelta);
+        }
+    }
     return left && right;
 }
 
@@ -85,8 +93,8 @@ void Segmentation::segmentImage(int nThreads, int startRow, int endRow) {
         std::thread tid[nThreads];
 
         for (int n = 0; n < nThreads; n++) {
-            targ[n].startRow = startRow + n * (endRow-startRow) / nThreads;
-            targ[n].endRow = startRow + (n + 1) * (endRow-startRow) / nThreads;
+            targ[n].startRow = startRow + n * (endRow - startRow) / nThreads;
+            targ[n].endRow = startRow + (n + 1) * (endRow - startRow) / nThreads;
 
             tid[n] = std::thread(&Segmentation::segmentationThread, this, &targ[n]);
         }
@@ -95,8 +103,7 @@ void Segmentation::segmentImage(int nThreads, int startRow, int endRow) {
             tid[n].join();
         }
 
-    }
-    else {
+    } else {
         ThreadArgs targ{};
         targ.startRow = startRow;
         targ.endRow = endRow;

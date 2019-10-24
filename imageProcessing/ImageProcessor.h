@@ -33,9 +33,7 @@ public:
 
 
 
-    void setHorizon(RowCol horizon, int minLineSegmentDistToHorizon, int maxLineDistToHorizon);
-
-    void setMinLineLength(int minLineLength);
+    void setFilters(Filters &filters);
 
     std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);
 };

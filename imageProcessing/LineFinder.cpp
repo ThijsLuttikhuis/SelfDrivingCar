@@ -57,7 +57,7 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
     int timeOut = -1;
 
     while (--timeOut != 0) {
-        if (row == 0 || row == image.rows - 1 || col == 0 || col == image.cols - 1) {
+        if (row <= 0 || row >= image.rows - 1 || col <= 0 || col >= image.cols - 1) {
             return {row, col};
         }
 

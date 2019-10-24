@@ -9,6 +9,7 @@
 #include "dataStructures/RowCol.h"
 #include "imageProcessing/RoadLine.h"
 #include <iostream>
+#include "dataStructures/Filters.h"
 
 // Number of Threads
 #define N_THREADS 16
@@ -18,17 +19,26 @@
 
 //#define HORIZON RowCol(410, 500) // compilation720
 //#define HORIZON RowCol(174, 280) // straight_long
-#define HORIZON RowCol(210, 210) // night
+//#define HORIZON RowCol(210, 210) // night
+#define HORIZON RowCol(175, 310) // Lenovo WebCam
 
-#define MAX_LINE_D2H 30
+#define MAX_LINE_D2H 50
 #define MIN_LINE_SEGMENT_D2H 200
 
 // Debug mode
 #define DEBUG 1
 #define SHOW_SEGMENTATION 1
 #define SHOW_LINES 1
-#define FRAME_BY_FRAME 1
+#define FRAME_BY_FRAME 0
 #define SHOW_ORIGINAL_IMAGE 2
+
+// Edge detection threshold parameters
+#define LINES_ARE_DARK 1
+#define THRESHOLD_COL_DISTANCE 15
+#define THRESHOLD_MINIMUM_DELTA 15
+
+// Use webcam or video
+#define USE_WEBCAM 1
 
 
 int main(int argc, char** argv) {
@@ -43,11 +53,24 @@ int main(int argc, char** argv) {
     // Init image
     cv::Mat image;
     ImageProcessor imageProcessor = ImageProcessor(N_THREADS, image);
-    imageProcessor.setHorizon(HORIZON, MIN_LINE_SEGMENT_D2H, MAX_LINE_D2H);
-    imageProcessor.setMinLineLength(MIN_LINE_LENGTH);
+
+    Filters filters;
+    filters.minLineLength = MIN_LINE_LENGTH;
+    filters.maxLineDistToHorizon = MAX_LINE_D2H;
+    filters.minDistToHorizon = MIN_LINE_SEGMENT_D2H;
+    filters.horizon = HORIZON;
+    filters.thresholdColDistance = THRESHOLD_COL_DISTANCE;
+    filters.thresholdMinimumDelta = LINES_ARE_DARK ? -THRESHOLD_MINIMUM_DELTA : THRESHOLD_MINIMUM_DELTA;
+    imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    cv::String filename;
+    if (USE_WEBCAM) {
+        filename = "WEBCAM";
+    }
+    else {
+        filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    }
     if (!Drawer::startVideo(filename)) {
         return -1;
     }

@@ -5,8 +5,6 @@
 #ifndef SELFDRIVINGCAR_FILTERS_H
 #define SELFDRIVINGCAR_FILTERS_H
 
-#endif //SELFDRIVINGCAR_FILTERS_H
-
 #include "RowCol.h"
 
 struct Filters {
@@ -16,7 +14,13 @@ public:
     int minDistToHorizon;
     int maxLineDistToHorizon;
 
-    Filters() : Filters({}, 0, 0, 0) {};
-    Filters(RowCol horizon, int minLineLength, int minDistToHorizon, int maxLineDistToHorizon) :
-          horizon(horizon), minLineLength(minLineLength), minDistToHorizon(minDistToHorizon), maxLineDistToHorizon(maxLineDistToHorizon) {};
+    // thresholding image
+    int thresholdMinimumDelta;
+    int thresholdColDistance;
+
+    Filters() = default;
+
 };
+
+#endif //SELFDRIVINGCAR_FILTERS_H
+

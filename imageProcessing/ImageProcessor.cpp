@@ -12,7 +12,7 @@
 #include "RoadLine.h"
 
 Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
-    Segmentation segmentation = Segmentation(image, showSegmentation);
+    Segmentation segmentation = Segmentation(image, showSegmentation, filters.thresholdMinimumDelta, filters.thresholdColDistance);
     segmentation.segmentImage(nThreads, filters.horizon.row, image.rows);
     return segmentation;
 }
@@ -23,14 +23,8 @@ std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, bool sho
    return lines;
 }
 
-void ImageProcessor::setHorizon(RowCol horizon, int minDistToHorizon, int maxLineDistToHorizon) {
-    filters.horizon = horizon;
-    filters.minDistToHorizon = minDistToHorizon;
-    filters.maxLineDistToHorizon = maxLineDistToHorizon;
-}
-
-void ImageProcessor::setMinLineLength(int minLineLength) {
-    filters.minLineLength = minLineLength;
+void ImageProcessor::setFilters(Filters &_filters) {
+    filters = _filters;
 }
 
 std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines) {
