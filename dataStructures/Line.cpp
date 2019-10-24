@@ -37,11 +37,11 @@ void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const
     }
 }
 
-double Line::dist2ToPoint(RowCol &point) const {
-    return dist2ToPoint(point.row, point.col);
+double Line::horizontalDist2ToPoint(RowCol &point) const {
+    return horizontalDist2ToPoint(point.row, point.col);
 }
 
-double Line::dist2ToPoint(int row, int col) const {
+double Line::horizontalDist2ToPoint(int row, int col) const {
     auto _colC = (double) ((row - b) / a);
     auto _rowC = (double) (_colC * a + b);
     return (_colC-col)*(_colC-col) + (_rowC-row)*(_rowC-row);
@@ -49,4 +49,13 @@ double Line::dist2ToPoint(int row, int col) const {
 
 double Line::length2() const {
     return start.dist2(end);
+}
+
+double Line::getColAtRow(int row) const {
+   // if (a == 0) return -1;
+    return (double) ((row - b) / a);
+}
+
+double Line::getRowAtCol(int col) const {
+    return (double (col * a + b));
 }

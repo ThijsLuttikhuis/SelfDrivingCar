@@ -10,15 +10,22 @@
 #include <opencv2/highgui.hpp>
 
 #include "RowCol.h"
-#include "../Drawer.h"
+#include "../utilities/Drawer.h"
 
 class Line {
 public:
     Line() : Line({}, {}) { };
 
     Line(RowCol start, RowCol end) : start(start), end(end) {
-        a = (double) (end.row - start.row) / (end.col - start.col);
-        b = (double) start.row + a * -start.col;
+        if (end.col == start.col) {
+            a = (double) 99999;
+            b = (double) start.row + a * -start.col;
+        }
+        else {
+            a = (double) (end.row - start.row) / (end.col - start.col);
+            b = (double) start.row + a * -start.col;
+        }
+
     };
 
     RowCol start;
@@ -26,6 +33,7 @@ public:
     double a;
     double b;
     static uchar color;
+    bool isCurved = false;
 
     void draw(const cv::Mat &image, int thickness) const;
 
@@ -37,11 +45,15 @@ public:
         return (this->start == other.start) && (this->end == other.end);
     }
 
-    double dist2ToPoint(int row, int col) const;
+    double horizontalDist2ToPoint(int row, int col) const;
 
     double length2() const;
 
-    double dist2ToPoint(RowCol &point) const;
+    double horizontalDist2ToPoint(RowCol &point) const;
+
+    double getColAtRow(int row) const;
+
+    double getRowAtCol(int col) const;
 };
 
 

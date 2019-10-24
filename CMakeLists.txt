@@ -1,25 +1,53 @@
-cmake_minimum_required( VERSION 3.14 )
-set( CMAKE_CXX_STANDARD 14 )
+cmake_minimum_required(VERSION 3.14)
+set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
-project( SelfDrivingCar )
-find_package( OpenCV REQUIRED )
-find_package( Threads REQUIRED )
+project(SelfDrivingCar)
+find_package(OpenCV REQUIRED)
+find_package(Threads REQUIRED)
 
-add_executable( SelfDrivingCar main.cpp
+set(IMAGE_PROCESSING_SOURCES
+        imageProcessing/ImageProcessor.cpp
+        imageProcessing/ImageProcessor.h
 
-        ImageProcessor.cpp
-        ImageProcessor.h
-        Drawer.cpp
-        Drawer.h
-        Timer.cpp
-        Timer.h
-        dataStructures/Segmentation.h
-        dataStructures/Segmentation.cpp
+        # Processing parts
+        imageProcessing/Segmentation.h
+        imageProcessing/Segmentation.cpp
+        imageProcessing/LineFinder.cpp
+        imageProcessing/LineFinder.h
+        imageProcessing/LinePositionFinder.cpp
+        imageProcessing/LinePositionFinder.h
+        )
+
+set(UTILITIES_SOURCES
+        utilities/Drawer.cpp
+        utilities/Drawer.h
+        utilities/Timer.cpp
+        utilities/Timer.h
+        )
+
+set(DATA_STRUCTURES_SOURCES
+        dataStructures/RowCol.h
         dataStructures/ColumnSegment.h
-        dataStructures/RowCol.h dataStructures/Line.cpp dataStructures/Line.h dataStructures/LineFinder.cpp dataStructures/LineFinder.h)
+        dataStructures/Line.cpp
+        dataStructures/Line.h
+        imageProcessing/RoadLine.cpp
+        imageProcessing/RoadLine.h
 
-target_link_libraries( SelfDrivingCar ${OpenCV_LIBS} )
-target_link_libraries( SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT} )
+        # Helper structures
+        dataStructures/Filters.h
+        dataStructures/Pixel.h
+        dataStructures/ThreadArgs.h
+        )
+
+add_executable(SelfDrivingCar
+        main.cpp
+        ${IMAGE_PROCESSING_SOURCES}
+        ${UTILITIES_SOURCES}
+        ${DATA_STRUCTURES_SOURCES}
+        )
+
+target_link_libraries(SelfDrivingCar ${OpenCV_LIBS})
+target_link_libraries(SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT})
