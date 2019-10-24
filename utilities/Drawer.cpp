@@ -93,7 +93,6 @@ void Drawer::clearCopy(cv::Mat &image) {
 
     copy = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
 
-   // image.copyTo(copy);
 }
 
 void Drawer::setDebug(int _debug) {
@@ -105,18 +104,21 @@ void Drawer::setShowOriginalImage(int _showOriginalImage) {
 }
 
 void Drawer::drawArrowLeft(cv::Mat &image) {
+    if (!debug) return;
     RowCol start = RowCol(image.rows / 2, image.cols / 8);
     RowCol end = RowCol(image.rows / 2, 0);
     Drawer::drawArrow(start, end, 10);
 }
 
 void Drawer::drawArrowRight(cv::Mat &image) {
+    if (!debug) return;
     RowCol start = RowCol(image.rows / 2, 7 * image.cols / 8);
     RowCol end = RowCol(image.rows / 2, image.cols-1);
     Drawer::drawArrow(start, end, 10);
 }
 
 void Drawer::drawArrow(RowCol start, RowCol end, int thickness) {
+    if (!debug) return;
     for (int i = -thickness; i < thickness; i++) {
         int row = start.row + i;
         for (int col = start.col; col != end.col; col += (start.col-end.col) > 0 ? -1 : 1) {

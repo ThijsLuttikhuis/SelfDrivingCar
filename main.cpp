@@ -25,12 +25,6 @@
 #define MAX_LINE_D2H 80
 #define MIN_LINE_SEGMENT_D2H 200
 
-// Debug mode
-#define DEBUG 1
-#define SHOW_SEGMENTATION 1
-#define SHOW_LINES 1
-#define FRAME_BY_FRAME 0
-#define SHOW_ORIGINAL_IMAGE 2
 
 // Edge detection threshold parameters
 #define LINES_ARE_DARK 1
@@ -40,8 +34,15 @@
 // Use webcam or video
 #define USE_WEBCAM 1
 
+// Debug mode
+#define DEBUG 0
+#define SHOW_SEGMENTATION 0
+#define SHOW_LINES 0
+#define FRAME_BY_FRAME 0
+#define SHOW_ORIGINAL_IMAGE 0
 
 int main(int argc, char** argv) {
+
     // Start Timer
     Timer totalTime("Total time");
     totalTime.start();
@@ -77,16 +78,11 @@ int main(int argc, char** argv) {
 
     // Timing
     Timer timer = Timer("Processing time");
-    timer.start();
-
     Timer imshowTime = Timer("Imshow time");
+    timer.start();
     imshowTime.start();
 
     while (true) {
-        // Update Image
-        if (!Drawer::getNextFrame(image)) {
-            break;
-        }
         Drawer::clearCopy(image);
 
         // Segment image
@@ -129,8 +125,6 @@ int main(int argc, char** argv) {
             }
         }
 
-
-
         // Timing
         timer.printMilliSeconds();
         imshowTime.start();
@@ -140,10 +134,14 @@ int main(int argc, char** argv) {
             break;
         }
 
+        // Update Image
+        if (!Drawer::getNextFrame(image)) {
+            break;
+        }
+
         // Timing
         imshowTime.printMilliSeconds();
         timer.start();
-
     }
 
     // Properly close windows

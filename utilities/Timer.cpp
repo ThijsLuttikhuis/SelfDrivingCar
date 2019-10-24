@@ -44,7 +44,7 @@ void Timer::printMilliSeconds() {
         std::cout << "Time taken: " << t * 1000 << "ms " << std::endl;
     }
     else {
-        std::cout << name << " taken`: " << t * 1000 << "ms " << std::endl;
+        std::cout << name << " taken: " << t * 1000 << "ms " << std::endl;
     }
     tStart = tEnd;
 }
