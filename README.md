@@ -50,10 +50,20 @@ make -j3
 sudo make install
 ```
  
-###### If everything went ok, you should be done!
+#### Compile the project:
+```
+git clone https://github.com/ThijsLuttikhuis/SelfDrivingCar.git
+cd SelfDrivingCar
+mkdir build
+cd build
+cmake cmake -DCMAKE_BUILD_TYPE=DEBUG ..
+make -j2
+```
 
-
-
+#### Run the script:
+```
+./SelfDrivingCar
+```
 
 
 
