@@ -35,6 +35,7 @@ Make a directory and put the zip file in there:
 ```
 cd; mkdir OpenCV; cd OpenCV
 ```
+
 Unzip the file:
 ```
 unzip opencv-3.4.5.zip
@@ -51,6 +52,12 @@ sudo make install
 ```
  
 #### Compile the project:
+Make a directory:
+```
+cd; mkdir SelfDrivingCar; cd SelfDrivingCar
+```
+
+Clone and compile the project
 ```
 git clone https://github.com/ThijsLuttikhuis/SelfDrivingCar.git
 cd SelfDrivingCar
