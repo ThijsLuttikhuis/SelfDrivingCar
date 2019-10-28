@@ -40,7 +40,7 @@ set(DATA_STRUCTURES_SOURCES
         dataStructures/Filters.h
         dataStructures/Pixel.h
         dataStructures/ThreadArgs.h
-        )
+        dataStructures/Filters.cpp)
 
 add_executable(SelfDrivingCar
         main.cpp

@@ -19,7 +19,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 RowCol startOfLine = RowCol(row, col);
 
                 // Filters before
-                if (!preFilter(startOfLine)) continue;
+                if (!filters.preFilter(startOfLine)) continue;
 
                 // Create line
                 std::vector<double> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
@@ -27,7 +27,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 Line line = Line(startOfLine, endOfLine);
 
                 // Filters after
-                if (!lineFilter(line, lines, &dRowDCol)) continue;
+                if (!filters.lineFilter(line, lines, &dRowDCol)) continue;
 
                 // draw line
                 if (showLines) {
@@ -103,47 +103,4 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
     } else {
         return {-1, -1};
     }
-}
-
-bool LineFinder::preFilter(const RowCol &startOfLine) {
-    // filter lines too close to the horizon
-    if (startOfLine.dist2(filters.horizon) < filters.minDistToHorizon) return false;
-
-    return true;
-}
-
-bool LineFinder::lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<double>* dColDRow) {
-
-
-    // Filters after
-    if (line.end.row == -1 || line.end.col == -1) return false;
-
-    // Filter line length
-    auto dcdrSize = static_cast<int>(dColDRow->size());
-    if (dcdrSize < filters.minLineLength) return false;
-
-
-    // Filter line length
-    if (line.length2() < filters.minLineLength * filters.minLineLength) return false;
-
-    // Fiter direction of the line (towards horizon point)
-    double distanceToHorizon = line.horizontalDist2ToPoint(filters.horizon); // left ==> dth < 0
-    if (distanceToHorizon > filters.maxLineDistToHorizon * filters.maxLineDistToHorizon) {
-        // Actually fine, if the line is long enough, but line is not straight, or the car is not straight.
-        if (line.length2() < filters.minLineLength*filters.minLineLength*2*2) return false;
-        line.isCurved = true;
-        return false;
-    }
-
-    // Filter if another line is already very close
-    bool isCloseToOtherLine = false;
-    for (auto &otherLine : otherLines) {
-        if (otherLine.start.dist2(line.start) < 6 * 6 && otherLine.end.dist2(line.end) < 6 * 6) {
-            isCloseToOtherLine = true;
-            break;
-        }
-    }
-    if (isCloseToOtherLine) return false;
-
-    return true;
 }

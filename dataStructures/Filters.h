@@ -6,6 +6,7 @@
 #define SELFDRIVINGCAR_FILTERS_H
 
 #include "RowCol.h"
+#include "Line.h"
 
 struct Filters {
 public:
@@ -20,6 +21,9 @@ public:
 
     Filters() = default;
 
+    bool preFilter(RowCol startOfLine);
+
+    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<double>* dColDRow);
 };
 
 #endif //SELFDRIVINGCAR_FILTERS_H

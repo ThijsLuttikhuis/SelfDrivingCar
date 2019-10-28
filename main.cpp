@@ -16,14 +16,13 @@
 
 // Line Filters
 #define MIN_LINE_LENGTH 8
-
-//#define HORIZON RowCol(410, 500) // compilation720
-//#define HORIZON RowCol(174, 280) // straight_long
-#define HORIZON RowCol(210, 210) // night
-//#define HORIZON RowCol(155, 310) // Lenovo WebCam
-
 #define MAX_LINE_D2H 80
 #define MIN_LINE_SEGMENT_D2H 200
+
+//#define HORIZON RowCol(410, 500) // compilation720
+#define HORIZON RowCol(174, 270) // straight_long
+//#define HORIZON RowCol(210, 210) // night
+//#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 
 // Edge detection threshold parameters
@@ -65,7 +64,7 @@ int main(int argc, char** argv) {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    cv::String filename = "../dc_sl.mp4";
     if (USE_WEBCAM && !Drawer::startWebcam()) {
         return -1;
     }
@@ -101,31 +100,34 @@ int main(int argc, char** argv) {
 
         bool lineExistsLeft = false;
         bool lineExistsRight = false;
-        double closestLineColLeft = filters.horizon.col;
-        double closestLineColRight = filters.horizon.col;
+        double closestLineColLeft = -filters.horizon.col;
+        double closestLineColRight = filters.horizon.col*3;
         for (auto &roadLine : roadLines) {
             roadLine.drawColumn(image);
 
             double col = roadLine.lineColAtCar;
             if (col < filters.horizon.col) {
                 lineExistsLeft = true;
-                if (col < closestLineColLeft) {
+                if (col > closestLineColLeft) {
                     closestLineColLeft = col;
                 }
             }
             else {
                 lineExistsRight = true;
-                if (col > closestLineColRight) {
+                if (col < closestLineColRight) {
                     closestLineColRight = col;
                 }
             }
         }
         if (lineExistsLeft && lineExistsRight) {
-            if (fabs(closestLineColLeft - filters.horizon.col) > fabs(closestLineColRight - filters.horizon.col)) {
-                Drawer::drawArrowLeft(image);
+            double distanceLeft = -closestLineColLeft + filters.horizon.col;
+            double distanceRight = closestLineColRight - filters.horizon.col;
+            std::cout << "left: " << distanceLeft << "    right: " << distanceRight << std::endl;
+            if (distanceLeft < distanceRight) {
+                Drawer::drawArrowRight(image);
             }
             else {
-                Drawer::drawArrowRight(image);
+                Drawer::drawArrowLeft(image);
             }
         }
 
