@@ -33,6 +33,8 @@ public:
 
     static bool startVideo(cv::String &filename);
 
+    static bool startWebcam();
+
     static void setPixel(int row, int col, const uchar &color);
 
     static void setPixel(RowCol rowCol, const uchar &color);

@@ -12,34 +12,34 @@
 #include "dataStructures/Filters.h"
 
 // Number of Threads
-#define N_THREADS 16
+#define N_THREADS 4
 
 // Line Filters
 #define MIN_LINE_LENGTH 8
 
 //#define HORIZON RowCol(410, 500) // compilation720
 //#define HORIZON RowCol(174, 280) // straight_long
-//#define HORIZON RowCol(210, 210) // night
-#define HORIZON RowCol(155, 310) // Lenovo WebCam
+#define HORIZON RowCol(210, 210) // night
+//#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 #define MAX_LINE_D2H 80
 #define MIN_LINE_SEGMENT_D2H 200
 
 
 // Edge detection threshold parameters
-#define LINES_ARE_DARK 1
+#define LINES_ARE_DARK 0
 #define THRESHOLD_COL_DISTANCE 15
 #define THRESHOLD_MINIMUM_DELTA 25
 
 // Use webcam or video
-#define USE_WEBCAM 1
+#define USE_WEBCAM 0
 
 // Debug mode
-#define DEBUG 0
-#define SHOW_SEGMENTATION 0
-#define SHOW_LINES 0
-#define FRAME_BY_FRAME 0
-#define SHOW_ORIGINAL_IMAGE 0
+#define DEBUG 1
+#define SHOW_SEGMENTATION 1
+#define SHOW_LINES 1
+#define FRAME_BY_FRAME 1
+#define SHOW_ORIGINAL_IMAGE 2
 
 int main(int argc, char** argv) {
 
@@ -65,14 +65,16 @@ int main(int argc, char** argv) {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename;
-    if (USE_WEBCAM) {
-        filename = "WEBCAM";
+    cv::String filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    if (USE_WEBCAM && !Drawer::startWebcam()) {
+        return -1;
     }
-    else {
-        filename = "/home/thijs/CLionProjects/SelfDrivingCar/dashcam_night.mp4";
+    else if (!Drawer::startVideo(filename)) {
+        return -1;
     }
-    if (!Drawer::startVideo(filename)) {
+
+    // Update Image
+    if (!Drawer::getNextFrame(image)) {
         return -1;
     }
 
@@ -81,6 +83,8 @@ int main(int argc, char** argv) {
     Timer imshowTime = Timer("Imshow time");
     timer.start();
     imshowTime.start();
+
+    std::cout << image.rows << "x" << image.cols << std::endl;
 
     while (true) {
         Drawer::clearCopy(image);
@@ -143,7 +147,6 @@ int main(int argc, char** argv) {
         imshowTime.printMilliSeconds();
         timer.start();
     }
-
     // Properly close windows
     Drawer::closeVideo();
     totalTime.printSeconds();

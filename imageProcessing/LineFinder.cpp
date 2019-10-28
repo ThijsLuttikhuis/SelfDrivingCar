@@ -67,11 +67,9 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
             timeOut = -1;
             previousEdge = edge;
             row++;
-            if (++index % 5 == 0) {
-                dColDRow->push_back((double)(col - prevCol) /  (row - prevRow));
-                prevRow = row;
-                prevCol = col;
-            }
+            dColDRow->push_back((double)(col - prevCol) /  (row - prevRow));
+            prevRow = row;
+            prevCol = col;
             continue;
         }
         if (edge == PIXEL::NO_EDGE) {
@@ -119,6 +117,11 @@ bool LineFinder::lineFilter(Line &line, const std::vector<Line> &otherLines, con
 
     // Filters after
     if (line.end.row == -1 || line.end.col == -1) return false;
+
+    // Filter line length
+    auto dcdrSize = static_cast<int>(dColDRow->size());
+    if (dcdrSize < filters.minLineLength) return false;
+
 
     // Filter line length
     if (line.length2() < filters.minLineLength * filters.minLineLength) return false;

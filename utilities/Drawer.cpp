@@ -65,16 +65,20 @@ bool Drawer::showImage(bool frameByFrame) {
 }
 
 bool Drawer::startVideo(cv::String &filename) {
-    cv::VideoCapture _capture = cv::VideoCapture(0);
-    if (filename != "WEBCAM") {
-        _capture = cv::VideoCapture(filename);
-    }
-    capture = _capture;
+    capture = cv::VideoCapture(filename);
     if (!capture.isOpened()) {
         std::cerr << "Error opening video stream or file" << std::endl;
         return false;
     }
+    return true;
+}
 
+bool Drawer::startWebcam() {
+    capture = cv::VideoCapture(0);
+    if (!capture.isOpened()) {
+        std::cerr << "Error opening webcam" << std::endl;
+        return false;
+    }
     return true;
 }
 
