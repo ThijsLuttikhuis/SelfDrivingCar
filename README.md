@@ -63,8 +63,8 @@ git clone https://github.com/ThijsLuttikhuis/SelfDrivingCar.git
 cd SelfDrivingCar
 mkdir build
 cd build
-cmake cmake -DCMAKE_BUILD_TYPE=DEBUG ..
-make -j2
+cmake -DCMAKE_BUILD_TYPE=DEBUG ..
+make
 ```
 
 #### Run the script:
