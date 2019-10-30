@@ -18,9 +18,10 @@
 #define MIN_LINE_LENGTH 8
 #define MAX_LINE_D2H 80
 #define MIN_LINE_SEGMENT_D2H 200
+#define MIN_LINE_D2L 10
 
-//#define HORIZON RowCol(410, 500) // compilation720
-#define HORIZON RowCol(174, 270) // straight_long
+#define HORIZON RowCol(410, 500) // compilation720
+//#define HORIZON RowCol(174, 270) // straight_long
 //#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
@@ -35,7 +36,7 @@
 
 // Debug mode
 #define DEBUG 1
-#define SHOW_SEGMENTATION 1
+#define SHOW_SEGMENTATION 0
 #define SHOW_LINES 1
 #define FRAME_BY_FRAME 1
 #define SHOW_ORIGINAL_IMAGE 2
@@ -61,15 +62,20 @@ int main(int argc, char** argv) {
     filters.horizon = HORIZON;
     filters.thresholdColDistance = THRESHOLD_COL_DISTANCE;
     filters.thresholdMinimumDelta = LINES_ARE_DARK ? -THRESHOLD_MINIMUM_DELTA : THRESHOLD_MINIMUM_DELTA;
+    filters.minLineDistToOtherLine = MIN_LINE_D2L;
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_sl.mp4";
-    if (USE_WEBCAM && !Drawer::startWebcam()) {
-        return -1;
+    cv::String filename = "../dc_c720.mp4";
+    if (USE_WEBCAM) {
+        if (!Drawer::startWebcam()) {
+            return -1;
+        }
     }
-    else if (!Drawer::startVideo(filename)) {
-        return -1;
+    else {
+        if (!Drawer::startVideo(filename)) {
+            return -1;
+        }
     }
 
     // Update Image
@@ -98,8 +104,8 @@ int main(int argc, char** argv) {
         // Get actual position of lines
         std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
 
-        bool lineExistsLeft = false;
-        bool lineExistsRight = false;
+        int linesLeft = 0;
+        int linesRight = 0;
         double closestLineColLeft = -filters.horizon.col;
         double closestLineColRight = filters.horizon.col*3;
         for (auto &roadLine : roadLines) {
@@ -107,22 +113,23 @@ int main(int argc, char** argv) {
 
             double col = roadLine.lineColAtCar;
             if (col < filters.horizon.col) {
-                lineExistsLeft = true;
+                linesLeft++;
                 if (col > closestLineColLeft) {
                     closestLineColLeft = col;
                 }
             }
             else {
-                lineExistsRight = true;
+                linesRight++;
                 if (col < closestLineColRight) {
                     closestLineColRight = col;
                 }
             }
         }
-        if (lineExistsLeft && lineExistsRight) {
+        if (linesLeft && linesRight) {
             double distanceLeft = -closestLineColLeft + filters.horizon.col;
             double distanceRight = closestLineColRight - filters.horizon.col;
-            std::cout << "left: " << distanceLeft << "    right: " << distanceRight << std::endl;
+            std::cout << "left: " << linesLeft << " lines, distance = " << distanceLeft << "    right: " << linesRight << " lines, distance = " << distanceRight << std::endl;
+
             if (distanceLeft < distanceRight) {
                 Drawer::drawArrowRight(image);
             }

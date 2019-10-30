@@ -38,7 +38,8 @@ bool Filters::lineFilter(Line &line, const std::vector<Line> &otherLines, const 
     // Filter if another line is already very close
     bool isCloseToOtherLine = false;
     for (auto &otherLine : otherLines) {
-        if (otherLine.start.dist2(line.start) < 6 * 6 && otherLine.end.dist2(line.end) < 6 * 6) {
+        if (otherLine.start.dist2(line.start) < minLineDistToOtherLine * minLineDistToOtherLine &&
+            otherLine.end.dist2(line.end) < minLineDistToOtherLine * minLineDistToOtherLine) {
             isCloseToOtherLine = true;
             break;
         }

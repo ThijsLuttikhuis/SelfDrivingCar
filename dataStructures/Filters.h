@@ -14,6 +14,7 @@ public:
     int minLineLength;
     int minDistToHorizon;
     int maxLineDistToHorizon;
+    int minLineDistToOtherLine;
 
     // thresholding image
     int thresholdMinimumDelta;
