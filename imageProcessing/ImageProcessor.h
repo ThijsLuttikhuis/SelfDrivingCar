@@ -29,7 +29,7 @@ public:
 
     Segmentation segmentImage(bool showSegentation = false);
 
-    std::vector<Line> findLines(Segmentation* segmentation, bool showLines);
+    std::vector<Line> findLines(Segmentation* segmentation, int showLines);
 
 
 

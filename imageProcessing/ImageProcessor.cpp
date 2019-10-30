@@ -17,14 +17,10 @@ Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
     return segmentation;
 }
 
-std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, bool showLines) {
+std::vector<Line> ImageProcessor::findLines(Segmentation* segmentation, int showLines) {
     LineFinder lineFinder = LineFinder(image, filters, showLines);
     std::vector<Line> lines = lineFinder.findLines(segmentation);
    return lines;
-}
-
-void ImageProcessor::setFilters(Filters &_filters) {
-    filters = _filters;
 }
 
 std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines) {
@@ -34,3 +30,6 @@ std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines)
     return lineCols;
 }
 
+void ImageProcessor::setFilters(Filters &_filters) {
+    filters = _filters;
+}

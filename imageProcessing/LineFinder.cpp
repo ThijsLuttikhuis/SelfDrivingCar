@@ -22,7 +22,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 if (!filters.preFilter(startOfLine)) continue;
 
                 // Create line
-                std::vector<double> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
+                std::vector<int> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, &dRowDCol);
                 Line line = Line(startOfLine, endOfLine);
 
@@ -31,9 +31,13 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
 
                 // draw line
                 if (showLines) {
-                    line.draw(image, 7);
-                    line.draw(image, filters.horizon.row, image.rows);
-                    //Drawer::showImage(image, true);
+                    if (showLines > 1) {
+                        line.draw(image, 7);
+                        line.draw(image, filters.horizon.row, image.rows);
+                    }
+                    else {
+                        line.draw(image, 1);
+                    }
                 }
                 lines.push_back(line);
             }
@@ -43,7 +47,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
 }
 
 RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _col, PIXEL _previousEdge,
-                                   std::vector<double>* dColDRow) {
+                                   std::vector<int>* dColDRow) {
     // Magic (tm) - probably not wise to touch this function.
     PIXEL previousEdge = _previousEdge;
     int row = _row;
@@ -67,7 +71,7 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
             timeOut = -1;
             previousEdge = edge;
             row++;
-            dColDRow->push_back((double)(col - prevCol) /  (row - prevRow));
+            dColDRow->push_back(col - prevCol);
             prevRow = row;
             prevCol = col;
             continue;

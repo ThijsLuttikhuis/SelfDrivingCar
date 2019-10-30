@@ -12,34 +12,34 @@
 #include "dataStructures/Filters.h"
 
 // Number of Threads
-#define N_THREADS 4
+#define N_THREADS               4
 
 // Line Filters
-#define MIN_LINE_LENGTH 8
-#define MAX_LINE_D2H 80
-#define MIN_LINE_SEGMENT_D2H 200
-#define MIN_LINE_D2L 10
+#define MIN_LINE_LENGTH         10
+#define MAX_LINE_D2H            120
+#define MIN_LINE_SEGMENT_D2H    60
+#define MIN_LINE_D2L            10
 
-#define HORIZON RowCol(410, 500) // compilation720
-//#define HORIZON RowCol(174, 270) // straight_long
+//#define HORIZON RowCol(410, 500) // compilation720
+#define HORIZON RowCol(174, 270) // straight_long
 //#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 
 // Edge detection threshold parameters
-#define LINES_ARE_DARK 0
-#define THRESHOLD_COL_DISTANCE 15
+#define LINES_ARE_DARK          0
+#define THRESHOLD_COL_DISTANCE  15
 #define THRESHOLD_MINIMUM_DELTA 25
 
 // Use webcam or video
-#define USE_WEBCAM 0
+#define USE_WEBCAM              0
 
-// Debug mode
-#define DEBUG 1
-#define SHOW_SEGMENTATION 0
-#define SHOW_LINES 1
-#define FRAME_BY_FRAME 1
-#define SHOW_ORIGINAL_IMAGE 2
+// Debug mode                 value     //  |       0       |       1       |       2       |
+#define DEBUG                   1       //  | show NOTHING  | debug mode    |               |
+#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |
+#define SHOW_LINES              1       //  | dont show     | simple lines  | extend lines  |
+#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
+#define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
 int main(int argc, char** argv) {
 
@@ -66,30 +66,31 @@ int main(int argc, char** argv) {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_c720.mp4";
+    cv::String filename = "../dc_sl.mp4";
     if (USE_WEBCAM) {
         if (!Drawer::startWebcam()) {
             return -1;
         }
+        std::cout << "Webcam loaded" << std::endl;
     }
     else {
         if (!Drawer::startVideo(filename)) {
             return -1;
         }
+        std::cout << "Video loaded" << std::endl;
     }
 
     // Update Image
     if (!Drawer::getNextFrame(image)) {
         return -1;
     }
+    std::cout << "image: " << image.rows << "x" << image.cols << std::endl;
 
     // Timing
     Timer timer = Timer("Processing time");
     Timer imshowTime = Timer("Imshow time");
     timer.start();
     imshowTime.start();
-
-    std::cout << image.rows << "x" << image.cols << std::endl;
 
     while (true) {
         Drawer::clearCopy(image);
@@ -99,10 +100,11 @@ int main(int argc, char** argv) {
 
         // Combine lines and filter them
         std::vector<Line> lines = imageProcessor.findLines(&segmentation, SHOW_LINES);
-        std::cout << lines.size() << " lines found!" << std::endl;
 
         // Get actual position of lines
         std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
+
+        std::cout << lines.size() << " lines found, of which " << roadLines.size() << " actual roadlines!" << std::endl;
 
         int linesLeft = 0;
         int linesRight = 0;
@@ -156,6 +158,7 @@ int main(int argc, char** argv) {
         imshowTime.printMilliSeconds();
         timer.start();
     }
+
     // Properly close windows
     Drawer::closeVideo();
     totalTime.printSeconds();

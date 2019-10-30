@@ -24,7 +24,7 @@ public:
 
     bool preFilter(RowCol startOfLine);
 
-    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<double>* dColDRow);
+    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow);
 };
 
 #endif //SELFDRIVINGCAR_FILTERS_H
