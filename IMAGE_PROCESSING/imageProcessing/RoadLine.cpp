@@ -4,9 +4,7 @@
 
 #include "RoadLine.h"
 
-void RoadLine::drawSquareAtColumn(cv::Mat &image) {
-    int size = 20;
-
+void RoadLine::drawSquareAtColumn(cv::Mat &image, int size) {
     auto col = lineColAtCar;
     auto row = image.rows - size - 1;
     for (int i = -size; i < size; i++) {

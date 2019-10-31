@@ -4,8 +4,6 @@
 
 #include "Line.h"
 
-uchar Line::color = 0;
-
 void Line::draw(const cv::Mat &image, int thickness) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
@@ -21,8 +19,6 @@ void Line::draw(const cv::Mat &image) const {
 }
 
 void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const {
-    color = 255;
-
     for (int row = startRow; row < endRow; row++) {
         auto col = (int) ((row - b) / a) + delta;
         if (col >= 0 && col < image.cols) {

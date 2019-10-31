@@ -14,7 +14,7 @@ public:
     std::vector<Line> correspondingLines;
 
 
-    void drawSquareAtColumn(cv::Mat &image);
+    void drawSquareAtColumn(cv::Mat &image, int size = 20);
 };
 
 

@@ -28,6 +28,7 @@
 #define MAX_LINE_D2H            120
 #define MIN_LINE_SEGMENT_D2H    60
 #define MIN_LINE_D2L            10
+#define MIN_ROAD_LINE_POINTS    20
 
 //#define HORIZON RowCol(410, 500) // compilation720
 #define HORIZON RowCol(174, 270) // straight_long
@@ -43,13 +44,13 @@
 // Use webcam or video
 #define USE_WEBCAM              0
 
-// Debug mode                 value     //  |       0       |       1       |       2       |
-#define DEBUG                   1       //  | show NOTHING  | debug mode    |               |
-#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |
-#define SHOW_LINES              1       //  | dont show     | simple lines  | extend lines  |
-#define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |
-#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
-#define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
+// Debug mode                 value     //  |       0       |       1       |       2       |       3       |
+#define DEBUG                   1       //  | show NOTHING  | debug mode    |               |               |
+#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |               |
+#define SHOW_LINES              3       //  | dont show     | simple lines  | extend lines  | show wrong too|
+#define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |               |
+#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |               |
+#define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
 
 class image_processing : public node {
 private:

@@ -22,6 +22,7 @@ bool image_processing::setup() {
     filters.thresholdColDistance = THRESHOLD_COL_DISTANCE;
     filters.thresholdMinimumDelta = LINES_ARE_DARK ? -THRESHOLD_MINIMUM_DELTA : THRESHOLD_MINIMUM_DELTA;
     filters.minLineDistToOtherLine = MIN_LINE_D2L;
+    filters.minRoadLinePoints = MIN_ROAD_LINE_POINTS;
     imageProcessor.setFilters(filters);
 
     // Get Video

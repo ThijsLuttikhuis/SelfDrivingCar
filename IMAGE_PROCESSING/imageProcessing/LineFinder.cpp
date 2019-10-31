@@ -27,7 +27,13 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 Line line = Line(startOfLine, endOfLine);
 
                 // Filters after
-                if (!filters.lineFilter(line, lines, &dRowDCol)) continue;
+                if (!filters.lineFilter(line, lines, &dRowDCol)) {
+                    if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
+                        line.color = 100;
+                        line.draw(image, 3);
+                    }
+                    continue;
+                }
 
                 // draw line
                 if (showLines) {
@@ -39,6 +45,8 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                         line.draw(image, 1);
                     }
                 }
+
+                line.dRowDCol = dRowDCol;
                 lines.push_back(line);
             }
         }

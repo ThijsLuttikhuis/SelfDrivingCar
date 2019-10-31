@@ -19,7 +19,6 @@ void Drawer::setPixel(char &pixel, const uchar &color) {
     if (!debug) return;
 
     pixel = color;
-
 }
 
 void Drawer::setPixel(int row, int col, const uchar &color) {
@@ -41,7 +40,7 @@ bool Drawer::showImage(cv::Mat &image, bool frameByFrame) {
     if (showOriginalImage > 1) showImage(frameByFrame);
 
     if (!initShowOriginalImage) {
-        initShowOriginalImage=true;
+        initShowOriginalImage = true;
         cv::namedWindow("Original Image window", cv::WINDOW_NORMAL); // Create a window for display.
         cv::resizeWindow("Original Image window", 640, 480);
         cv::moveWindow("Original Image window", 700, 60);
@@ -55,7 +54,7 @@ bool Drawer::showImage(bool frameByFrame) {
     if (!debug) return true;
 
     if (!initShowSegmentedImage) {
-        initShowSegmentedImage=true;
+        initShowSegmentedImage = true;
         cv::namedWindow("Segmented Image window", cv::WINDOW_NORMAL); // Create a window for display.
         cv::resizeWindow("Segmented Image window", 640, 480);
         cv::moveWindow("Segmented Image window", 60, 60);
@@ -75,6 +74,7 @@ bool Drawer::startVideo(cv::String &filename) {
 
 bool Drawer::startWebcam() {
     capture = cv::VideoCapture(0);
+
     if (!capture.isOpened()) {
         std::cerr << "Error opening webcam" << std::endl;
         return false;
@@ -111,7 +111,6 @@ void Drawer::drawArrowLeft(cv::Mat &image, double factor) {
     if (!debug) return;
     int thickness = 10;
     RowCol start = RowCol(image.rows / 8, static_cast<int>(factor * image.cols / 20.0));
-    start.col = start.col > image.cols ? image.cols-1 : start.col;
     RowCol end = RowCol(image.rows / 8, 0);
     Drawer::drawArrow(image, start, end, thickness);
 }
@@ -120,17 +119,19 @@ void Drawer::drawArrowRight(cv::Mat &image, double factor) {
     if (!debug) return;
     int thickness = 10;
     RowCol start = RowCol(image.rows / 8, static_cast<int>((20.0-factor) * image.cols / 20.0));
-    start.col = start.col < 0 ? 0 : start.col;
     RowCol end = RowCol(image.rows / 8, image.cols-1);
     Drawer::drawArrow(image, start, end, thickness);
 }
 
 void Drawer::drawArrow(cv::Mat &image, RowCol start, RowCol end, int thickness) {
     if (!debug) return;
+    start.col = start.col > image.cols ? image.cols-1 : start.col < 0 ? 0 : start.col;
+    end.col = end.col > image.cols ? image.cols-1 : end.col < 0 ? 0 : end.col;
+
     for (int i = -thickness; i < thickness; i++) {
         int row = start.row + i;
         for (int col = start.col; col != end.col; col += (start.col-end.col) > 0 ? -1 : 1) {
-            if (col > 0 && col < image.cols && row > 0 && row < image.rows) {
+            if (col > 0 && col < image.cols-1 && row > 0 && row < image.rows-1) {
                     Drawer::setPixel(row, col, 255);
             }
         }

@@ -14,7 +14,7 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
     double closestLineColRight = filters.horizon.col*3;
     for (auto &roadLine : *roadLines) {
         if (showRoadLinePositions) {
-            roadLine.drawSquareAtColumn(image);
+            roadLine.drawSquareAtColumn(image, 10);
         }
 
         double col = roadLine.lineColAtCar;

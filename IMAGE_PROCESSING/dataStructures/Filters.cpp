@@ -58,3 +58,27 @@ bool Filters::lineFilter(Line &line, const std::vector<Line> &otherLines, const 
 
     return true;
 }
+
+bool Filters::roadLineFilter(RoadLine &roadLine) {
+    int sum = 0;
+    int longestPart = 0;
+    double a = 0.0;
+    for (auto &line : roadLine.correspondingLines) {
+        int size = line.dRowDCol.size();
+        sum += size;
+
+        if (size > longestPart) {
+            longestPart = size;
+            a = line.a;
+        }
+    }
+    if (sum < minRoadLinePoints) return false;
+
+    for (auto &line : roadLine.correspondingLines) {
+        if (line.a / a < 0.7 || a / line.a < 0.7) {
+            return false;
+        }
+    }
+
+    return true;
+}
