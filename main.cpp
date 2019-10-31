@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
             break;
         }
     }
-    
+
     imageprocessing.close();
     return 0;
 }
