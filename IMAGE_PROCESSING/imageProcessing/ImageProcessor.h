@@ -33,8 +33,6 @@ public:
 
     std::vector<Line> findLines(Segmentation* segmentation, int showLines);
 
-
-
     void setFilters(Filters &filters);
 
     std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);

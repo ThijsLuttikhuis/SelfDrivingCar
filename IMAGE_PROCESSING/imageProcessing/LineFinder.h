@@ -20,7 +20,7 @@ private:
     int maxTimeOut = 8;
     int showLines;
 
-    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, std::vector<int>* dColDRow);
+    RowCol recursiveSearch(Segmentation* segmentation, int row, int col, int previousEdge, std::vector<int>* dColDRow);
 
 public:
     LineFinder(cv::Mat &image, Filters &filters, int showLines) :

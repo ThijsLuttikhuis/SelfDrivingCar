@@ -10,9 +10,9 @@
 
 class ColumnSegment {
 public:
-    explicit ColumnSegment(int row, int col) : row(row), col(std::vector<PIXEL>(col, PIXEL::NO_EDGE)) {}
+    explicit ColumnSegment(int row, int col) : row(row), col(std::vector<int>(col, NO_EDGE)) {}
     int row;
-    std::vector<PIXEL> col;
+    std::vector<int> col;
 };
 
 

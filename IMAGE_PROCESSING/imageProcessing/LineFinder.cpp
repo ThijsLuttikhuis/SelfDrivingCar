@@ -3,7 +3,7 @@
 //
 
 #include "LineFinder.h"
-#include <iostream>
+#include "../dataStructures/Pixel.h"
 
 
 std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
@@ -14,8 +14,8 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
         for (int col = 0; col < (int) columnSegment.col.size(); col++) {
             if (row < filters.horizon.row) continue;
 
-            PIXEL edge = columnSegment.col[col];
-            if (edge == PIXEL::RIGHT_EDGE || edge == PIXEL::LEFT_EDGE) {
+            int edge = columnSegment.col[col];
+            if (edge == RIGHT_EDGE || edge == LEFT_EDGE) {
                 RowCol startOfLine = RowCol(row, col);
 
                 // Filters before
@@ -46,18 +46,16 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
     return lines;
 }
 
-RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _col, PIXEL _previousEdge,
+RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _col, int _previousEdge,
                                    std::vector<int>* dColDRow) {
     // Magic (tm) - probably not wise to touch this function.
-    PIXEL previousEdge = _previousEdge;
+    int previousEdge = _previousEdge;
     int row = _row;
     int col = _col;
 
-    int prevRow = _row;
     int prevCol = _col;
 
 
-    int index = 0;
     int timeOut = -1;
 
     while (--timeOut != 0) {
@@ -65,32 +63,31 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
             return {row, col};
         }
 
-        PIXEL edge = segmentation->segmentationRow[row].col[col];
-        segmentation->segmentationRow[row].col[col] = PIXEL::UNDEFINED;
-        if (edge == PIXEL::LEFT_EDGE || edge == PIXEL::RIGHT_EDGE) {
+        int edge = segmentation->segmentationRow[row].col[col];
+        segmentation->segmentationRow[row].col[col] = UNDEFINED;
+        if (edge == LEFT_EDGE || edge == RIGHT_EDGE) {
             timeOut = -1;
             previousEdge = edge;
             row++;
             dColDRow->push_back(col - prevCol);
-            prevRow = row;
             prevCol = col;
             continue;
         }
-        if (edge == PIXEL::NO_EDGE) {
-            if (previousEdge == PIXEL::LEFT_EDGE || previousEdge == PIXEL::RIGHT_EDGE) {
-                col += static_cast<char>(previousEdge);
+        if (edge == NO_EDGE) {
+            if (previousEdge == LEFT_EDGE || previousEdge == RIGHT_EDGE) {
+                col += previousEdge;
                 timeOut = maxTimeOut;
-                previousEdge = static_cast<PIXEL>(previousEdge * -2);
+                previousEdge = previousEdge * -2;
                 continue;
-            } else if (previousEdge == PIXEL::NO_EDGE_GO_RIGHT || previousEdge == PIXEL::NO_EDGE_GO_LEFT) {
-                col += static_cast<char>(previousEdge / -2);
+            } else if (previousEdge == NO_EDGE_GO_RIGHT || previousEdge == NO_EDGE_GO_LEFT) {
+                col += previousEdge / -2;
                 continue;
             }
         }
-        if (edge == PIXEL::BETWEEN_EDGE) {
-            if (previousEdge == PIXEL::LEFT_EDGE || previousEdge == PIXEL::RIGHT_EDGE) {
-                col += static_cast<char>(previousEdge);
-                previousEdge = static_cast<PIXEL>(previousEdge * 3);
+        if (edge == BETWEEN_EDGE) {
+            if (previousEdge == LEFT_EDGE || previousEdge == RIGHT_EDGE) {
+                col += previousEdge;
+                previousEdge = previousEdge * 3;
                 continue;
             } else {
                 col += static_cast<char>(previousEdge / 3);
@@ -100,9 +97,9 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
         return {-1, -1};
     }
 
-    if (previousEdge == PIXEL::NO_EDGE_GO_RIGHT) {
+    if (previousEdge == NO_EDGE_GO_RIGHT) {
         return {row, col - maxTimeOut};
-    } else if (previousEdge == PIXEL::NO_EDGE_GO_LEFT) {
+    } else if (previousEdge == NO_EDGE_GO_LEFT) {
         return {row, col + maxTimeOut};
     } else {
         return {-1, -1};

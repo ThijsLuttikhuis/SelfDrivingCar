@@ -45,10 +45,10 @@
 
 // Debug mode                 value     //  |       0       |       1       |       2       |
 #define DEBUG                   1       //  | show NOTHING  | debug mode    |               |
-#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |
-#define SHOW_LINES              1       //  | dont show     | simple lines  | extend lines  |
+#define SHOW_SEGMENTATION       1       //  | dont show     | segmentation  |               |
+#define SHOW_LINES              2       //  | dont show     | simple lines  | extend lines  |
 #define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |
-#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
+#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
 class image_processing : public node {
@@ -61,8 +61,7 @@ private:
     Timer imshowTime;
 
 public:
-    explicit image_processing(cv::Mat &image) : node(image),
-                                                imageProcessor(ImageProcessor(N_THREADS, image)) {};
+    explicit image_processing(cv::Mat &image) : node(image), imageProcessor(ImageProcessor(N_THREADS, image)) {};
     bool setup() override;
     bool loop(CarPosition* carPosition) override;
     void close() override;
