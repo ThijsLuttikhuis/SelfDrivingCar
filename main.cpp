@@ -36,12 +36,12 @@
 #define USE_WEBCAM              0
 
 // Debug mode                 value     //  |       0       |       1       |       2       |
-#define DEBUG                   1       //  | show NOTHING  | debug mode    |               |
-#define SHOW_SEGMENTATION       1       //  | dont show     | segmentation  |               |
-#define SHOW_LINES              2       //  | dont show     | simple lines  | extend lines  |
-#define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |
-#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
-#define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
+#define DEBUG                   0       //  | show NOTHING  | debug mode    |               |
+#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |
+#define SHOW_LINES              0       //  | dont show     | simple lines  | extend lines  |
+#define SHOW_ROAD_LINES         0       //  | dont show     | road position |               |
+#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
+#define SHOW_ORIGINAL_IMAGE     0       //  | thresholded   | original      | show both     |
 
 int main(int argc, char** argv) {
 
@@ -106,6 +106,7 @@ int main(int argc, char** argv) {
         // Get actual position of lines
         std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
 
+        // Get the position of the car on the road.
         CarPosition carPosition = imageProcessor.getCarPosition(&roadLines, SHOW_ROAD_LINES);
 
         std::cout << lines.size() << " lines found, of which " << roadLines.size() << " actual roadlines!" << std::endl;
