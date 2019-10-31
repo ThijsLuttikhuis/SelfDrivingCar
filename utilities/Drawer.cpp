@@ -65,16 +65,20 @@ bool Drawer::showImage(bool frameByFrame) {
 }
 
 bool Drawer::startVideo(cv::String &filename) {
-    cv::VideoCapture _capture = cv::VideoCapture(0);
-    if (filename != "WEBCAM") {
-        _capture = cv::VideoCapture(filename);
-    }
-    capture = _capture;
+    capture = cv::VideoCapture(filename);
     if (!capture.isOpened()) {
         std::cerr << "Error opening video stream or file" << std::endl;
         return false;
     }
+    return true;
+}
 
+bool Drawer::startWebcam() {
+    capture = cv::VideoCapture(0);
+    if (!capture.isOpened()) {
+        std::cerr << "Error opening webcam" << std::endl;
+        return false;
+    }
     return true;
 }
 
@@ -93,7 +97,6 @@ void Drawer::clearCopy(cv::Mat &image) {
 
     copy = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
 
-   // image.copyTo(copy);
 }
 
 void Drawer::setDebug(int _debug) {
@@ -104,19 +107,24 @@ void Drawer::setShowOriginalImage(int _showOriginalImage) {
     showOriginalImage = _showOriginalImage;
 }
 
-void Drawer::drawArrowLeft(cv::Mat &image) {
-    RowCol start = RowCol(image.rows / 2, image.cols / 8);
-    RowCol end = RowCol(image.rows / 2, 0);
-    Drawer::drawArrow(start, end, 10);
+void Drawer::drawArrowLeft(cv::Mat &image, double factor) {
+    if (!debug) return;
+    int thickness = 10;
+    RowCol start = RowCol(image.rows / 8, static_cast<int>(factor * image.cols / 20.0));
+    RowCol end = RowCol(image.rows / 8, 0);
+    Drawer::drawArrow(start, end, thickness);
 }
 
-void Drawer::drawArrowRight(cv::Mat &image) {
-    RowCol start = RowCol(image.rows / 2, 7 * image.cols / 8);
-    RowCol end = RowCol(image.rows / 2, image.cols-1);
-    Drawer::drawArrow(start, end, 10);
+void Drawer::drawArrowRight(cv::Mat &image, double factor) {
+    if (!debug) return;
+    int thickness = 10;
+    RowCol start = RowCol(image.rows / 8, static_cast<int>((20.0-factor) * image.cols / 20.0));
+    RowCol end = RowCol(image.rows / 8, image.cols-1);
+    Drawer::drawArrow(start, end, thickness);
 }
 
 void Drawer::drawArrow(RowCol start, RowCol end, int thickness) {
+    if (!debug) return;
     for (int i = -thickness; i < thickness; i++) {
         int row = start.row + i;
         for (int col = start.col; col != end.col; col += (start.col-end.col) > 0 ? -1 : 1) {

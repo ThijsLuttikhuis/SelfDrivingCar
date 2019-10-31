@@ -5,7 +5,7 @@
 #ifndef SELFDRIVINGCAR_PIXEL_H
 #define SELFDRIVINGCAR_PIXEL_H
 
-enum PIXEL : char {
+enum PIXEL : int {
     // Dont touch the numbers! :)
 
     BETWEEN_EDGE_GO_LEFT = -3,

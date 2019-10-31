@@ -80,6 +80,8 @@ void* Segmentation::segmentationThread(void* arg) {
         thresholdColumn(&columnSegment);
         segmentationRow[row] = columnSegment;
     }
+
+    return NULL;
 }
 
 void Segmentation::segmentImage(int nThreads) {

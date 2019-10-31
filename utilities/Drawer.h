@@ -33,6 +33,8 @@ public:
 
     static bool startVideo(cv::String &filename);
 
+    static bool startWebcam();
+
     static void setPixel(int row, int col, const uchar &color);
 
     static void setPixel(RowCol rowCol, const uchar &color);
@@ -43,9 +45,9 @@ public:
 
     static void setShowOriginalImage(int showOriginaImage);
 
-    static void drawArrowLeft(cv::Mat &image);
+    static void drawArrowLeft(cv::Mat &image, double factor = 1);
 
-    static void drawArrowRight(cv::Mat &image);
+    static void drawArrowRight(cv::Mat &image, double factor = 1);
 
     static void drawArrow(RowCol start, RowCol end, int thickness);
 };

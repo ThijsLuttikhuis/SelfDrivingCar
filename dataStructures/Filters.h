@@ -6,6 +6,7 @@
 #define SELFDRIVINGCAR_FILTERS_H
 
 #include "RowCol.h"
+#include "Line.h"
 
 struct Filters {
 public:
@@ -13,6 +14,7 @@ public:
     int minLineLength;
     int minDistToHorizon;
     int maxLineDistToHorizon;
+    int minLineDistToOtherLine;
 
     // thresholding image
     int thresholdMinimumDelta;
@@ -20,6 +22,9 @@ public:
 
     Filters() = default;
 
+    bool preFilter(RowCol startOfLine);
+
+    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow);
 };
 
 #endif //SELFDRIVINGCAR_FILTERS_H

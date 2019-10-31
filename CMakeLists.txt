@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
@@ -19,6 +19,8 @@ set(IMAGE_PROCESSING_SOURCES
         imageProcessing/LineFinder.h
         imageProcessing/LinePositionFinder.cpp
         imageProcessing/LinePositionFinder.h
+        imageProcessing/CarPositionFinder.cpp
+        imageProcessing/CarPositionFinder.h
         )
 
 set(UTILITIES_SOURCES
@@ -35,11 +37,14 @@ set(DATA_STRUCTURES_SOURCES
         dataStructures/Line.h
         imageProcessing/RoadLine.cpp
         imageProcessing/RoadLine.h
+        dataStructures/CarPosition.cpp
+        dataStructures/CarPosition.h
 
         # Helper structures
         dataStructures/Filters.h
         dataStructures/Pixel.h
         dataStructures/ThreadArgs.h
+        dataStructures/Filters.cpp
         )
 
 add_executable(SelfDrivingCar
