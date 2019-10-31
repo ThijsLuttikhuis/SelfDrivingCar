@@ -15,8 +15,7 @@
 class LineFinder {
 private:
     cv::Mat &image;
-
-    Filters filters;
+    Filters &filters;
 
     int maxTimeOut = 8;
     int showLines;
@@ -24,7 +23,7 @@ private:
     RowCol recursiveSearch(Segmentation* segmentation, int row, int col, PIXEL previousEdge, std::vector<int>* dColDRow);
 
 public:
-    LineFinder(cv::Mat &image, Filters filters, int showLines) :
+    LineFinder(cv::Mat &image, Filters &filters, int showLines) :
     image(image), filters(filters), showLines(showLines) {};
 
     std::vector<Line> findLines(Segmentation* segmentation);

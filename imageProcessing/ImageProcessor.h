@@ -11,6 +11,7 @@
 #include "../dataStructures/Line.h"
 #include "LineFinder.h"
 #include "RoadLine.h"
+#include "CarPositionFinder.h"
 
 #ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
 #define SELFDRIVINGCAR_IMAGEPROCESSOR_H
@@ -36,6 +37,8 @@ public:
     void setFilters(Filters &filters);
 
     std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);
+
+    CarPosition getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

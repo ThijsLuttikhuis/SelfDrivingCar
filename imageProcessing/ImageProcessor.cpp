@@ -10,6 +10,7 @@
 #include "LineFinder.h"
 #include "LinePositionFinder.h"
 #include "RoadLine.h"
+#include "../dataStructures/CarPosition.h"
 
 Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
     Segmentation segmentation = Segmentation(image, showSegmentation, filters.thresholdMinimumDelta, filters.thresholdColDistance);
@@ -30,6 +31,14 @@ std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines)
     return lineCols;
 }
 
+CarPosition ImageProcessor::getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions) {
+    CarPositionFinder carPositionFinder = CarPositionFinder(image, filters, showRoadLinePositions);
+    CarPosition carPosition = carPositionFinder.findCarPosition(roadLines);
+
+    return carPosition;
+}
+
 void ImageProcessor::setFilters(Filters &_filters) {
     filters = _filters;
 }
+

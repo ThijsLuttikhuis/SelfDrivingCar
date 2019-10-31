@@ -10,6 +10,7 @@
 #include "imageProcessing/RoadLine.h"
 #include <iostream>
 #include "dataStructures/Filters.h"
+#include "dataStructures/CarPosition.h"
 
 // Number of Threads
 #define N_THREADS               4
@@ -21,8 +22,8 @@
 #define MIN_LINE_D2L            10
 
 //#define HORIZON RowCol(410, 500) // compilation720
-#define HORIZON RowCol(174, 270) // straight_long
-//#define HORIZON RowCol(210, 210) // night
+//#define HORIZON RowCol(174, 270) // straight_long
+#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 
@@ -36,9 +37,10 @@
 
 // Debug mode                 value     //  |       0       |       1       |       2       |
 #define DEBUG                   1       //  | show NOTHING  | debug mode    |               |
-#define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |
-#define SHOW_LINES              1       //  | dont show     | simple lines  | extend lines  |
-#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
+#define SHOW_SEGMENTATION       1       //  | dont show     | segmentation  |               |
+#define SHOW_LINES              2       //  | dont show     | simple lines  | extend lines  |
+#define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |
+#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
 int main(int argc, char** argv) {
@@ -66,7 +68,7 @@ int main(int argc, char** argv) {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_sl.mp4";
+    cv::String filename = "../dc_n.mp4";
     if (USE_WEBCAM) {
         if (!Drawer::startWebcam()) {
             return -1;
@@ -104,41 +106,9 @@ int main(int argc, char** argv) {
         // Get actual position of lines
         std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
 
+        CarPosition carPosition = imageProcessor.getCarPosition(&roadLines, SHOW_ROAD_LINES);
+
         std::cout << lines.size() << " lines found, of which " << roadLines.size() << " actual roadlines!" << std::endl;
-
-        int linesLeft = 0;
-        int linesRight = 0;
-        double closestLineColLeft = -filters.horizon.col;
-        double closestLineColRight = filters.horizon.col*3;
-        for (auto &roadLine : roadLines) {
-            roadLine.drawColumn(image);
-
-            double col = roadLine.lineColAtCar;
-            if (col < filters.horizon.col) {
-                linesLeft++;
-                if (col > closestLineColLeft) {
-                    closestLineColLeft = col;
-                }
-            }
-            else {
-                linesRight++;
-                if (col < closestLineColRight) {
-                    closestLineColRight = col;
-                }
-            }
-        }
-        if (linesLeft && linesRight) {
-            double distanceLeft = -closestLineColLeft + filters.horizon.col;
-            double distanceRight = closestLineColRight - filters.horizon.col;
-            std::cout << "left: " << linesLeft << " lines, distance = " << distanceLeft << "    right: " << linesRight << " lines, distance = " << distanceRight << std::endl;
-
-            if (distanceLeft < distanceRight) {
-                Drawer::drawArrowRight(image);
-            }
-            else {
-                Drawer::drawArrowLeft(image);
-            }
-        }
 
         // Timing
         timer.printMilliSeconds();

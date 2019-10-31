@@ -19,6 +19,8 @@ set(IMAGE_PROCESSING_SOURCES
         imageProcessing/LineFinder.h
         imageProcessing/LinePositionFinder.cpp
         imageProcessing/LinePositionFinder.h
+        imageProcessing/CarPositionFinder.cpp
+        imageProcessing/CarPositionFinder.h
         )
 
 set(UTILITIES_SOURCES
@@ -35,12 +37,15 @@ set(DATA_STRUCTURES_SOURCES
         dataStructures/Line.h
         imageProcessing/RoadLine.cpp
         imageProcessing/RoadLine.h
+        dataStructures/CarPosition.cpp
+        dataStructures/CarPosition.h
 
         # Helper structures
         dataStructures/Filters.h
         dataStructures/Pixel.h
         dataStructures/ThreadArgs.h
-        dataStructures/Filters.cpp)
+        dataStructures/Filters.cpp
+        )
 
 add_executable(SelfDrivingCar
         main.cpp

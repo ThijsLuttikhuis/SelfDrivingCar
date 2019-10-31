@@ -13,7 +13,7 @@ public:
     double lineColAtCar;
     std::vector<Line> correspondingLines;
 
-    void drawColumn(cv::Mat &image) {
+    void drawSquareAtColumn(cv::Mat &image) {
         int size = 20;
 
         auto col = lineColAtCar;
