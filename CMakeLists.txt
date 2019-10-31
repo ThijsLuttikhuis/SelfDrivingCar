@@ -48,7 +48,7 @@ set(DATA_STRUCTURES_SOURCES
         )
 
 set(CONTROL_SOURCES
-        stack.cpp stack.h)
+        node.cpp node.h)
 
 add_executable(SelfDrivingCar
         main.cpp

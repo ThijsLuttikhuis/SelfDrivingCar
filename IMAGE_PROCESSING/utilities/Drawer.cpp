@@ -111,24 +111,28 @@ void Drawer::drawArrowLeft(cv::Mat &image, double factor) {
     if (!debug) return;
     int thickness = 10;
     RowCol start = RowCol(image.rows / 8, static_cast<int>(factor * image.cols / 20.0));
+    start.col = start.col > image.cols ? image.cols-1 : start.col;
     RowCol end = RowCol(image.rows / 8, 0);
-    Drawer::drawArrow(start, end, thickness);
+    Drawer::drawArrow(image, start, end, thickness);
 }
 
 void Drawer::drawArrowRight(cv::Mat &image, double factor) {
     if (!debug) return;
     int thickness = 10;
     RowCol start = RowCol(image.rows / 8, static_cast<int>((20.0-factor) * image.cols / 20.0));
+    start.col = start.col < 0 ? 0 : start.col;
     RowCol end = RowCol(image.rows / 8, image.cols-1);
-    Drawer::drawArrow(start, end, thickness);
+    Drawer::drawArrow(image, start, end, thickness);
 }
 
-void Drawer::drawArrow(RowCol start, RowCol end, int thickness) {
+void Drawer::drawArrow(cv::Mat &image, RowCol start, RowCol end, int thickness) {
     if (!debug) return;
     for (int i = -thickness; i < thickness; i++) {
         int row = start.row + i;
         for (int col = start.col; col != end.col; col += (start.col-end.col) > 0 ? -1 : 1) {
-            setPixel(row, col, 255);
+            if (col > 0 && col < image.cols && row > 0 && row < image.rows) {
+                    Drawer::setPixel(row, col, 255);
+            }
         }
     }
 }

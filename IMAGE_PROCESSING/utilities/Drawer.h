@@ -49,7 +49,7 @@ public:
 
     static void drawArrowRight(cv::Mat &image, double factor = 1);
 
-    static void drawArrow(RowCol start, RowCol end, int thickness);
+    static void drawArrow(cv::Mat &image, RowCol start, RowCol end, int thickness);
 };
 
 

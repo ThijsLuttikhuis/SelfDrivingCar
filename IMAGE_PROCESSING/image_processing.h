@@ -18,7 +18,7 @@
 #include <iostream>
 #include "dataStructures/Filters.h"
 #include "../CarPosition.h"
-#include "../stack.h"
+#include "../node.h"
 
 // Number of Threads
 #define N_THREADS               4
@@ -51,7 +51,7 @@
 #define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
-class image_processing : public stack {
+class image_processing : public node {
 private:
 
     ImageProcessor imageProcessor;
@@ -61,7 +61,7 @@ private:
     Timer imshowTime;
 
 public:
-    explicit image_processing(cv::Mat &image) : stack(image),
+    explicit image_processing(cv::Mat &image) : node(image),
                                                 imageProcessor(ImageProcessor(N_THREADS, image)) {};
     bool setup() override;
     bool loop(CarPosition* carPosition) override;

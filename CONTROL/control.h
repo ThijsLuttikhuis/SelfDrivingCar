@@ -7,9 +7,9 @@
 
 
 #include "../CarPosition.h"
-#include "../stack.h"
+#include "../node.h"
 
-class control : public stack {
+class control : public node {
 private:
     double Kp;
     double Ki;
@@ -20,7 +20,7 @@ private:
     double errorSum;
 
 public:
-    explicit control(cv::Mat &image) : stack(image) {};
+    explicit control(cv::Mat &image) : node(image) {};
     bool setup() override;
     bool loop(CarPosition* carPosition) override;
     void close() override;

@@ -5,8 +5,8 @@
 #include "IMAGE_PROCESSING/image_processing.h"
 #include "CONTROL/control.h"
 
-std::vector<stack*> setupStack(cv::Mat &image) {
-    std::vector<stack*> stack {};
+std::vector<node*> setupStack(cv::Mat &image) {
+    std::vector<node*> stack {};
 
     auto* imageprocessing = new image_processing(image);
     auto* pidcontrol = new control(image);
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     bool loop = true;
 
     // make stack
-    std::vector<stack*> stack = setupStack(image);
+    std::vector<node*> stack = setupStack(image);
 
     // setup stack
     for (auto &n : stack) {
