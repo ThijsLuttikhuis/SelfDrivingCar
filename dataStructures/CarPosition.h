@@ -7,6 +7,17 @@
 
 
 class CarPosition {
+public:
+    int distanceToLeftLine;
+    int distanceToRightLine;
+
+    bool laneLeftExists;
+    bool laneRightExists;
+
+    double roadCurve;
+
+    CarPosition() : distanceToLeftLine(0), distanceToRightLine(0),
+                    laneLeftExists(false), laneRightExists(false), roadCurve(0) {};
 
 };
 

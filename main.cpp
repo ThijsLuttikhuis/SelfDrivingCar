@@ -22,8 +22,8 @@
 #define MIN_LINE_D2L            10
 
 //#define HORIZON RowCol(410, 500) // compilation720
-//#define HORIZON RowCol(174, 270) // straight_long
-#define HORIZON RowCol(210, 210) // night
+#define HORIZON RowCol(174, 270) // straight_long
+//#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 
@@ -40,7 +40,7 @@
 #define SHOW_SEGMENTATION       1       //  | dont show     | segmentation  |               |
 #define SHOW_LINES              2       //  | dont show     | simple lines  | extend lines  |
 #define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |
-#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
+#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
 int main(int argc, char** argv) {
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_n.mp4";
+    cv::String filename = "../dc_sl.mp4";
     if (USE_WEBCAM) {
         if (!Drawer::startWebcam()) {
             return -1;

@@ -12,7 +12,9 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
     double closestLineColLeft = -filters.horizon.col;
     double closestLineColRight = filters.horizon.col*3;
     for (auto &roadLine : *roadLines) {
-        roadLine.drawSquareAtColumn(image);
+        if (showRoadLinePositions) {
+            roadLine.drawSquareAtColumn(image);
+        }
 
         double col = roadLine.lineColAtCar;
         if (col < filters.horizon.col) {
@@ -29,14 +31,17 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
         }
     }
     if (linesLeft && linesRight) {
-        double distanceLeft = -closestLineColLeft + filters.horizon.col;
-        double distanceRight = closestLineColRight - filters.horizon.col;
-
-        if (distanceLeft < distanceRight) {
-            Drawer::drawArrowRight(image);
-        }
-        else {
-            Drawer::drawArrowLeft(image);
+        carPosition.distanceToLeftLine = static_cast<int>(-closestLineColLeft + filters.horizon.col);
+        carPosition.distanceToRightLine = static_cast<int>(closestLineColRight - filters.horizon.col);
+        int &dLeft = carPosition.distanceToLeftLine;
+        int &dRight = carPosition.distanceToRightLine;
+        if (showRoadLinePositions) {
+            if (dLeft < dRight) {
+                Drawer::drawArrowRight(image, static_cast<double>(dRight * 1.0 / dLeft - 1.0));
+            }
+            else {
+                Drawer::drawArrowLeft(image, static_cast<double>(dLeft * 1.0 / dRight - 1.0));
+            }
         }
     }
 

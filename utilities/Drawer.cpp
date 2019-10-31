@@ -107,18 +107,20 @@ void Drawer::setShowOriginalImage(int _showOriginalImage) {
     showOriginalImage = _showOriginalImage;
 }
 
-void Drawer::drawArrowLeft(cv::Mat &image) {
+void Drawer::drawArrowLeft(cv::Mat &image, double factor) {
     if (!debug) return;
-    RowCol start = RowCol(image.rows / 2, image.cols / 8);
-    RowCol end = RowCol(image.rows / 2, 0);
-    Drawer::drawArrow(start, end, 10);
+    int thickness = 10;
+    RowCol start = RowCol(image.rows / 8, static_cast<int>(factor * image.cols / 20.0));
+    RowCol end = RowCol(image.rows / 8, 0);
+    Drawer::drawArrow(start, end, thickness);
 }
 
-void Drawer::drawArrowRight(cv::Mat &image) {
+void Drawer::drawArrowRight(cv::Mat &image, double factor) {
     if (!debug) return;
-    RowCol start = RowCol(image.rows / 2, 7 * image.cols / 8);
-    RowCol end = RowCol(image.rows / 2, image.cols-1);
-    Drawer::drawArrow(start, end, 10);
+    int thickness = 10;
+    RowCol start = RowCol(image.rows / 8, static_cast<int>((20.0-factor) * image.cols / 20.0));
+    RowCol end = RowCol(image.rows / 8, image.cols-1);
+    Drawer::drawArrow(start, end, thickness);
 }
 
 void Drawer::drawArrow(RowCol start, RowCol end, int thickness) {
