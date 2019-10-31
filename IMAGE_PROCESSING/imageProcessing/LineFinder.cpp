@@ -89,8 +89,8 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
                 col += previousEdge;
                 previousEdge = previousEdge * 3;
                 continue;
-            } else {
-                col += static_cast<char>(previousEdge / 3);
+            } else if (previousEdge == BETWEEN_EDGE_GO_LEFT || previousEdge == BETWEEN_EDGE_GO_RIGHT) {
+                col += static_cast<int>(previousEdge / 3);
                 continue;
             }
         }
