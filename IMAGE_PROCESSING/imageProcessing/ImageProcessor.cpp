@@ -10,7 +10,7 @@
 #include "LineFinder.h"
 #include "LinePositionFinder.h"
 #include "RoadLine.h"
-#include "../dataStructures/CarPosition.h"
+#include "../../CarPosition.h"
 
 Segmentation ImageProcessor::segmentImage(bool showSegmentation) {
     Segmentation segmentation = Segmentation(image, showSegmentation, filters.thresholdMinimumDelta, filters.thresholdColDistance);

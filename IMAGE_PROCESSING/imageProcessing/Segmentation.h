@@ -2,13 +2,14 @@
 // Created by thijs on 17-10-19.
 //
 
+#ifndef SELFDRIVINGCAR_SEGMENTATION_H
+#define SELFDRIVINGCAR_SEGMENTATION_H
+
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include "../dataStructures/ColumnSegment.h"
 
-#ifndef SELFDRIVINGCAR_SEGMENTATION_H
-#define SELFDRIVINGCAR_SEGMENTATION_H
 
 class Segmentation {
 private:

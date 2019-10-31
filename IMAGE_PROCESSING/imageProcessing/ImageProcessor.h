@@ -2,6 +2,9 @@
 // Created by thijs on 17-10-19.
 //
 
+#ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
+#define SELFDRIVINGCAR_IMAGEPROCESSOR_H
+
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
@@ -13,8 +16,6 @@
 #include "RoadLine.h"
 #include "CarPositionFinder.h"
 
-#ifndef SELFDRIVINGCAR_IMAGEPROCESSOR_H
-#define SELFDRIVINGCAR_IMAGEPROCESSOR_H
 
 class ImageProcessor {
 private:

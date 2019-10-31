@@ -5,7 +5,7 @@
 #include "CarPositionFinder.h"
 
 CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines) {
-    CarPosition carPosition;
+    CarPosition carPosition = CarPosition();
     if (roadLines->size() < 2) return carPosition;
 
     int linesLeft = 0;
