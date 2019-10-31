@@ -18,6 +18,7 @@
 #include <iostream>
 #include "dataStructures/Filters.h"
 #include "../CarPosition.h"
+#include "../stack.h"
 
 // Number of Threads
 #define N_THREADS               4
@@ -50,9 +51,9 @@
 #define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |
 
-class image_processing {
+class image_processing : public stack {
 private:
-    cv::Mat &image;
+
     ImageProcessor imageProcessor;
 
     Timer totalTime;
@@ -60,10 +61,11 @@ private:
     Timer imshowTime;
 
 public:
-    explicit image_processing(cv::Mat &image) : image(image), imageProcessor(ImageProcessor(N_THREADS, image)) {};
-    bool setup();
-    bool loop();
-    void close();
+    explicit image_processing(cv::Mat &image) : stack(image),
+                                                imageProcessor(ImageProcessor(N_THREADS, image)) {};
+    bool setup() override;
+    bool loop(CarPosition* carPosition) override;
+    void close() override;
 };
 
 #endif //SELFDRIVINGCAR_MAIN_IMAGE_PROCESSING_H

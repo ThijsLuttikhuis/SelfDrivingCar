@@ -47,16 +47,25 @@ set(DATA_STRUCTURES_SOURCES
         IMAGE_PROCESSING/image_processing.h
         )
 
+set(CONTROL_SOURCES
+        stack.cpp stack.h)
+
 add_executable(SelfDrivingCar
         main.cpp
 
         # Image Processing
         IMAGE_PROCESSING/image_processing.cpp
+        IMAGE_PROCESSING/image_processing.h
+
         ${IMAGE_PROCESSING_SOURCES}
         ${UTILITIES_SOURCES}
         ${DATA_STRUCTURES_SOURCES}
 
         # Control
+        CONTROL/control.cpp
+        CONTROL/control.h
+
+        ${CONTROL_SOURCES}
 
         # GPIO
 

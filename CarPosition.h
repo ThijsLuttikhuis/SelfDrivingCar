@@ -16,8 +16,10 @@ public:
 
     double roadCurve;
 
+    double pid;
+
     CarPosition() : distanceToLeftLine(0), distanceToRightLine(0),
-                    laneLeftExists(false), laneRightExists(false), roadCurve(0) {};
+                    laneLeftExists(false), laneRightExists(false), roadCurve(0), pid(0) {};
 
 };
 

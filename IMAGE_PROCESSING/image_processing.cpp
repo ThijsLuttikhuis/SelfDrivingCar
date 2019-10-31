@@ -54,7 +54,7 @@ bool image_processing::setup() {
     return true;
 }
 
-bool image_processing::loop() {
+bool image_processing::loop(CarPosition* carPosition) {
     Drawer::clearCopy(image);
 
     // Segment image
@@ -67,7 +67,7 @@ bool image_processing::loop() {
     std::vector<RoadLine> roadLines = imageProcessor.getLinePositions(&lines);
 
     // Get the position of the car on the road.
-    CarPosition carPosition = imageProcessor.getCarPosition(&roadLines, SHOW_ROAD_LINES);
+    *carPosition = imageProcessor.getCarPosition(&roadLines, SHOW_ROAD_LINES);
 
     std::cout << lines.size() << " lines found, of which " << roadLines.size() << " actual roadlines!" << std::endl;
 
