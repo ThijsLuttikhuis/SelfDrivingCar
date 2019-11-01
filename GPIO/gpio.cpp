@@ -3,7 +3,7 @@
 //
 
 #include "gpio.h"
-#define USE_PI
+
 #ifdef USE_PI
 #include <wiringPi.h>
 #include <softPwm.h>
