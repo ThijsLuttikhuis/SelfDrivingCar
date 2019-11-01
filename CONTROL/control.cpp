@@ -22,7 +22,7 @@ void control::filter(CarPosition* carPosition) {
 bool control::loop(CarPosition* carPosition) {
     filter(carPosition);
 
-    double sampleTime = 0;
+    double sampleTime = 0.05;
 
     previousError = error;
     error = carPosition->distanceToLeftLine - carPosition->distanceToRightLine;

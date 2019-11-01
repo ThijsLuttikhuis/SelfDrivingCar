@@ -16,7 +16,7 @@ bool gpio::setup() {
     // Steer variables
     currentAngle = 12;
     rangeCamera = 400;
-    rangeServo = 8;
+    rangeServo = 6;  // MAX = 8
     biasServo = 12;
 
     // Speed variables
@@ -30,6 +30,14 @@ bool gpio::setup() {
         std::cout << "Error in creating softPwm" << std::endl;
         return false;
     }
+
+    std::cout << "Testing Steering" << std::endl;
+    softPwmWrite(SERVO_PWM, biasServo + (rangeServo/2));
+    sleep(1);
+    softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
+    sleep(1);
+    softPwmWrite(SERVO_PWM, biasServo);
+    sleep(1);
 
     std::cout << "Starting Engine" << std::endl;
     softPwmWrite(HBRUG_PWM, startSpeed);
