@@ -8,6 +8,17 @@ project(SelfDrivingCar)
 find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
 
+
+set(USE_PI 0)
+
+if(USE_PI)
+    add_definitions(-DUSE_PI=1)
+    message("Raspberry Pi set")
+    find_library(wiringPi_LIB wiringPi REQUIRED)
+else()
+    message("Ubuntu set")
+endif()
+
 set(IMAGE_PROCESSING_SOURCES
         IMAGE_PROCESSING/imageProcessing/ImageProcessor.cpp
         IMAGE_PROCESSING/imageProcessing/ImageProcessor.h
@@ -48,7 +59,7 @@ set(DATA_STRUCTURES_SOURCES
         )
 
 set(CONTROL_SOURCES
-        node.cpp node.h)
+        node.cpp node.h GPIO/gpio.cpp GPIO/gpio.h)
 
 add_executable(SelfDrivingCar
         main.cpp
@@ -73,3 +84,7 @@ add_executable(SelfDrivingCar
 
 target_link_libraries(SelfDrivingCar ${OpenCV_LIBS})
 target_link_libraries(SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT})
+
+if (USE_PI)
+    target_link_libraries(SelfDrivingCar ${wiringPi_LIB})
+endif()
