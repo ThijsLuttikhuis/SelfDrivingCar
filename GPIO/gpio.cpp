@@ -2,12 +2,13 @@
 // Created by thijs on 01-11-19.
 //
 
-#include <zconf.h>
 #include "gpio.h"
 
 #ifdef USE_PI
 #include <wiringPi.h>
 #include <softPwm.h>
+#include <iostream>
+#include <zconf.h>
 #endif
 
 bool gpio::setup() {
