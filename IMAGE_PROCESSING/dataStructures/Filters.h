@@ -7,6 +7,7 @@
 
 #include "RowCol.h"
 #include "Line.h"
+#include "../imageProcessing/RoadLine.h"
 
 struct Filters {
 public:
@@ -15,6 +16,8 @@ public:
     int minDistToHorizon;
     int maxLineDistToHorizon;
     int minLineDistToOtherLine;
+    int minRoadLinePoints;
+    int minDistanceForSeperateLines;
 
     // thresholding image
     int thresholdMinimumDelta;
@@ -22,9 +25,13 @@ public:
 
     Filters() = default;
 
-    bool preFilter(RowCol startOfLine);
+    bool preLineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow);
 
-    bool lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow);
+    void afterLineFilter(std::vector<Line>* lines);
+
+
+
+    bool roadLineFilter(RoadLine &roadLine);
 };
 
 #endif //SELFDRIVINGCAR_FILTERS_H

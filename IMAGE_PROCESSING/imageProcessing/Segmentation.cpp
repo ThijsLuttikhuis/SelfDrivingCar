@@ -48,12 +48,12 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
                 if (showSegmentation) {
                     Drawer::setPixel(row, col, thresholdedColor[1]);
                 }
-                columnSegment->col.at(col) = PIXEL::LEFT_EDGE;
+                columnSegment->col.at(col) = LEFT_EDGE;
             } else {
                 if (showSegmentation) {
                     Drawer::setPixel(row, col, thresholdedColor[2]);
                 }
-                columnSegment->col.at(col) = PIXEL::BETWEEN_EDGE;
+                columnSegment->col.at(col) = BETWEEN_EDGE;
             }
             prev = true;
         } else {
@@ -61,7 +61,7 @@ void Segmentation::thresholdColumn(ColumnSegment* columnSegment) {
                 if (showSegmentation) {
                     Drawer::setPixel(row, col, thresholdedColor[3]);
                 }
-                columnSegment->col.at(col) = PIXEL::RIGHT_EDGE;
+                columnSegment->col.at(col) = RIGHT_EDGE;
             }
             prev = false;
         }
@@ -81,7 +81,7 @@ void* Segmentation::segmentationThread(void* arg) {
         segmentationRow[row] = columnSegment;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 void Segmentation::segmentImage(int nThreads) {

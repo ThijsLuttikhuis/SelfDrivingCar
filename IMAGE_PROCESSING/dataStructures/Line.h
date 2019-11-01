@@ -32,8 +32,10 @@ public:
     RowCol end;
     double a;
     double b;
-    static uchar color;
+    uchar color = 255;
+
     bool isCurved = false;
+    std::vector<int> dRowDCol;
 
     void draw(const cv::Mat &image, int thickness) const;
 
@@ -54,6 +56,7 @@ public:
     double getColAtRow(int row) const;
 
     double getRowAtCol(int col) const;
+
 };
 
 

@@ -5,11 +5,10 @@
 #ifndef SELFDRIVINGCAR_CARPOSITIONFINDER_H
 #define SELFDRIVINGCAR_CARPOSITIONFINDER_H
 
-
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include "../dataStructures/CarPosition.h"
+#include "../../CarPosition.h"
 #include "../dataStructures/Filters.h"
 #include "RoadLine.h"
 

@@ -5,7 +5,8 @@
 #include "CarPositionFinder.h"
 
 CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines) {
-    CarPosition carPosition;
+    CarPosition carPosition = CarPosition();
+    if (roadLines->size() < 2) return carPosition;
 
     int linesLeft = 0;
     int linesRight = 0;
@@ -13,7 +14,7 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
     double closestLineColRight = filters.horizon.col*3;
     for (auto &roadLine : *roadLines) {
         if (showRoadLinePositions) {
-            roadLine.drawSquareAtColumn(image);
+            roadLine.drawSquareAtColumn(image, 10);
         }
 
         double col = roadLine.lineColAtCar;
