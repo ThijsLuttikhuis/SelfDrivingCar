@@ -10,10 +10,18 @@ bool control::setup() {
     previousError = 0;
     errorSum = 0;
 
+    dataSet = false;
+
     return true;
 }
 
+void control::filter(CarPosition* carPosition) {
+    if (!dataSet) return;
+}
+
 bool control::loop(CarPosition* carPosition) {
+    filter(carPosition);
+
     double sampleTime = 0;
 
     previousError = error;
@@ -28,5 +36,6 @@ bool control::loop(CarPosition* carPosition) {
 void control::close() {
 
 }
+
 
 

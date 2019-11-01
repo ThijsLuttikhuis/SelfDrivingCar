@@ -15,18 +15,15 @@ class gpio : public node {
 private:
 
 // Steer variables
-    double currentAngle = 12;
-    double rangeCamera = 400;
-    double rangeServo = 8;
-    double biasServo = 12;
+    double currentAngle;
+    double rangeCamera;
+    double rangeServo;
+    double biasServo;
 
     // Speed variables
-    double startSpeed = 40;
-    double startSpeed_t = 500;
-    double speed = 30;
-
-// Inputs
-    double pid = 100;
+    double startSpeed;
+    double startSpeed_t;
+    double speed;
 
 public:
     explicit gpio(cv::Mat &image) : node(image) {};
