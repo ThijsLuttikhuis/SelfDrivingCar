@@ -12,6 +12,7 @@
 
 bool gpio::setup() {
 #ifdef USE_PI
+    std::cout << "Using WiringPi for GPIO" << std::endl;
     wiringPiSetup();
     if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 100)) ;
 
