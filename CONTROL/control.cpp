@@ -2,7 +2,7 @@
 #include "control.h"
 
 bool control::setup() {
-    Kp = 0.0001;
+    Kp = 1;
     Ki = 0;
     Kd = 0;
 

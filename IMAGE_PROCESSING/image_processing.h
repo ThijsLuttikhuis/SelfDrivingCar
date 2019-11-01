@@ -50,7 +50,7 @@
 #define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |               |
 #define SHOW_LINES              3       //  | dont show     | simple lines  | extend lines  | show wrong too|
 #define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |               |
-#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |               |
+#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
 
 class image_processing : public node {
