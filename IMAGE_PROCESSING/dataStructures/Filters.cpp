@@ -12,14 +12,8 @@ enum DIR {
     LEFT
 };
 
-bool Filters::preFilter(RowCol startOfLine) {
-    // filter lines too close to the horizon
-//    if (startOfLine.dist2(horizon) < minDistToHorizon*minDistToHorizon) return false;
 
-    return true;
-}
-
-bool Filters::lineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow) {
+bool Filters::preLineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow) {
 
     // Filters after
     if (line.end.row == -1 || line.end.col == -1) return false;
@@ -33,30 +27,20 @@ bool Filters::lineFilter(Line &line, const std::vector<Line> &otherLines, const 
     if (line.start.dist2(horizon) < minDistToHorizon*minDistToHorizon &&
         line.end.dist2(horizon) < minDistToHorizon*minDistToHorizon) return false;
 
-
     return true;
+}
 
-    // Fiter direction of the line (towards horizon point)
-    double distanceToHorizon = line.horizontalDist2ToPoint(horizon); // left ==> dth < 0
-    if (distanceToHorizon > maxLineDistToHorizon * maxLineDistToHorizon) {
-        // Actually fine, if the line is long enough, but line is not straight, or the car is not straight.
-        if (line.length2() < minLineLength*minLineLength*2*2) return false;
-        line.isCurved = true;
-        return false;
-    }
 
+void Filters::afterLineFilter(std::vector<Line>* lines) {
     // Filter if another line is already very close
-    bool isCloseToOtherLine = false;
-    for (auto &otherLine : otherLines) {
-        if (otherLine.start.dist2(line.start) < minLineDistToOtherLine * minLineDistToOtherLine &&
-            otherLine.end.dist2(line.end) < minLineDistToOtherLine * minLineDistToOtherLine) {
-            isCloseToOtherLine = true;
-            break;
-        }
-    }
-    if (isCloseToOtherLine) return false;
+//    for (auto &otherLine : otherLines) {
+//        if (otherLine.start.dist2(line.start) < minLineDistToOtherLine * minLineDistToOtherLine &&
+//            otherLine.end.dist2(line.end) < minLineDistToOtherLine * minLineDistToOtherLine) {
+//            std::cout << "too close to other line . exe tm xd haha 1234567890       string" << std::endl;
+//            return false;
+//        }
+//    }
 
-    return true;
 }
 
 bool Filters::roadLineFilter(RoadLine &roadLine) {

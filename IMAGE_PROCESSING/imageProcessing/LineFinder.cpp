@@ -2,6 +2,7 @@
 // Created by thijs on 22-10-19.
 //
 
+#include <iostream>
 #include "LineFinder.h"
 #include "../dataStructures/Pixel.h"
 
@@ -18,16 +19,13 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
             if (edge == RIGHT_EDGE || edge == LEFT_EDGE) {
                 RowCol startOfLine = RowCol(row, col);
 
-                // Filters before
-                if (!filters.preFilter(startOfLine)) continue;
-
                 // Create line
                 std::vector<int> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, &dRowDCol);
                 Line line = Line(startOfLine, endOfLine);
 
-                // Filters after
-                if (!filters.lineFilter(line, lines, &dRowDCol)) {
+                // Filter line
+                if (!filters.preLineFilter(line, lines, &dRowDCol)) {
                     if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
                         line.color = 100;
                         line.draw(image, 3);
@@ -35,7 +33,7 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                     continue;
                 }
 
-                // draw line
+                // Draw line
                 if (showLines) {
                     if (showLines > 1) {
                         line.draw(image, 7);
@@ -46,33 +44,42 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                     }
                 }
 
+                // Make line
                 line.dRowDCol = dRowDCol;
                 lines.push_back(line);
             }
         }
     }
+
+    filters.afterLineFilter(&lines);
     return lines;
 }
 
 RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _col, int _previousEdge,
                                    std::vector<int>* dColDRow) {
     // Magic (tm) - probably not wise to touch this function.
-    int previousEdge = _previousEdge;
+
     int row = _row;
     int col = _col;
 
+    int previousEdge = _previousEdge;
     int prevCol = _col;
 
-
+    // Variable to check if we are at the end of the line
     int timeOut = -1;
 
+    // Recursive while loop
     while (--timeOut != 0) {
+        // If end of the image, return
         if (row <= 0 || row >= image.rows - 1 || col <= 0 || col >= image.cols - 1) {
             return {row, col};
         }
 
+        // Get current pixel
         int edge = segmentation->segmentationRow[row].col[col];
         segmentation->segmentationRow[row].col[col] = UNDEFINED;
+
+        // If we find the line, move one pixel down and continue
         if (edge == LEFT_EDGE || edge == RIGHT_EDGE) {
             timeOut = -1;
             previousEdge = edge;
@@ -81,6 +88,7 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
             prevCol = col;
             continue;
         }
+        // If we do not find a line, keep moving sideways to find it
         if (edge == NO_EDGE) {
             if (previousEdge == LEFT_EDGE || previousEdge == RIGHT_EDGE) {
                 col += previousEdge;
@@ -102,9 +110,12 @@ RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _co
                 continue;
             }
         }
+
+        // Else, a line probably already exists nearby
         return {-1, -1};
     }
 
+    // End of line, return the line
     if (previousEdge == NO_EDGE_GO_RIGHT) {
         return {row, col - maxTimeOut};
     } else if (previousEdge == NO_EDGE_GO_LEFT) {

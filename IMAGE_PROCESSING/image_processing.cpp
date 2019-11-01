@@ -19,14 +19,15 @@ bool image_processing::setup() {
     filters.maxLineDistToHorizon = MAX_LINE_D2H;
     filters.minDistToHorizon = MIN_LINE_SEGMENT_D2H;
     filters.horizon = HORIZON;
-    filters.thresholdColDistance = THRESHOLD_COL_DISTANCE;
+    filters.thresholdColDistance = THRESHOLD_COL_D;
     filters.thresholdMinimumDelta = LINES_ARE_DARK ? -THRESHOLD_MINIMUM_DELTA : THRESHOLD_MINIMUM_DELTA;
     filters.minLineDistToOtherLine = MIN_LINE_D2L;
     filters.minRoadLinePoints = MIN_ROAD_LINE_POINTS;
+    filters.minDistanceForSeperateLines = MIN_DF_SEPARATE_LINES;
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_sl.mp4";
+    cv::String filename = "../dc_n.mp4";
     if (USE_WEBCAM) {
         if (!Drawer::startWebcam()) {
             return false;

@@ -8,7 +8,6 @@
 std::vector<RoadLine> LinePositionFinder::findLinePositions(std::vector<Line>* lines) {
     if (!lines) return {};
     std::vector<RoadLine> potentialRoadLines;
-    double minDistanceForSeperateLines = 150.0;
     double col;
     for (auto &line : *lines) {
         col = line.getColAtRow(image.rows-1);
@@ -16,7 +15,7 @@ std::vector<RoadLine> LinePositionFinder::findLinePositions(std::vector<Line>* l
         bool isSeperateLine = true;
         for (auto &roadLine : potentialRoadLines) {
             auto &existingCol = roadLine.lineColAtCar;
-            if (fabs(col - existingCol) < minDistanceForSeperateLines) {
+            if (fabs(col - existingCol) < filters.minDistanceForSeperateLines) {
                 isSeperateLine = false;
                 roadLine.correspondingLines.push_back(line);
 

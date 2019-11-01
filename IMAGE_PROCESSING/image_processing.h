@@ -26,19 +26,20 @@
 // Line Filters
 #define MIN_LINE_LENGTH         10
 #define MAX_LINE_D2H            120
-#define MIN_LINE_SEGMENT_D2H    60
+#define MIN_LINE_SEGMENT_D2H    30
 #define MIN_LINE_D2L            10
 #define MIN_ROAD_LINE_POINTS    20
+#define MIN_DF_SEPARATE_LINES   100
 
 //#define HORIZON RowCol(410, 500) // compilation720
-#define HORIZON RowCol(174, 270) // straight_long
-//#define HORIZON RowCol(210, 210) // night
+//#define HORIZON RowCol(174, 270) // straight_long
+#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
 
 
 // Edge detection threshold parameters
 #define LINES_ARE_DARK          0
-#define THRESHOLD_COL_DISTANCE  15
+#define THRESHOLD_COL_D  15
 #define THRESHOLD_MINIMUM_DELTA 25
 
 // Use webcam or video
