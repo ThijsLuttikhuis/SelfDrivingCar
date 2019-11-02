@@ -24,11 +24,11 @@
 #define N_THREADS               4
 
 // Line Filters
-#define MIN_LINE_LENGTH         10
-#define MAX_LINE_D2H            120
+#define MIN_LINE_LENGTH         8
+#define MAX_LINE_D2H            30
 #define MIN_LINE_SEGMENT_D2H    30
 #define MIN_LINE_D2L            10
-#define MIN_ROAD_LINE_POINTS    20
+#define MIN_ROAD_LINE_POINTS    25
 #define MIN_DF_SEPARATE_LINES   100
 
 //#define HORIZON RowCol(410, 500) // compilation720
@@ -39,18 +39,19 @@
 
 // Edge detection threshold parameters
 #define LINES_ARE_DARK          0
-#define THRESHOLD_COL_D  15
+#define THRESHOLD_COL_D         15
 #define THRESHOLD_MINIMUM_DELTA 25
 
 // Use webcam or video
 #define USE_WEBCAM              0
+#define FILENAME                "../dc_n.mp4"
 
 // Debug mode                 value     //  |       0       |       1       |       2       |       3       |
 #define DEBUG                   1       //  | show NOTHING  | debug mode    |               |               |
 #define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |               |
 #define SHOW_LINES              3       //  | dont show     | simple lines  | extend lines  | show wrong too|
 #define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |               |
-#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |               |
+#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
 
 class image_processing : public node {
