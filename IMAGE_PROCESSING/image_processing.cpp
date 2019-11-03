@@ -6,11 +6,9 @@
 
 bool image_processing::setup() {
 
-#if PRINT_TIMING == 1
     // Start Timer
     totalTime = Timer("Total time");
     totalTime.start();
-#endif
 
     // Set Debug
     Drawer::setDebug(DEBUG);
@@ -57,6 +55,10 @@ bool image_processing::setup() {
     timer.start();
     imshowTime.start();
 #endif
+#if PRINT_FPS == 1
+    fps = Timer("Frames");
+    fps.start();
+#endif
 
     return true;
 }
@@ -101,6 +103,7 @@ bool image_processing::loop(CarPosition* carPosition) {
     timer.start();
 #endif
 
+    fps.printFPS();
     return true;
 }
 
@@ -108,7 +111,5 @@ void image_processing::close() {
     // Properly close windows
     Drawer::closeVideo();
 
-#if PRINT_TIMING == 1
     totalTime.printSeconds();
-#endif
 }

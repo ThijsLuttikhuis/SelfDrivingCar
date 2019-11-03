@@ -46,16 +46,17 @@
 #define FILENAME                "../dc_sl.mp4"
 
 // Debug mode                 value     //  |       0       |       1       |       2       |       3       |
-#define DEBUG                   1       //  | show NOTHING  | debug mode    |               |               |
+#define DEBUG                   0       //  | show NOTHING  | debug mode    |               |               |
 #define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |               |
-#define SHOW_LINES              3       //  | dont show     | simple lines  | extend lines  | show wrong too|
-#define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |               |
+#define SHOW_LINES              0       //  | dont show     | simple lines  | extend lines  | show wrong too|
+#define SHOW_ROAD_LINES         0       //  | dont show     | road position |               |               |
 #define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |               |
-#define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
+#define SHOW_ORIGINAL_IMAGE     0       //  | thresholded   | original      | show both     |               |
 // Print in terminal                    //  |---------------|---------------|---------------|---------------|
-#define PRINT_TIMING            1       //  |               |               |               |               |
+#define PRINT_TIMING            0       //  |               |               |               |               |
+#define PRINT_FPS               1       //  |               |               |               |               |
 #define PRINT_HORIZON           0       //  |               |               |               |               |
-#define PRINT_LINES_FOUND       1       //  |               |               |               |               |
+#define PRINT_LINES_FOUND       0       //  |               |               |               |               |
 
 
 class image_processing : public node {
@@ -63,10 +64,13 @@ private:
 
     ImageProcessor imageProcessor;
 
-#if PRINT_TIMING == 1
     Timer totalTime;
+#if PRINT_TIMING == 1
     Timer timer;
     Timer imshowTime;
+#endif
+#if PRINT_FPS == 1
+    Timer fps;
 #endif
 
 public:

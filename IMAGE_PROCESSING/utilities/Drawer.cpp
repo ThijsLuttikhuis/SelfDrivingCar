@@ -24,7 +24,7 @@ void Drawer::setPixel(uchar &pixel, const uchar &color) {
 void Drawer::setPixel(int row, int col, const uchar &color) {
     if (!debug) return;
 
-    uchar &pixel = copy.at<uchar>(row, col);
+    auto &pixel = copy.at<uchar>(row, col);
     setPixel(pixel, color);
 }
 
