@@ -32,10 +32,9 @@
 #define MIN_DF_SEPARATE_LINES   100
 
 //#define HORIZON RowCol(410, 500) // compilation720
-//#define HORIZON RowCol(174, 270) // straight_long
-#define HORIZON RowCol(210, 210) // night
+#define HORIZON RowCol(174, 270) // straight_long
+//#define HORIZON RowCol(210, 210) // night
 //#define HORIZON RowCol(155, 310) // Lenovo WebCam
-
 
 // Edge detection threshold parameters
 #define LINES_ARE_DARK          0
@@ -44,7 +43,7 @@
 
 // Use webcam or video
 #define USE_WEBCAM              0
-#define FILENAME                "../dc_n.mp4"
+#define FILENAME                "../dc_sl.mp4"
 
 // Debug mode                 value     //  |       0       |       1       |       2       |       3       |
 #define DEBUG                   1       //  | show NOTHING  | debug mode    |               |               |

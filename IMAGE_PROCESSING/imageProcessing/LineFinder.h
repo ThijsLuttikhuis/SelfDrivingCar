@@ -28,6 +28,7 @@ public:
 
     std::vector<Line> findLines(Segmentation* segmentation);
 
+    void drawLine(bool b, Line* line);
 };
 
 #endif //SELFDRIVINGCAR_LINEFINDER_H

@@ -4,21 +4,21 @@
 
 #include "Line.h"
 
-void Line::draw(const cv::Mat &image, int thickness) const {
+void Line::draw(const cv::Mat &image, int thickness, uchar color) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
     for (int i = -thickness; i < thickness; i++) {
-        this->draw(image, startRow, endRow, i);
+        this->draw(image, startRow, endRow, i, color);
     }
 }
 
-void Line::draw(const cv::Mat &image) const {
+void Line::draw(const cv::Mat &image, uchar color) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
-    this->draw(image, startRow, endRow);
+    this->draw(image, startRow, endRow, color);
 }
 
-void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const {
+void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta, uchar color) const {
     for (int row = startRow; row < endRow; row++) {
         auto col = (int) ((row - b) / a) + delta;
         if (col >= 0 && col < image.cols) {

@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 project(SelfDrivingCar)
 find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
 
-
+# The GPIO part is only needed when running on the Pi
 set(USE_PI 0)
 
 if(USE_PI)
