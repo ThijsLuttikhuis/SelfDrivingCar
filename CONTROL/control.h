@@ -19,11 +19,16 @@ private:
     double previousError;
     double errorSum;
 
+    bool dataSet;
+
+    void filter(CarPosition* carPosition);
+
 public:
     explicit control(cv::Mat &image) : node(image) {};
     bool setup() override;
     bool loop(CarPosition* carPosition) override;
     void close() override;
+
 };
 
 #endif //SELFDRIVINGCAR_CONTROL_H

@@ -1,12 +1,23 @@
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 14)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE  "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 project(SelfDrivingCar)
 find_package(OpenCV REQUIRED)
 find_package(Threads REQUIRED)
+
+# The GPIO part is only needed when running on the Pi
+set(USE_PI 0)
+
+if(USE_PI)
+    add_definitions(-DUSE_PI=1)
+    message("Raspberry Pi set")
+    find_library(wiringPi_LIB wiringPi REQUIRED)
+else()
+    message("Ubuntu set")
+endif()
 
 set(IMAGE_PROCESSING_SOURCES
         IMAGE_PROCESSING/imageProcessing/ImageProcessor.cpp
@@ -48,7 +59,7 @@ set(DATA_STRUCTURES_SOURCES
         )
 
 set(CONTROL_SOURCES
-        node.cpp node.h)
+        node.cpp node.h GPIO/gpio.cpp GPIO/gpio.h)
 
 add_executable(SelfDrivingCar
         main.cpp
@@ -73,3 +84,7 @@ add_executable(SelfDrivingCar
 
 target_link_libraries(SelfDrivingCar ${OpenCV_LIBS})
 target_link_libraries(SelfDrivingCar ${CMAKE_THREAD_LIBS_INIT})
+
+if (USE_PI)
+    target_link_libraries(SelfDrivingCar ${wiringPi_LIB})
+endif()

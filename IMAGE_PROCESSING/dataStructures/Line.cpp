@@ -4,21 +4,21 @@
 
 #include "Line.h"
 
-void Line::draw(const cv::Mat &image, int thickness) const {
+void Line::draw(const cv::Mat &image, int thickness, uchar color) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
     for (int i = -thickness; i < thickness; i++) {
-        this->draw(image, startRow, endRow, i);
+        this->draw(image, startRow, endRow, i, color);
     }
 }
 
-void Line::draw(const cv::Mat &image) const {
+void Line::draw(const cv::Mat &image, uchar color) const {
     int startRow = start.row < end.row ? start.row : end.row;
     int endRow = start.row < end.row ? end.row : start.row;
-    this->draw(image, startRow, endRow);
+    this->draw(image, startRow, endRow, color);
 }
 
-void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const {
+void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta, uchar color) const {
     for (int row = startRow; row < endRow; row++) {
         auto col = (int) ((row - b) / a) + delta;
         if (col >= 0 && col < image.cols) {
@@ -34,12 +34,12 @@ void Line::draw(const cv::Mat &image, int startRow, int endRow, int delta) const
 }
 
 double Line::horizontalDist2ToPoint(RowCol &point) const {
-    return horizontalDist2ToPoint(point.row, point.col);
+    return dist2ToPoint(point.row, point.col);
 }
 
-double Line::horizontalDist2ToPoint(int row, int col) const {
+double Line::dist2ToPoint(int row, int col) const {
     auto _colC = (double) ((row - b) / a);
-    auto _rowC = (double) (_colC * a + b);
+    auto _rowC = (double) (col * a + b);
     return (_colC-col)*(_colC-col) + (_rowC-row)*(_rowC-row);
 }
 
@@ -54,4 +54,8 @@ double Line::getColAtRow(int row) const {
 
 double Line::getRowAtCol(int col) const {
     return (double (col * a + b));
+}
+
+int Line::verticalLength() const {
+    return end.row - start.row;
 }

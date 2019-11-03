@@ -22,37 +22,37 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 // Create line
                 std::vector<int> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, &dRowDCol);
-                Line line = Line(startOfLine, endOfLine);
+                Line line = Line(startOfLine, endOfLine, dRowDCol);
 
                 // Filter line
-                if (!filters.preLineFilter(line, lines, &dRowDCol)) {
-                    if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
-                        line.color = 100;
-                        line.draw(image, 3);
-                    }
-                    continue;
+                if (!filters.preLineFilter(line, lines)) continue;
+
+                // Draw Line
+                if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
+                    uchar color = 100;
+                    line.draw(image, 3, color);
                 }
 
-                // Draw line
-                if (showLines) {
-                    if (showLines > 1) {
-                        line.draw(image, 7);
-                        line.draw(image, filters.horizon.row, image.rows);
-                    }
-                    else {
-                        line.draw(image, 1);
-                    }
-                }
-
-                // Make line
-                line.dRowDCol = dRowDCol;
+                // Add line
                 lines.push_back(line);
             }
         }
     }
 
     filters.afterLineFilter(&lines);
+    // Draw lines
+    if (showLines) {
+        for (auto &line : lines) {
+            if (showLines > 1) {
+                line.draw(image, 7);
+                line.draw(image, filters.horizon.row, image.rows);
+            } else {
+                line.draw(image, 1);
+            }
+        }
+    }
     return lines;
+
 }
 
 RowCol LineFinder::recursiveSearch(Segmentation* segmentation, int _row, int _col, int _previousEdge,

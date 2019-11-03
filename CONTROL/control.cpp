@@ -2,7 +2,7 @@
 #include "control.h"
 
 bool control::setup() {
-    Kp = 0;
+    Kp = 1;
     Ki = 0;
     Kd = 0;
 
@@ -10,11 +10,19 @@ bool control::setup() {
     previousError = 0;
     errorSum = 0;
 
+    dataSet = false;
+
     return true;
 }
 
+void control::filter(CarPosition* carPosition) {
+    if (!dataSet) return;
+}
+
 bool control::loop(CarPosition* carPosition) {
-    double sampleTime = 0;
+    filter(carPosition);
+
+    double sampleTime = 0.05;
 
     previousError = error;
     error = carPosition->distanceToLeftLine - carPosition->distanceToRightLine;
@@ -28,5 +36,6 @@ bool control::loop(CarPosition* carPosition) {
 void control::close() {
 
 }
+
 
 

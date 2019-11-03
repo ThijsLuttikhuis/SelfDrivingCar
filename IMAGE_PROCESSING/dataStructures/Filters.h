@@ -25,7 +25,7 @@ public:
 
     Filters() = default;
 
-    bool preLineFilter(Line &line, const std::vector<Line> &otherLines, const std::vector<int>* dColDRow);
+    bool preLineFilter(Line &line, const std::vector<Line> &otherLines);
 
     void afterLineFilter(std::vector<Line>* lines);
 

@@ -27,7 +27,7 @@ bool image_processing::setup() {
     imageProcessor.setFilters(filters);
 
     // Get Video
-    cv::String filename = "../dc_n.mp4";
+    cv::String filename = FILENAME;
     if (USE_WEBCAM) {
         if (!Drawer::startWebcam()) {
             return false;
