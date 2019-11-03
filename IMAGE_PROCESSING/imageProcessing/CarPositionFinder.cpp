@@ -16,7 +16,6 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
         if (showRoadLinePositions) {
             roadLine.drawSquareAtColumn(image, 10);
         }
-
         double col = roadLine.lineColAtCar;
         if (col < filters.horizon.col) {
             linesLeft++;
@@ -45,5 +44,6 @@ CarPosition CarPositionFinder::findCarPosition(std::vector<RoadLine>* roadLines)
             }
         }
     }
+    return carPosition;
 
 }

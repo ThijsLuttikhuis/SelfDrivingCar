@@ -6,9 +6,11 @@
 
 bool image_processing::setup() {
 
+#if PRINT_TIMING == 1
     // Start Timer
     totalTime = Timer("Total time");
     totalTime.start();
+#endif
 
     // Set Debug
     Drawer::setDebug(DEBUG);
@@ -24,6 +26,7 @@ bool image_processing::setup() {
     filters.minLineDistToOtherLine = MIN_LINE_D2L;
     filters.minRoadLinePoints = MIN_ROAD_LINE_POINTS;
     filters.minDistanceForSeperateLines = MIN_DF_SEPARATE_LINES;
+    filters.printCurrentHorizon = PRINT_HORIZON;
     imageProcessor.setFilters(filters);
 
     // Get Video
@@ -47,11 +50,13 @@ bool image_processing::setup() {
     }
     std::cout << "image: " << image.rows << "x" << image.cols << std::endl;
 
+#if PRINT_TIMING == 1
     // Timing
     timer = Timer("Processing time");
     imshowTime = Timer("Imshow time");
     timer.start();
     imshowTime.start();
+#endif
 
     return true;
 }
@@ -71,11 +76,14 @@ bool image_processing::loop(CarPosition* carPosition) {
     // Get the position of the car on the road.
     *carPosition = imageProcessor.getCarPosition(&roadLines, SHOW_ROAD_LINES);
 
+#if PRINT_LINES_FOUND == 1
     std::cout << lines.size() << " lines found, of which " << roadLines.size() << " actual roadlines!" << std::endl;
-
+#endif
+#if PRINT_TIMING == 1
     // Timing
     timer.printMilliSeconds();
     imshowTime.start();
+#endif
 
     // Show image
     if (!Drawer::showImage(image, FRAME_BY_FRAME)) {
@@ -87,9 +95,11 @@ bool image_processing::loop(CarPosition* carPosition) {
         return false;
     }
 
+#if PRINT_TIMING == 1
     // Timing
     imshowTime.printMilliSeconds();
     timer.start();
+#endif
 
     return true;
 }
@@ -97,5 +107,8 @@ bool image_processing::loop(CarPosition* carPosition) {
 void image_processing::close() {
     // Properly close windows
     Drawer::closeVideo();
+
+#if PRINT_TIMING == 1
     totalTime.printSeconds();
+#endif
 }

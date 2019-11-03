@@ -49,7 +49,10 @@ void Filters::afterLineFilter(std::vector<Line>* lines) {
         sumCols += line.verticalLength() * line.getColAtRow(horizon.row);
     }
     RowCol newHorizonRC = RowCol(horizon.row, static_cast<int>(sumCols / totalLines));
+
+    if (printCurrentHorizon) {
     std::cout << "current horizon is at: " << newHorizonRC.row << " x " << newHorizonRC.col << std::endl;
+    }
 
     int &maxldth = maxLineDistToHorizon;
     lines->erase(std::remove_if(lines->begin(), lines->end(), [maxldth, newHorizonRC] (Line &line) {

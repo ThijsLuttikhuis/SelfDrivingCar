@@ -21,7 +21,7 @@ private:
     static cv::Mat copy;
     static cv::VideoCapture capture;
 
-    static void setPixel(char &pixel, const uchar &color);
+    static void setPixel(uchar &pixel, const uchar &color);
     static bool showImage(bool frameByFrame);
 
 public:

@@ -21,7 +21,7 @@
 #include "../node.h"
 
 // Number of Threads
-#define N_THREADS               4
+#define N_THREADS               8
 
 // Line Filters
 #define MIN_LINE_LENGTH         8
@@ -50,17 +50,24 @@
 #define SHOW_SEGMENTATION       0       //  | dont show     | segmentation  |               |               |
 #define SHOW_LINES              3       //  | dont show     | simple lines  | extend lines  | show wrong too|
 #define SHOW_ROAD_LINES         1       //  | dont show     | road position |               |               |
-#define FRAME_BY_FRAME          1       //  | dont show     | frame-by-frame|               |               |
+#define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
+// Print in terminal                    //  |---------------|---------------|---------------|---------------|
+#define PRINT_TIMING            1       //  |               |               |               |               |
+#define PRINT_HORIZON           0       //  |               |               |               |               |
+#define PRINT_LINES_FOUND       1       //  |               |               |               |               |
+
 
 class image_processing : public node {
 private:
 
     ImageProcessor imageProcessor;
 
+#if PRINT_TIMING == 1
     Timer totalTime;
     Timer timer;
     Timer imshowTime;
+#endif
 
 public:
     explicit image_processing(cv::Mat &image) : node(image), imageProcessor(ImageProcessor(N_THREADS, image)) {};

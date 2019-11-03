@@ -23,7 +23,10 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 std::vector<int> dRowDCol; // += 0 -> vertical, >0 -> line goes left, <0 -> line goes right
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, &dRowDCol);
                 Line line = Line(startOfLine, endOfLine, dRowDCol);
-
+                if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
+                    uchar color = 100;
+                    line.draw(image, 3, color);
+                }
                 // Filter line
                 if (!filters.preLineFilter(line, lines)) continue;
 

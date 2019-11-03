@@ -23,6 +23,9 @@ public:
     int thresholdMinimumDelta;
     int thresholdColDistance;
 
+    // printing
+    bool printCurrentHorizon;
+
     Filters() = default;
 
     bool preLineFilter(Line &line, const std::vector<Line> &otherLines);

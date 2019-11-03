@@ -28,7 +28,6 @@ std::vector<RoadLine> LinePositionFinder::findLinePositions(std::vector<Line>* l
             }
 
         }
-
         if (isSeperateLine) {
             RoadLine roadLine;
             roadLine.lineColAtCar = col;
