@@ -13,8 +13,6 @@ void CarPositionBuffer::push(CarPosition* carPosition) {
 
 CarPosition CarPositionBuffer::at(int i) {
     i = (size + index - i - 1) % size;
-    std::cout << i << std::endl;
-    std::cout << "size: " << cpBuffer.size() << std::endl;
-    auto ii = (unsigned long)i;
-    return cpBuffer.at(ii);
+    CarPosition cp = cpBuffer.at(i);
+    return cp;
 }
