@@ -17,7 +17,7 @@ bool control::setup() {
     previousError = 0;
     errorSum = 0;
 
-    cPBuffer = CarPositionBuffer(10);
+    cPBuffer = CarPositionBuffer();
     return true;
 }
 

@@ -12,13 +12,13 @@
 
 class CarPositionBuffer {
 private:
-    int size;
+    static const int size = 10;
     int index;
-    std::vector<CarPosition> cpBuffer;
+    CarPosition cpBuffer[size];
 
 public:
-    explicit CarPositionBuffer(int size = 0) : size(size), index(1) {
-        cpBuffer.resize(size, CarPosition());
+    explicit CarPositionBuffer() : index(0) {
+
     };
 
     void push(CarPosition* carPosition);

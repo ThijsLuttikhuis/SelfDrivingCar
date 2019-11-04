@@ -7,12 +7,12 @@
 void CarPositionBuffer::push(CarPosition* carPosition) {
     if (!carPosition) return;
     CarPosition cp = *carPosition;
-    cpBuffer.at(index) = cp;
+    cpBuffer[index] = cp;
     index = (index +1) % size;
 }
 
 CarPosition CarPositionBuffer::at(int i) {
     i = (size + index - i - 1) % size;
-    CarPosition cp = cpBuffer.at(i);
+    CarPosition cp = cpBuffer[i];
     return cp;
 }
