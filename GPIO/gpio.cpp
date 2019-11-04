@@ -3,6 +3,7 @@
 //
 
 #include "gpio.h"
+
 #ifdef USE_PI
 #include <wiringPi.h>
 #include <softPwm.h>
@@ -21,8 +22,7 @@ bool gpio::setup() {
 
     // Speed variables
     startSpeed = 40;
-    startSpeed_t = 500;
-    speed = 30;
+    speed = 20;
 
     // Setup wiringPi
     wiringPiSetup();
@@ -37,7 +37,6 @@ bool gpio::setup() {
     softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
     sleep(1);
     softPwmWrite(SERVO_PWM, biasServo);
-    sleep(1);
 
     std::cout << "Starting Engine" << std::endl;
     softPwmWrite(HBRUG_PWM, startSpeed);
@@ -66,5 +65,6 @@ void gpio::close() {
 #ifdef USE_PI
     softPwmWrite(HBRUG_PWM, 0);
     sleep(1);
+    softPwmWrite(HBRUG_PWM, 0);
 #endif
 }

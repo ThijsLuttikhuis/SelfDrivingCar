@@ -7,7 +7,6 @@ CarPosition control::filter() {
     CarPosition previous = cPBuffer.at(1);
     CarPosition current = cPBuffer.at(0);
 
-
     if (previous == CarPosition()) return current;
     if (current == CarPosition()) {
         current = previous;
@@ -29,8 +28,6 @@ CarPosition control::filter() {
         current.d2RightLine = previous.d2RightLine;
         current.d2SecondRightLine = previous.d2SecondRightLine;
     }
-
-
     return current;
 }
 
@@ -56,7 +53,7 @@ bool control::loop(CarPosition* carPosition) {
     if (!carPosition) return true;
 
     status = readFile();
-    std::cout << "status: " << status << std::endl;
+    //std::cout << "status: " << status << std::endl;
     switch (status) {
         case 1:
             switchLane(STRAIGHT);
@@ -85,7 +82,7 @@ bool control::loop(CarPosition* carPosition) {
         writeControl(1);
     }
     else {
-        error = (carPosition->d2LeftLine + marge);
+        error = carPosition->d2SecondLeftLine - carPosition->d2RightLine;
     }
 
     if (switchingTo == RIGHT && carPosition->d2SecondRightLine < 0) {
@@ -93,7 +90,7 @@ bool control::loop(CarPosition* carPosition) {
         writeControl(1);
     }
     else {
-        error = 0 - (carPosition->d2RightLine + marge);
+        error = carPosition->d2LeftLine - carPosition->d2SecondRightLine;
     }
 
     if (switchingTo != LEFT && switchingTo != RIGHT) {
