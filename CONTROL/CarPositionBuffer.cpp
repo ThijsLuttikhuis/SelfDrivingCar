@@ -15,5 +15,6 @@ CarPosition CarPositionBuffer::at(int i) {
     i = (size + index - i - 1) % size;
     std::cout << i << std::endl;
     std::cout << "size: " << cpBuffer.size() << std::endl;
-    return cpBuffer.at(i);
+    size_t ii = i;
+    return cpBuffer.at(ii);
 }
