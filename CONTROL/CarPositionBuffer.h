@@ -17,7 +17,7 @@ private:
     std::vector<CarPosition> cpBuffer;
 
 public:
-    explicit CarPositionBuffer(int size = 0) : size(size), index(0) {
+    explicit CarPositionBuffer(int size = 0) : size(size), index(1) {
         cpBuffer.resize(size, CarPosition());
     };
 

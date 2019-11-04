@@ -18,7 +18,7 @@ public:
 
     double pid;
 
-    CarPosition() : distanceToLeftLine(0), distanceToRightLine(0),
+    explicit CarPosition() : distanceToLeftLine(0), distanceToRightLine(0),
                     lanesLeft(0), lanesRight(0), roadCurve(0), pid(0) {};
 
 };
