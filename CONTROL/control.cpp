@@ -5,7 +5,7 @@ CarPosition control::filter() {
 
     CarPosition previous = cPBuffer.at(1);
     CarPosition current = cPBuffer.at(0);
-
+    return current;
 }
 
 bool control::setup() {
