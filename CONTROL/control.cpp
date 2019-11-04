@@ -23,7 +23,7 @@ bool control::setup() {
 
 
 bool control::loop(CarPosition* carPosition) {
-    cPBuffer.push(carPosition);
+    cPBuffer.push(*carPosition);
     filter();
 
     double sampleTime = 0.05;

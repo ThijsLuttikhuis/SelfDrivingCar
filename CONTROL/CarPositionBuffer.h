@@ -13,15 +13,18 @@
 class CarPositionBuffer {
 private:
     static const int size = 10;
-    int index = 0;
+    int index;
     CarPosition cpBuffer[size];
 
 public:
     explicit CarPositionBuffer() {
-
+        index = 0;
+        for (auto &cp : cpBuffer) {
+            cp = CarPosition();
+        }
     };
 
-    void push(CarPosition* carPosition);
+    void push(CarPosition carPosition);
     CarPosition at(int i);
 };
 

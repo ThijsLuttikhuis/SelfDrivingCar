@@ -4,11 +4,9 @@
 
 #include "CarPositionBuffer.h"
 
-void CarPositionBuffer::push(CarPosition* carPosition) {
-    if (!carPosition) return;
-    CarPosition cp = *carPosition;
-    cpBuffer[index] = cp;
-    index = (index +1) % size;
+void CarPositionBuffer::push(CarPosition carPosition) {
+    cpBuffer[index] = carPosition;
+    index = (index + 1) % size;
 }
 
 CarPosition CarPositionBuffer::at(int i) {
