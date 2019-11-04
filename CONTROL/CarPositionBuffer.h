@@ -13,11 +13,11 @@
 class CarPositionBuffer {
 private:
     static const int size = 10;
-    int index;
+    int index = 0;
     CarPosition cpBuffer[size];
 
 public:
-    explicit CarPositionBuffer() : index(0) {
+    explicit CarPositionBuffer() {
 
     };
 
