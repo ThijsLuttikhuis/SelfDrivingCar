@@ -18,6 +18,7 @@ public:
     int minLineDistToOtherLine;
     int minRoadLinePoints;
     int minDistanceForSeperateLines;
+    double maxLineGradientDifference;
 
     // thresholding image
     int thresholdMinimumDelta;
@@ -35,6 +36,7 @@ public:
 
 
     bool roadLineFilter(RoadLine &roadLine);
+
 };
 
 #endif //SELFDRIVINGCAR_FILTERS_H

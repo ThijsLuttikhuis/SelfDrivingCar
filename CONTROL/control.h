@@ -8,6 +8,7 @@
 
 #include "../CarPosition.h"
 #include "../node.h"
+#include "CarPositionBuffer.h"
 
 class control : public node {
 private:
@@ -21,7 +22,9 @@ private:
 
     bool dataSet;
 
-    void filter(CarPosition* carPosition);
+    CarPositionBuffer cPBuffer;
+
+    CarPosition filter();
 
 public:
     explicit control(cv::Mat &image) : node(image) {};

@@ -37,7 +37,7 @@ public:
 
     std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);
 
-    CarPosition getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions);
+    CarPosition* getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

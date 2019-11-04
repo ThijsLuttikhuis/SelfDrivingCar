@@ -11,15 +11,15 @@ public:
     int distanceToLeftLine;
     int distanceToRightLine;
 
-    bool laneLeftExists;
-    bool laneRightExists;
+    int lanesLeft;
+    int lanesRight;
 
     double roadCurve;
 
     double pid;
 
     CarPosition() : distanceToLeftLine(0), distanceToRightLine(0),
-                    laneLeftExists(false), laneRightExists(false), roadCurve(0), pid(0) {};
+                    lanesLeft(0), lanesRight(0), roadCurve(0), pid(0) {};
 
 };
 

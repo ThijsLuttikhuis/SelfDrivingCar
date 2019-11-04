@@ -1,6 +1,14 @@
 
 #include "control.h"
 
+CarPosition control::filter() {
+    CarPosition filtedCP;
+    auto previous = cPBuffer.at(1);
+    auto current = cPBuffer.at(0);
+
+
+}
+
 bool control::setup() {
     Kp = 1;
     Ki = 0;
@@ -10,17 +18,14 @@ bool control::setup() {
     previousError = 0;
     errorSum = 0;
 
-    dataSet = false;
-
+    cPBuffer = CarPositionBuffer(10);
     return true;
 }
 
-void control::filter(CarPosition* carPosition) {
-    if (!dataSet) return;
-}
 
 bool control::loop(CarPosition* carPosition) {
-    filter(carPosition);
+    cPBuffer.push(carPosition);
+    filter();
 
     double sampleTime = 0.05;
 

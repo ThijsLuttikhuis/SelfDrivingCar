@@ -59,7 +59,7 @@ set(DATA_STRUCTURES_SOURCES
         )
 
 set(CONTROL_SOURCES
-        node.cpp node.h GPIO/gpio.cpp GPIO/gpio.h)
+        node.cpp node.h GPIO/gpio.cpp GPIO/gpio.h CONTROL/CarPositionBuffer.cpp CONTROL/CarPositionBuffer.h)
 
 add_executable(SelfDrivingCar
         main.cpp

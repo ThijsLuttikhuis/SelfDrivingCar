@@ -33,9 +33,9 @@ std::vector<RoadLine> ImageProcessor::getLinePositions(std::vector<Line>* lines)
     return roadLines;
 }
 
-CarPosition ImageProcessor::getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions) {
+CarPosition* ImageProcessor::getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions) {
     CarPositionFinder carPositionFinder = CarPositionFinder(image, filters, showRoadLinePositions);
-    CarPosition carPosition = carPositionFinder.findCarPosition(roadLines);
+    CarPosition* carPosition = carPositionFinder.findCarPosition(roadLines);
 
     return carPosition;
 }
