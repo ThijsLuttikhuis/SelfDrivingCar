@@ -5,10 +5,9 @@
 #include "CarPositionBuffer.h"
 
 void CarPositionBuffer::push(CarPosition* carPosition) {
+    if (!carPosition) return;
     CarPosition cp = *carPosition;
-    std::cout << index << "  x  " << cpBuffer.size() << std::endl;
     cpBuffer.at(index) = cp;
-
     index = (index +1) % size;
 }
 
