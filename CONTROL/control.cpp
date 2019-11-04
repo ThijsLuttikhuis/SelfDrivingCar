@@ -24,7 +24,7 @@ bool control::setup() {
 
 bool control::loop(CarPosition* carPosition) {
     if (!carPosition) return true;
-    
+
     cPBuffer.push(*carPosition);
     filter();
 
