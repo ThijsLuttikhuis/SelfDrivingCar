@@ -12,6 +12,7 @@
 struct Filters {
 public:
     RowCol horizon;
+    int verticalLineMaxDistToHorizon;
     int minLineLength;
     int minDistToHorizon;
     int maxLineDistToHorizon;

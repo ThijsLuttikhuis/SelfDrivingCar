@@ -19,6 +19,14 @@ bool Filters::preLineFilter(Line &line, const std::vector<Line> &otherLines) {
     if (line.start.dist2(horizon) < minDistToHorizon*minDistToHorizon &&
         line.end.dist2(horizon) < minDistToHorizon*minDistToHorizon) return false;
 
+    // Filter vertical lines not in the middle of the screen
+    if (line.a > 6 || line.a < -6) {
+        if (line.start.col < horizon.col - verticalLineMaxDistToHorizon ||
+            line.start.col > horizon.col + verticalLineMaxDistToHorizon) {
+            return false;
+        }
+    }
+
     // Filter if another line is already very close
     for (auto &otherLine : otherLines) {
         if (otherLine.start.dist2(line.start) < minLineDistToOtherLine * minLineDistToOtherLine &&

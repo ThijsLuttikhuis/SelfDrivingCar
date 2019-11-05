@@ -19,6 +19,7 @@ bool image_processing::setup() {
     filters.maxLineDistToHorizon = MAX_LINE_D2H;
     filters.minDistToHorizon = MIN_LINE_SEGMENT_D2H;
     filters.horizon = HORIZON;
+    filters.verticalLineMaxDistToHorizon = V_LINE_MAX_D2H;
     filters.thresholdColDistance = THRESHOLD_COL_D;
     filters.thresholdMinimumDelta = LINES_ARE_DARK ? -THRESHOLD_MINIMUM_DELTA : THRESHOLD_MINIMUM_DELTA;
     filters.minLineDistToOtherLine = MIN_LINE_D2L;
