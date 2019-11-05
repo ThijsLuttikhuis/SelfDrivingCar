@@ -3,7 +3,6 @@
 //
 
 #include "gpio.h"
-
 #ifdef USE_PI
 #include <wiringPi.h>
 #include <softPwm.h>
@@ -16,8 +15,8 @@ bool gpio::setup() {
     std::cout << "Using WiringPi for GPIO" << std::endl;
     // Steer variables
     currentAngle = 12;
-    rangeCamera = 400;
-    rangeServo = 6;  // MAX = 8
+    rangeCamera = 200;
+    rangeServo = 8;
     biasServo = 12;
 
     // Speed variables
@@ -26,7 +25,7 @@ bool gpio::setup() {
 
     // Setup wiringPi
     wiringPiSetup();
-    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 100)) {
+    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 1)) {
         std::cout << "Error in creating softPwm" << std::endl;
         return false;
     }
@@ -48,7 +47,7 @@ bool gpio::setup() {
 
 bool gpio::loop(CarPosition* carPosition) {
 #ifdef USE_PI
-    double &pid = carPosition->pid;
+    double &pid = carPosition->carAngle;
 
     double max_output = biasServo + (rangeServo/2);
     double min_output = biasServo - (rangeServo/2);
@@ -57,6 +56,7 @@ bool gpio::loop(CarPosition* carPosition) {
     double output = factor*pid + biasServo;
     output = output > max_output ? max_output : output < min_output ? min_output : output;
     softPwmWrite(SERVO_PWM, static_cast<int>(output+0.5));
+    softPwmWrite(HBRUG_PWM, speed);
 #endif
     return true;
 }

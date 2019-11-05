@@ -27,7 +27,7 @@ public:
     explicit CarPosition() : d2LeftLine(-1), d2RightLine(-1),
                              lanesLeft(0), lanesRight(0),
                              d2SecondLeftLine(-1), d2SecondRightLine(-1),
-                             carAngleToRoad(0), carAngle(0) {};
+                             carAngleToRoad(0), carAngle(0), carSpeed(0) {};
 
     void print() {
         std::cout << "distanceToRightLine: " << d2RightLine << std::endl <<

@@ -75,7 +75,9 @@ bool control::loop(CarPosition* carPosition) {
             return true;
     }
 
-    double sampleTime = 0;
+    carPosition->carSpeed = 1;
+
+    double sampleTime = 0.02;
 
     if (switchingTo == LEFT && carPosition->d2SecondLeftLine < 0) {
         read = writeFile("Cannot turn left.", read, 2);
@@ -121,17 +123,13 @@ void control::switchLane(Direction n) {
 }
 
 int control::readFile() {
-
     std::ifstream myfile("input.txt");
     if (myfile.is_open()) {
         while (myfile >> intermediate) {
             status = intermediate;
         }
         myfile.close();
-    } else {
-        std::cout << "Unable to open file";
     }
-
     return status;
 }
 
@@ -145,7 +143,6 @@ int control::writeFile(const char* input, int read, int readNew) {
         fout.open("log.txt", std::ios::trunc);
         fout << input;
         fout.close();
-
     }
     read = readNew;
     return read;
