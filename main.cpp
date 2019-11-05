@@ -14,7 +14,7 @@ std::vector<node*> initStack(cv::Mat &image) {
     auto* gpiocontrol = new gpio(image);
 
     stack.push_back(imageprocessing);
-    //stack.push_back(pidcontrol);
+    stack.push_back(pidcontrol);
     stack.push_back(gpiocontrol);
 
     return stack;

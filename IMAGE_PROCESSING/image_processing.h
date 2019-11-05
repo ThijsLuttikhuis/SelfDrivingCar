@@ -36,7 +36,7 @@
 //#define HORIZON RowCol(410, 500) // compilation720
 //#define HORIZON RowCol(174, 270) // straight_long
 //#define HORIZON RowCol(210, 210) // night
-#define HORIZON RowCol(60, 320) // Lenovo WebCam
+#define HORIZON RowCol(300, 320) // Lenovo WebCam
 
 // Edge detection threshold parameters
 #define LINES_ARE_DARK          1

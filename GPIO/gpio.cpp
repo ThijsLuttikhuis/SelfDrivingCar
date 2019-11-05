@@ -26,15 +26,15 @@ bool gpio::setup() {
     }
 
     std::cout << "Testing Steering" << std::endl;
-    softPwmWrite(SERVO_PWM, biasServo + (rangeServo/2));
-    sleep(1);
-    softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
-    sleep(1);
-    softPwmWrite(SERVO_PWM, biasServo);
+    //softPwmWrite(SERVO_PWM, biasServo + (rangeServo/2));
+    //sleep(1);
+    //softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
+    //sleep(1);
+    //softPwmWrite(SERVO_PWM, biasServo);
 
     std::cout << "Starting Engine" << std::endl;
     softPwmWrite(HBRUG_PWM, 8);
-    sleep(1);
+    //sleep(1);
 #endif
     return true;
 }
@@ -53,7 +53,7 @@ bool gpio::loop(CarPosition* &carPosition) {
     double output = factor*pid + biasServo;
     output = output > max_output ? max_output : output < min_output ? min_output : output;
     softPwmWrite(SERVO_PWM, static_cast<int>(output+0.5));
-    softPwmWrite(HBRUG_PWM, speed*8);
+    softPwmWrite(HBRUG_PWM, speed*9);
     std::cout << output << std::endl;
 #endif
     return true;

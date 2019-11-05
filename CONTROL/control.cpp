@@ -58,6 +58,7 @@ bool control::loop(CarPosition* &carPosition) {
         error = 0;
     }
 
+    carPosition->carSpeed = 1;
     carPosition->carAngle = error;
     std::cout << carPosition->carAngle << std::endl;
     return true;
