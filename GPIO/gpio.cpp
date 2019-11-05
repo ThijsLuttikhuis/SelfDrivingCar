@@ -18,14 +18,9 @@ bool gpio::setup() {
     rangeCamera = 200;
     rangeServo = 8;
     biasServo = 12;
-
-    // Speed variables
-    startSpeed = 40;
-    speed = 20;
-
     // Setup wiringPi
     wiringPiSetup();
-    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 1)) {
+    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 10)) {
         std::cout << "Error in creating softPwm" << std::endl;
         return false;
     }
@@ -38,7 +33,7 @@ bool gpio::setup() {
     softPwmWrite(SERVO_PWM, biasServo);
 
     std::cout << "Starting Engine" << std::endl;
-    softPwmWrite(HBRUG_PWM, 1);
+    softPwmWrite(HBRUG_PWM, 8);
     sleep(1);
 #endif
     return true;
@@ -56,7 +51,7 @@ bool gpio::loop(CarPosition* carPosition) {
     double output = factor*pid + biasServo;
     output = output > max_output ? max_output : output < min_output ? min_output : output;
     softPwmWrite(SERVO_PWM, static_cast<int>(output+0.5));
-    softPwmWrite(HBRUG_PWM, speed);
+    softPwmWrite(HBRUG_PWM, speed*8);
 #endif
     return true;
 }
