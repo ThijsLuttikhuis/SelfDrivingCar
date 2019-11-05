@@ -57,7 +57,9 @@ bool control::loop(CarPosition* &carPosition) {
     else {
         error = 0;
     }
+
     carPosition->carAngle = error;
+    std::cout << carPosition->carAngle << std::endl;
     return true;
 
     status = readFile();
