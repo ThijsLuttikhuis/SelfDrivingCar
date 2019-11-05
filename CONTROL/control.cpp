@@ -50,12 +50,13 @@ bool control::loop(CarPosition* &carPosition) {
         cPBuffer.push(*carPosition);
         *carPosition = filter();
     }
+
     carPosition->carSpeed = 1;
     carPosition->carAngle = error;
 
     previousState = state;
     state = FileReadWrite::readFile();
-    std::cout << "\"input.txt\" status: " << state << std::endl;
+    // std::cout << "\"input.txt\" status: " << state << std::endl;
 
     switch (state) {
         case 1:
