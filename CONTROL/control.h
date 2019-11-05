@@ -66,7 +66,7 @@ public:
 
     bool setup() override;
 
-    bool loop(CarPosition* carPosition) override;
+    bool loop(CarPosition* &carPosition) override;
 
     void close() override;
 

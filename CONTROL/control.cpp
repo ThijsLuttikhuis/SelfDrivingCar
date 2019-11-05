@@ -49,7 +49,7 @@ bool control::setup() {
     return true;
 }
 
-bool control::loop(CarPosition* carPosition) {
+bool control::loop(CarPosition* &carPosition) {
     if (!carPosition) return true;
     if (carPosition->lanesRight && carPosition->lanesLeft) {
         error = carPosition->d2LeftLine - carPosition->d2RightLine;

@@ -29,15 +29,15 @@ public:
     ImageProcessor(int nThreads, cv::Mat &image)
     : nThreads(nThreads), image(image) { }
 
-    Segmentation segmentImage(CarPosition* carPosition, bool showSegentation = false);
+    Segmentation segmentImage(CarPosition* &carPosition, bool showSegentation = false);
 
-    std::vector<Line> findLines(Segmentation* segmentation, CarPosition* carPosition, int showLines);
+    std::vector<Line> findLines(Segmentation* segmentation, CarPosition* &carPosition, int showLines);
 
     void setFilters(Filters &filters);
 
-    std::vector<RoadLine> getLinePositions(std::vector<Line>* lines, CarPosition* carPosition);
+    std::vector<RoadLine> getLinePositions(std::vector<Line>* lines, CarPosition* &carPosition);
 
-    CarPosition* getCarPosition(std::vector<RoadLine>* roadLines, CarPosition* carPosition, int showRoadLinePositions);
+    CarPosition* getCarPosition(std::vector<RoadLine>* roadLines, CarPosition* &carPosition, int showRoadLinePositions);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

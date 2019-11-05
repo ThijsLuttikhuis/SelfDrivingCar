@@ -24,7 +24,7 @@ public:
     explicit gpio(cv::Mat &image) : node(image) {};
 
     bool setup() override;
-    bool loop(CarPosition* carPosition) override;
+    bool loop(CarPosition* &carPosition) override;
     void close() override;
 };
 
