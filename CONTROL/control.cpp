@@ -69,7 +69,7 @@ bool control::loop(CarPosition* carPosition) {
         case 5:
             return false;
         case 6:
-            carPosition->pid = 0;
+            carPosition->carAngle = 0;
             break;
         default:
             return true;
@@ -107,7 +107,7 @@ bool control::loop(CarPosition* carPosition) {
     double pid = Kp * error + Ki * errorSum * sampleTime + Kd * (error - previousError) / sampleTime;
     previousError = error;
 
-    carPosition->pid = pid;
+    carPosition->carAngle = pid;
     carPosition->print();
     return true;
 }

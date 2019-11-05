@@ -17,15 +17,17 @@ public:
     int lanesLeft;
     int lanesRight;
 
-    double roadCurve;
+    double carAngleToRoad;
 
-    double pid;
+    double carAngle;
+    double carSpeed;
+
     CarPosition(const CarPosition &copy) = default;
 
     explicit CarPosition() : d2LeftLine(-1), d2RightLine(-1),
                              lanesLeft(0), lanesRight(0),
                              d2SecondLeftLine(-1), d2SecondRightLine(-1),
-                             roadCurve(0), pid(0) {};
+                             carAngleToRoad(0), carAngle(0) {};
 
     void print() {
         std::cout << "distanceToRightLine: " << d2RightLine << std::endl <<
@@ -34,8 +36,8 @@ public:
                   "distanceToSecondLeftLine: " << d2SecondLeftLine << std::endl <<
                   "lanesLeft: " << lanesLeft << std::endl <<
                   "lanesRight: " << lanesRight << std::endl <<
-                  "roadCurve: " << roadCurve << std::endl <<
-                  "pid: " << pid << std::endl;
+                  "carAngleToRoad: " << carAngleToRoad << std::endl <<
+                  "pid: " << carAngle << std::endl;
     }
 
     bool operator ==(const CarPosition &other) const {
@@ -43,8 +45,8 @@ public:
                d2RightLine == other.d2RightLine &&
                 lanesLeft == other.lanesLeft &&
                 lanesRight == other.lanesRight &&
-                roadCurve == other.roadCurve &&
-                pid == other.pid;
+               carAngleToRoad == other.carAngleToRoad &&
+               carAngle == other.carAngle;
     }
 };
 

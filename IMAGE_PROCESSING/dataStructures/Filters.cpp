@@ -6,13 +6,6 @@
 #include "Filters.h"
 #include "Line.h"
 
-enum DIR {
-    RIGHT,
-    STRAIGHT,
-    LEFT
-};
-
-
 bool Filters::preLineFilter(Line &line, const std::vector<Line> &otherLines) {
 
     // Filters after
@@ -37,9 +30,8 @@ bool Filters::preLineFilter(Line &line, const std::vector<Line> &otherLines) {
     return true;
 }
 
-
-void Filters::afterLineFilter(std::vector<Line>* lines) {
-    if (lines->size() < 2) return;
+RowCol Filters::afterLineFilter(std::vector<Line>* lines) {
+    if (lines->size() <= 2) return horizon;
 
     // Get weighted average Column at the horizon
     double sumCols = 0;
@@ -58,6 +50,8 @@ void Filters::afterLineFilter(std::vector<Line>* lines) {
     lines->erase(std::remove_if(lines->begin(), lines->end(), [maxldth, newHorizonRC] (Line &line) {
         return line.dist2ToPoint(newHorizonRC.row, newHorizonRC.col) > maxldth*maxldth ;
     }),lines->end());
+
+    return newHorizonRC;
 }
 
 bool Filters::roadLineFilter(RoadLine &roadLine) {

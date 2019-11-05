@@ -6,7 +6,7 @@
 #define SELFDRIVINGCAR_ROADLINE_H
 
 
-#include "../dataStructures/Line.h"
+#include "Line.h"
 
 class RoadLine {
 public:

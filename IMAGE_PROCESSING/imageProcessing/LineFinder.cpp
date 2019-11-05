@@ -6,8 +6,7 @@
 #include "LineFinder.h"
 #include "../dataStructures/Pixel.h"
 
-
-std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
+std::vector<Line> LineFinder::findLines(Segmentation* segmentation, CarPosition* carPosition) {
     std::vector<Line> lines;
 
     for (int row = filters.horizon.row; row < image.rows; row++) {
@@ -42,7 +41,9 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
         }
     }
 
-    filters.afterLineFilter(&lines);
+    RowCol newHorizonRC = filters.afterLineFilter(&lines);
+    carPosition->carAngleToRoad = newHorizonRC.col - filters.horizon.col;
+
     // Draw lines
     if (showLines) {
         for (auto &line : lines) {

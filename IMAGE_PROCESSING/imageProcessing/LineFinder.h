@@ -10,6 +10,7 @@
 #include "../dataStructures/Line.h"
 #include "Segmentation.h"
 #include "../dataStructures/Filters.h"
+#include "../../CarPosition.h"
 
 
 class LineFinder {
@@ -24,11 +25,9 @@ private:
 
 public:
     LineFinder(cv::Mat &image, Filters &filters, int showLines) :
-    image(image), filters(filters), showLines(showLines) {};
+          image(image), filters(filters), showLines(showLines) {};
 
-    std::vector<Line> findLines(Segmentation* segmentation);
-
-    void drawLine(bool b, Line* line);
+    std::vector<Line> findLines(Segmentation* segmentation, CarPosition* carPosition);
 };
 
 #endif //SELFDRIVINGCAR_LINEFINDER_H

@@ -14,7 +14,7 @@
 #include "dataStructures/ColumnSegment.h"
 #include "utilities/Drawer.h"
 #include "dataStructures/RowCol.h"
-#include "imageProcessing/RoadLine.h"
+#include "dataStructures/RoadLine.h"
 #include <iostream>
 #include "dataStructures/Filters.h"
 #include "../CarPosition.h"

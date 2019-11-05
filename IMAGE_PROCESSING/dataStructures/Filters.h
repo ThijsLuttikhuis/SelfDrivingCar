@@ -7,7 +7,7 @@
 
 #include "RowCol.h"
 #include "Line.h"
-#include "../imageProcessing/RoadLine.h"
+#include "RoadLine.h"
 
 struct Filters {
 public:
@@ -31,7 +31,7 @@ public:
 
     bool preLineFilter(Line &line, const std::vector<Line> &otherLines);
 
-    void afterLineFilter(std::vector<Line>* lines);
+    RowCol afterLineFilter(std::vector<Line>* lines);
 
 
 

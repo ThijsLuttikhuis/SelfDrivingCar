@@ -10,7 +10,7 @@
 #include <opencv2/highgui.hpp>
 #include "../../CarPosition.h"
 #include "../dataStructures/Filters.h"
-#include "RoadLine.h"
+#include "../dataStructures/RoadLine.h"
 
 class CarPositionFinder {
 private:
