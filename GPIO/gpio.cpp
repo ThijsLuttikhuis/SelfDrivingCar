@@ -15,41 +15,36 @@ bool gpio::setup() {
     std::cout << "Using WiringPi for GPIO" << std::endl;
     // Steer variables
     currentAngle = 12;
-    rangeCamera = 400;
-    rangeServo = 6;  // MAX = 8
+    rangeCamera = 200;
+    rangeServo = 8;
     biasServo = 12;
-
-    // Speed variables
-    startSpeed = 40;
-    startSpeed_t = 500;
-    speed = 30;
-
     // Setup wiringPi
     wiringPiSetup();
-    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 100)) {
+    if (softPwmCreate(SERVO_PWM, 0, 100) || softPwmCreate(HBRUG_PWM, 0, 10)) {
         std::cout << "Error in creating softPwm" << std::endl;
         return false;
     }
 
     std::cout << "Testing Steering" << std::endl;
-    softPwmWrite(SERVO_PWM, biasServo + (rangeServo/2));
-    sleep(1);
-    softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
-    sleep(1);
-    softPwmWrite(SERVO_PWM, biasServo);
-    sleep(1);
+    //softPwmWrite(SERVO_PWM, biasServo + (rangeServo/2));
+    //sleep(1);
+    //softPwmWrite(SERVO_PWM, biasServo - (rangeServo/2));
+    //sleep(1);
+    //softPwmWrite(SERVO_PWM, biasServo);
 
     std::cout << "Starting Engine" << std::endl;
-    softPwmWrite(HBRUG_PWM, startSpeed);
-    sleep(1);
-    softPwmWrite(HBRUG_PWM, speed);
+    softPwmWrite(HBRUG_PWM, 8);
+    //sleep(1);
 #endif
     return true;
 }
 
-bool gpio::loop(CarPosition* carPosition) {
+bool gpio::loop(CarPosition* &carPosition) {
 #ifdef USE_PI
-    double &pid = carPosition->pid;
+    carPosition->print();
+
+    double &pid = carPosition->carAngle;
+    double &speed = carPosition->carSpeed;
 
     double max_output = biasServo + (rangeServo/2);
     double min_output = biasServo - (rangeServo/2);
@@ -58,6 +53,8 @@ bool gpio::loop(CarPosition* carPosition) {
     double output = factor*pid + biasServo;
     output = output > max_output ? max_output : output < min_output ? min_output : output;
     softPwmWrite(SERVO_PWM, static_cast<int>(output+0.5));
+    softPwmWrite(HBRUG_PWM, speed*9);
+    std::cout << output << std::endl;
 #endif
     return true;
 }
@@ -66,5 +63,6 @@ void gpio::close() {
 #ifdef USE_PI
     softPwmWrite(HBRUG_PWM, 0);
     sleep(1);
+    softPwmWrite(HBRUG_PWM, 0);
 #endif
 }

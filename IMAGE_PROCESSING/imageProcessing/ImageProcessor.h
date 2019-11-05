@@ -13,7 +13,7 @@
 #include "Segmentation.h"
 #include "../dataStructures/Line.h"
 #include "LineFinder.h"
-#include "RoadLine.h"
+#include "../dataStructures/RoadLine.h"
 #include "CarPositionFinder.h"
 
 
@@ -29,15 +29,15 @@ public:
     ImageProcessor(int nThreads, cv::Mat &image)
     : nThreads(nThreads), image(image) { }
 
-    Segmentation segmentImage(bool showSegentation = false);
+    Segmentation segmentImage(CarPosition* &carPosition, bool showSegentation = false);
 
-    std::vector<Line> findLines(Segmentation* segmentation, int showLines);
+    std::vector<Line> findLines(Segmentation* segmentation, CarPosition* &carPosition, int showLines);
 
     void setFilters(Filters &filters);
 
-    std::vector<RoadLine> getLinePositions(std::vector<Line>* lines);
+    std::vector<RoadLine> getLinePositions(std::vector<Line>* lines, CarPosition* &carPosition);
 
-    CarPosition getCarPosition(std::vector<RoadLine>* roadLines, int showRoadLinePositions);
+    CarPosition* getCarPosition(std::vector<RoadLine>* roadLines, CarPosition* &carPosition, int showRoadLinePositions);
 };
 
 #endif //SELFDRIVINGCAR_IMAGEPROCESSOR_H

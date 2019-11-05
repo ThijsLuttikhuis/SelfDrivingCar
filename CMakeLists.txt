@@ -46,9 +46,8 @@ set(DATA_STRUCTURES_SOURCES
         IMAGE_PROCESSING/dataStructures/ColumnSegment.h
         IMAGE_PROCESSING/dataStructures/Line.cpp
         IMAGE_PROCESSING/dataStructures/Line.h
-        IMAGE_PROCESSING/imageProcessing/RoadLine.cpp
-        IMAGE_PROCESSING/imageProcessing/RoadLine.h
-        CarPosition.h
+        IMAGE_PROCESSING/dataStructures/RoadLine.cpp
+        IMAGE_PROCESSING/dataStructures/RoadLine.h
 
         # Helper structures
         IMAGE_PROCESSING/dataStructures/Filters.h
@@ -59,10 +58,18 @@ set(DATA_STRUCTURES_SOURCES
         )
 
 set(CONTROL_SOURCES
-        node.cpp node.h GPIO/gpio.cpp GPIO/gpio.h)
+        CONTROL/CarPositionBuffer.cpp
+        CONTROL/CarPositionBuffer.h
+        )
+
+set(GPIO_SOURCES
+        )
 
 add_executable(SelfDrivingCar
         main.cpp
+        node.cpp
+        node.h
+        CarPosition.h
 
         # Image Processing
         IMAGE_PROCESSING/image_processing.cpp
@@ -75,11 +82,12 @@ add_executable(SelfDrivingCar
         # Control
         CONTROL/control.cpp
         CONTROL/control.h
-
         ${CONTROL_SOURCES}
 
         # GPIO
-
+        GPIO/gpio.cpp
+        GPIO/gpio.h
+        ${GPIO_SOURCES}
         )
 
 target_link_libraries(SelfDrivingCar ${OpenCV_LIBS})

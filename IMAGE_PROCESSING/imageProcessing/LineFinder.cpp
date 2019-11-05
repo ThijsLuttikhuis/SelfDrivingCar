@@ -6,8 +6,7 @@
 #include "LineFinder.h"
 #include "../dataStructures/Pixel.h"
 
-
-std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
+std::vector<Line> LineFinder::findLines(Segmentation* segmentation, CarPosition* carPosition) {
     std::vector<Line> lines;
 
     for (int row = filters.horizon.row; row < image.rows; row++) {
@@ -24,12 +23,17 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
                 RowCol endOfLine = recursiveSearch(segmentation, row + 1, col, edge, &dRowDCol);
                 Line line = Line(startOfLine, endOfLine, dRowDCol);
 
+                if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
+                    uchar color = 31;
+                    line.draw(image, 3, color);
+                }
+
                 // Filter line
                 if (!filters.preLineFilter(line, lines)) continue;
 
                 // Draw Line
-                if (showLines == 3 && line.end.row != -1 && line.end.col != -1) {
-                    uchar color = 100;
+                if (showLines && line.end.row != -1 && line.end.col != -1) {
+                    uchar color = 127;
                     line.draw(image, 3, color);
                 }
 
@@ -39,7 +43,9 @@ std::vector<Line> LineFinder::findLines(Segmentation* segmentation) {
         }
     }
 
-    filters.afterLineFilter(&lines);
+    RowCol newHorizonRC = filters.afterLineFilter(&lines);
+    carPosition->carAngleToRoad = newHorizonRC.col - filters.horizon.col;
+
     // Draw lines
     if (showLines) {
         for (auto &line : lines) {

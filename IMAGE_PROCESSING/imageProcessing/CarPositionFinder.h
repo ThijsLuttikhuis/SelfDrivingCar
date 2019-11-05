@@ -10,7 +10,7 @@
 #include <opencv2/highgui.hpp>
 #include "../../CarPosition.h"
 #include "../dataStructures/Filters.h"
-#include "RoadLine.h"
+#include "../dataStructures/RoadLine.h"
 
 class CarPositionFinder {
 private:
@@ -22,7 +22,7 @@ public:
     CarPositionFinder(cv::Mat &image, Filters &filters, int showRoadLinePositions) :
           image(image), filters(filters), showRoadLinePositions(showRoadLinePositions) {};
 
-    CarPosition findCarPosition(std::vector<RoadLine>* roadLines);
+    CarPosition* findCarPosition(std::vector<RoadLine>* roadLines);
 };
 
 

@@ -7,7 +7,7 @@
 
 #include <opencv2/core/mat.hpp>
 #include "../dataStructures/Line.h"
-#include "RoadLine.h"
+#include "../dataStructures/RoadLine.h"
 #include "../dataStructures/Filters.h"
 #include <vector>
 

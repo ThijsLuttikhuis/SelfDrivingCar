@@ -8,9 +8,25 @@
 
 #include "../CarPosition.h"
 #include "../node.h"
+#include "CarPositionBuffer.h"
 
 class control : public node {
 private:
+    enum Direction {
+        STRAIGHT,
+        LEFT,
+        RIGHT
+    };
+    enum Status {
+        NONE,
+        LINE,
+        T_LEFT,
+        T_RIGHT,
+        EMERGENCY_STOP,
+        RESET,
+        STOP
+    };
+
     double Kp;
     double Ki;
     double Kd;
@@ -21,14 +37,44 @@ private:
 
     bool dataSet;
 
-    void filter(CarPosition* carPosition);
+    CarPositionBuffer cPBuffer;
+
+    CarPosition filter();
+
+    void switchLane(Direction);
+
+    Direction switchingTo;
+
+    int marge;
+
+    int status;
+    int intermediate;
+    int read;
+    int readNew;
+
+    int readFile();
+
+    void clearFile();
+
+    int writeFile(const char*, int, int);
+
+    void writeControl(int input);
+
 
 public:
     explicit control(cv::Mat &image) : node(image) {};
+
     bool setup() override;
-    bool loop(CarPosition* carPosition) override;
+
+    bool loop(CarPosition* &carPosition) override;
+
     void close() override;
 
 };
 
 #endif //SELFDRIVINGCAR_CONTROL_H
+
+
+
+
+

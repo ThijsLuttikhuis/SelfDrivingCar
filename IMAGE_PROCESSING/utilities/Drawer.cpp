@@ -15,7 +15,7 @@ int Drawer::showOriginalImage = false;
 cv::Mat Drawer::copy;
 cv::VideoCapture Drawer::capture = {};
 
-void Drawer::setPixel(char &pixel, const uchar &color) {
+void Drawer::setPixel(uchar &pixel, const uchar &color) {
     if (!debug) return;
 
     pixel = color;
@@ -24,7 +24,7 @@ void Drawer::setPixel(char &pixel, const uchar &color) {
 void Drawer::setPixel(int row, int col, const uchar &color) {
     if (!debug) return;
 
-    auto &pixel = copy.at<char>(row, col);
+    auto &pixel = copy.at<uchar>(row, col);
     setPixel(pixel, color);
 }
 

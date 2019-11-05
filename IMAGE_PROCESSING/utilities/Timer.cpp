@@ -49,3 +49,17 @@ void Timer::printMilliSeconds() {
     tStart = tEnd;
 }
 
+void Timer::printFPS() {
+    frames++;
+    if (tStart == -1) {
+        std::cerr << "No start time set" << std::endl;
+    }
+    this->end();
+    auto t = (double)(tEnd - tStart) / cv::getTickFrequency();
+    if (t > 1) {
+        std::cout << name << " per second: " << frames << std::endl;
+        tStart = tEnd;
+        frames = 0;
+    }
+}
+

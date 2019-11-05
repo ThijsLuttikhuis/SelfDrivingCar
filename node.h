@@ -15,7 +15,7 @@ protected:
 public:
     explicit node(cv::Mat &image) : image(image) {};
     virtual bool setup() = 0;
-    virtual bool loop(CarPosition* carPosition) = 0;
+    virtual bool loop(CarPosition* &carPosition) = 0;
     virtual void close() = 0;
 };
 
