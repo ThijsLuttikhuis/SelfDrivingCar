@@ -38,9 +38,8 @@ bool gpio::setup() {
     softPwmWrite(SERVO_PWM, biasServo);
 
     std::cout << "Starting Engine" << std::endl;
-    softPwmWrite(HBRUG_PWM, startSpeed);
+    softPwmWrite(HBRUG_PWM, 1);
     sleep(1);
-    softPwmWrite(HBRUG_PWM, speed);
 #endif
     return true;
 }
@@ -48,6 +47,7 @@ bool gpio::setup() {
 bool gpio::loop(CarPosition* carPosition) {
 #ifdef USE_PI
     double &pid = carPosition->carAngle;
+    double &speed = carPosition->carSpeed;
 
     double max_output = biasServo + (rangeServo/2);
     double min_output = biasServo - (rangeServo/2);

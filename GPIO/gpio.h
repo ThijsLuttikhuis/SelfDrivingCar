@@ -20,11 +20,6 @@ private:
     double rangeServo;
     double biasServo;
 
-    // Speed variables
-    double startSpeed;
-    double startSpeed_t;
-    double speed;
-
 public:
     explicit gpio(cv::Mat &image) : node(image) {};
 
