@@ -53,7 +53,7 @@ bool control::loop(CarPosition* carPosition) {
     if (!carPosition) return true;
 
     status = readFile();
-    //std::cout << "status: " << status << std::endl;
+    std::cout << "status: " << status << std::endl;
     switch (status) {
         case 1:
             switchLane(STRAIGHT);

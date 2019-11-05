@@ -58,7 +58,7 @@
 #define PRINT_TIMING            0       //  |               |               |               |               |
 #define PRINT_FPS               1       //  |               |               |               |               |
 #define PRINT_HORIZON           0       //  |               |               |               |               |
-#define PRINT_LINES_FOUND       1        //  |               |               |               |               |
+#define PRINT_LINES_FOUND       1       //  |               |               |               |               |
 
 class image_processing : public node {
 private:
