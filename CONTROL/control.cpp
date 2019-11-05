@@ -60,7 +60,6 @@ bool control::loop(CarPosition* &carPosition) {
 
     carPosition->carSpeed = 1;
     carPosition->carAngle = error;
-    std::cout << carPosition->carAngle << std::endl;
     return true;
 
     status = readFile();
@@ -113,7 +112,6 @@ bool control::loop(CarPosition* &carPosition) {
 
     cPBuffer.push(*carPosition);
     *carPosition = filter();
-    carPosition->print();
 
     error = carPosition->d2LeftLine - carPosition->d2RightLine;
     errorSum += error;
@@ -121,7 +119,6 @@ bool control::loop(CarPosition* &carPosition) {
     previousError = error;
 
     carPosition->carAngle = pid;
-    carPosition->print();
     return true;
 }
 

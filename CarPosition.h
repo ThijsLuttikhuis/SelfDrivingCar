@@ -47,7 +47,8 @@ public:
                 lanesLeft == other.lanesLeft &&
                 lanesRight == other.lanesRight &&
                carAngleToRoad == other.carAngleToRoad &&
-               carAngle == other.carAngle;
+               carAngle == other.carAngle &&
+               carSpeed == other.carSpeed;
     }
 };
 

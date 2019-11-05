@@ -39,7 +39,7 @@
 #define HORIZON RowCol(300, 320) // Lenovo WebCam
 
 // Edge detection threshold parameters
-#define LINES_ARE_DARK          1
+#define LINES_ARE_DARK          0
 #define THRESHOLD_COL_D         15
 #define THRESHOLD_MINIMUM_DELTA 25
 
@@ -55,10 +55,10 @@
 #define FRAME_BY_FRAME          0       //  | dont show     | frame-by-frame|               |               |
 #define SHOW_ORIGINAL_IMAGE     2       //  | thresholded   | original      | show both     |               |
 // Print in terminal                    //  |---------------|---------------|---------------|---------------|
-#define PRINT_TIMING            0       //  |               |               |               |               |
+#define PRINT_TIMING            1       //  |               |               |               |               |
 #define PRINT_FPS               1       //  |               |               |               |               |
 #define PRINT_HORIZON           0       //  |               |               |               |               |
-#define PRINT_LINES_FOUND       1       //  |               |               |               |               |
+#define PRINT_LINES_FOUND       0       //  |               |               |               |               |
 
 class image_processing : public node {
 private:
