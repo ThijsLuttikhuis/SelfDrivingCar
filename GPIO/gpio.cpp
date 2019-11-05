@@ -52,6 +52,7 @@ bool gpio::loop(CarPosition* carPosition) {
     output = output > max_output ? max_output : output < min_output ? min_output : output;
     softPwmWrite(SERVO_PWM, static_cast<int>(output+0.5));
     softPwmWrite(HBRUG_PWM, speed*8);
+    std::cout << output << std::endl;
 #endif
     return true;
 }

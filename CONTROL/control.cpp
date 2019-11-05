@@ -51,6 +51,14 @@ bool control::setup() {
 
 bool control::loop(CarPosition* carPosition) {
     if (!carPosition) return true;
+    if (carPosition->lanesRight && carPosition->lanesLeft) {
+        error = carPosition->d2LeftLine - carPosition->d2RightLine;
+    }
+    else {
+        error = 0;
+    }
+    carPosition->carAngle = error;
+    return true;
 
     status = readFile();
     std::cout << "status: " << status << std::endl;
