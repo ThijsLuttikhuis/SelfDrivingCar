@@ -37,7 +37,8 @@ public:
                   "lanesLeft: " << lanesLeft << std::endl <<
                   "lanesRight: " << lanesRight << std::endl <<
                   "carAngleToRoad: " << carAngleToRoad << std::endl <<
-                  "pid: " << carAngle << std::endl;
+                  "carAngle: " << carAngle << std::endl <<
+                  "carSpeed: " << carSpeed << std::endl;
     }
 
     bool operator ==(const CarPosition &other) const {
