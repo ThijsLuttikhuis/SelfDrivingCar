@@ -1,5 +1,6 @@
 
 #include "control.h"
+#include "FileReadWrite.h"
 #include <fstream>
 
 CarPosition control::filter() {
@@ -32,133 +33,91 @@ CarPosition control::filter() {
 }
 
 bool control::setup() {
-    Kp = 1;
-    Ki = 0;
-    Kd = 0;
+    FileReadWrite::clearFile();
+    read = 0;
 
     error = 0;
-    previousError = 0;
-    errorSum = 0;
-    switchingTo = STRAIGHT;
-
-    clearFile();
-    read = 0;
-    marge = 0;
-
     cPBuffer = CarPositionBuffer();
+    filterCP = false;
+
     return true;
 }
 
 bool control::loop(CarPosition* &carPosition) {
     if (!carPosition) return true;
-    if (carPosition->lanesRight && carPosition->lanesLeft) {
-        error = carPosition->d2LeftLine - carPosition->d2RightLine;
-    }
-    else {
-        error = 0;
-    }
 
+    if (filterCP) {
+        cPBuffer.push(*carPosition);
+        *carPosition = filter();
+    }
     carPosition->carSpeed = 1;
     carPosition->carAngle = error;
-    return true;
 
-    status = readFile();
-    std::cout << "status: " << status << std::endl;
-    switch (status) {
+    previousState = state;
+    state = FileReadWrite::readFile();
+    std::cout << "\"input.txt\" status: " << state << std::endl;
+
+    switch (state) {
         case 1:
-            switchLane(STRAIGHT);
-            break;
+            return goStraight(carPosition);
         case 2:
-            switchLane(LEFT);
-            break;
+            return goLeft(carPosition);
         case 3:
-            switchLane(RIGHT);
-            break;
+            return goRight(carPosition);
         case 4:
             return false;
         case 5:
             return false;
         case 6:
             carPosition->carAngle = 0;
-            break;
+            carPosition->carSpeed = 0;
+            return true;
+        case 7:
+            filterCP = !filterCP;
+            std::cout << "setting filter to " << filterCP << "!" << std::endl;
+            FileReadWrite::writeControl(previousState);
         default:
+            std::cerr << "\nfile \"input.txt\" not set!!\n" << std::endl;
+            carPosition->carAngle = 0;
+            carPosition->carSpeed = 0;
             return true;
     }
-
-    carPosition->carSpeed = 1;
-
-    double sampleTime = 0.02;
-
-    if (switchingTo == LEFT && carPosition->d2SecondLeftLine < 0) {
-        read = writeFile("Cannot turn left.", read, 2);
-        writeControl(1);
-    }
-    else {
-        error = carPosition->d2SecondLeftLine - carPosition->d2RightLine;
-    }
-
-    if (switchingTo == RIGHT && carPosition->d2SecondRightLine < 0) {
-        read = writeFile("Cannot turn right.", read, 3);
-        writeControl(1);
-    }
-    else {
-        error = carPosition->d2LeftLine - carPosition->d2SecondRightLine;
-    }
-
-    if (switchingTo != LEFT && switchingTo != RIGHT) {
-        error = carPosition->d2LeftLine - carPosition->d2RightLine;
-        switchingTo = STRAIGHT;
-    }
-
-    cPBuffer.push(*carPosition);
-    *carPosition = filter();
-
-    error = carPosition->d2LeftLine - carPosition->d2RightLine;
-    errorSum += error;
-    double pid = Kp * error + Ki * errorSum * sampleTime + Kd * (error - previousError) / sampleTime;
-    previousError = error;
-
-    carPosition->carAngle = pid;
-    return true;
 }
 
 void control::close() {
 
 }
 
-void control::switchLane(Direction n) {
-    switchingTo = n;
-}
-
-int control::readFile() {
-    std::ifstream myfile("input.txt");
-    if (myfile.is_open()) {
-        while (myfile >> intermediate) {
-            status = intermediate;
-        }
-        myfile.close();
+bool control::goStraight(CarPosition* &carPosition) {
+    if (carPosition->lanesRight && carPosition->lanesLeft) {
+        error = carPosition->d2LeftLine - carPosition->d2RightLine;
     }
-    return status;
-}
-
-void control::clearFile() {
-    std::ofstream file("input.txt", std::ios::trunc);
-}
-
-int control::writeFile(const char* input, int read, int readNew) {
-    if (read != readNew) {
-        std::ofstream fout;
-        fout.open("log.txt", std::ios::trunc);
-        fout << input;
-        fout.close();
+    else {
+        error = 0;
     }
-    read = readNew;
-    return read;
+    error = carPosition->d2LeftLine - carPosition->d2RightLine;
+    return true;
 }
 
-void control::writeControl(int input) {
-    std::ofstream fout;
-    fout.open("input.txt", std::ios::trunc);
-    fout << input;
-    fout.close();
+bool control::goLeft(CarPosition* &carPosition) {
+    if (carPosition->d2SecondLeftLine < 0) {
+        read = FileReadWrite::writeFile("Cannot turn left.", read, 2);
+        FileReadWrite::writeControl(1);
+    }
+    else {
+        error = carPosition->d2SecondLeftLine - carPosition->d2RightLine;
+    }
+    return true;
+}
+
+bool control::goRight(CarPosition* &carPosition) {
+
+    if (carPosition->d2SecondRightLine < 0) {
+        read = FileReadWrite::writeFile("Cannot turn right.", read, 3);
+        FileReadWrite::writeControl(1);
+    }
+    else {
+        error = carPosition->d2LeftLine - carPosition->d2SecondRightLine;
+    }
+    return true;
 }

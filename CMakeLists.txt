@@ -54,12 +54,13 @@ set(DATA_STRUCTURES_SOURCES
         IMAGE_PROCESSING/dataStructures/Pixel.h
         IMAGE_PROCESSING/dataStructures/ThreadArgs.h
         IMAGE_PROCESSING/dataStructures/Filters.cpp
-        IMAGE_PROCESSING/image_processing.h
         )
 
 set(CONTROL_SOURCES
         CONTROL/CarPositionBuffer.cpp
         CONTROL/CarPositionBuffer.h
+        CONTROL/FileReadWrite.cpp
+        CONTROL/FileReadWrite.h
         )
 
 set(GPIO_SOURCES

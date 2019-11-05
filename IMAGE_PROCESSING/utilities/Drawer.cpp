@@ -96,7 +96,6 @@ void Drawer::clearCopy(cv::Mat &image) {
     if (!debug) return;
 
     copy = cv::Mat::zeros(image.rows, image.cols, CV_8UC1);
-
 }
 
 void Drawer::setDebug(int _debug) {
