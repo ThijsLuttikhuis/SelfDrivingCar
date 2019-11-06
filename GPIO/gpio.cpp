@@ -41,8 +41,6 @@ bool gpio::setup() {
 
 bool gpio::loop(CarPosition* &carPosition) {
 #ifdef USE_PI
-    carPosition->print();
-
     double &pid = carPosition->carAngle;
     double &speed = carPosition->carSpeed;
 

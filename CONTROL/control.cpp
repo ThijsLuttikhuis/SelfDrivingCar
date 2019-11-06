@@ -51,9 +51,6 @@ bool control::loop(CarPosition* &carPosition) {
         *carPosition = filter();
     }
 
-    carPosition->carSpeed = 1;
-    carPosition->carAngle = error;
-
     previousState = state;
     state = FileReadWrite::readFile();
     // std::cout << "\"input.txt\" status: " << state << std::endl;
@@ -94,7 +91,8 @@ bool control::goStraight(CarPosition* &carPosition) {
     else {
         error = 0;
     }
-    error = carPosition->d2LeftLine - carPosition->d2RightLine;
+    carPosition->carSpeed = 1;
+    carPosition->carAngle = error;
     return true;
 }
 
@@ -102,10 +100,13 @@ bool control::goLeft(CarPosition* &carPosition) {
     if (carPosition->d2SecondLeftLine < 0) {
         read = FileReadWrite::writeFile("Cannot turn left.", read, 2);
         FileReadWrite::writeControl(1);
+        return goStraight(carPosition);
     }
     else {
         error = carPosition->d2SecondLeftLine - carPosition->d2RightLine;
     }
+    carPosition->carSpeed = 1;
+    carPosition->carAngle = error;
     return true;
 }
 
@@ -114,9 +115,12 @@ bool control::goRight(CarPosition* &carPosition) {
     if (carPosition->d2SecondRightLine < 0) {
         read = FileReadWrite::writeFile("Cannot turn right.", read, 3);
         FileReadWrite::writeControl(1);
+        return goStraight(carPosition);
     }
     else {
         error = carPosition->d2LeftLine - carPosition->d2SecondRightLine;
     }
+    carPosition->carSpeed = 1;
+    carPosition->carAngle = error;
     return true;
 }
