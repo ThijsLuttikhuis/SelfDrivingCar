@@ -33,7 +33,7 @@ CarPosition control::filter() {
 }
 
 bool control::setup() {
-    FileReadWrite::clearFile();
+    //FileReadWrite::clearFile();
     read = 0;
 
     error = 0;
