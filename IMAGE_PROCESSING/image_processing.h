@@ -21,7 +21,7 @@
 #include "../node.h"
 
 // Number of Threads
-#define N_THREADS               8
+#define N_THREADS               4
 
 // Line Filters
 #define MIN_LINE_LENGTH         58
