@@ -68,15 +68,13 @@ bool control::loop(CarPosition* &carPosition) {
         case 4:
             return false;
         case 5:
-            return false;
+            filterCP = !filterCP;
+            std::cout << "setting filter to " << filterCP << "!" << std::endl;
+            FileReadWrite::writeControl(previousState);
         case 6:
             carPosition->carAngle = 0;
             carPosition->carSpeed = 0;
             return true;
-        case 7:
-            filterCP = !filterCP;
-            std::cout << "setting filter to " << filterCP << "!" << std::endl;
-            FileReadWrite::writeControl(previousState);
         default:
             std::cerr << "\nfile \"input.txt\" not set!!\n" << std::endl;
             carPosition->carAngle = 0;
